@@ -1,0 +1,92 @@
+#!/usr/bin/env python
+
+
+def usage():
+	print "usage: hty (start|stop|mount DIR as SITE on HOST:PORT|listen IP PORT|umount SITE|update SITE)"
+
+class Sequence:
+	def __init__(self, slots):
+		self.slots = slots
+	
+	def consume(self, argv, index):
+		for slot in self.slots:
+			if index >= len(argv):
+				return False
+			if not slot.consume(argv, index):
+				return False
+			index = index + 1
+		return True
+
+	def find(self, field):
+		for slot in self.slots:
+			if hasattr(slot, 'name') and slot.name == field:
+				return slot.value
+			
+class Constant:
+	def __init__(self, value):
+		self.value = value
+	def consume(self, argv, index):
+		#print "%s == %s" % (self.value, argv[index])
+		return self.value == argv[index]
+
+class Slot:
+	def __init__(self, name):
+		self.name = name
+		self.value = None
+	def consume(self, argv, index):
+		#print "%s := %s" % (self.name, argv[index])
+		self.value = argv[index]
+		return True
+
+from os import system
+
+def mount(cmd):
+	dir = cmd.find("dir")
+	site = cmd.find("site")
+        hostport = cmd.find("hostport")
+        htyclient(['mount', dir, site, hostport])
+
+def htyclient(params):
+	command = 'erl -sname htyclient -noshell -pa target/beam -s htyclient'
+	for param in params:
+		command += ' '
+		command += param
+        print "issuing command [%s]" % command
+	system(command)
+
+
+commands = {
+	Constant("start"): lambda _x: system('erl -sname haughty@localhost -pa target/beam -s htyboot start'),
+	Constant("stop") : lambda _x: htyclient(['stop']),
+	Sequence([
+		Constant("mount"),
+		Slot("dir"),
+		Constant("as"),
+		Slot("site"),
+                Constant("on"),
+                Slot("hostport")
+	]):lambda x: mount(x),
+	Constant("list"):None,
+	Sequence([Constant("listen"), Slot("ip"), Slot("port")]): 
+		lambda x: htyclient(['listen', x.find('ip'), x.find('port')]),
+	Sequence([Constant("umount"),Slot("site")]):None,
+	Sequence([Constant("update"),Slot("site")]):None,
+	Constant("status"): lambda _x: htyclient(['status'])
+	}
+
+import sys
+import os
+os.chdir('/home/user/projekt/haughty')
+
+ok = False
+for (cmd,fun) in commands.items():
+	res = cmd.consume(sys.argv, 1)
+	if res:
+		print fun(cmd)
+		ok = True
+if not ok:
+	usage()
+
+
+
+
