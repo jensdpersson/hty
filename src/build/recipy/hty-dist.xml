@@ -1,0 +1,12 @@
+<recipe xmlns="http://recipy.hoverview.org/default">
+        <folder name="target">
+            <folder name="bin">
+                <copies of="src/main/python/hty"/>
+            </folder>
+            <folder name="ebin">
+                <artifact project="haughty" name="beams"/>
+                <!--artifact project="donner" name="beams"/-->
+                <artifact project="ogrebear" name="beams"/>
+            </folder>
+        </folder>
+</recipe>

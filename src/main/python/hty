@@ -56,7 +56,7 @@ def htyclient(params):
 
 
 commands = {
-	Constant("start"): lambda _x: system('erl -sname haughty@localhost -pa target/beam -s htyboot start'),
+	Constant("start"): lambda _x: system('erl -sname haughty@localhost -pa ebin -s htyboot start'),
 	Constant("stop") : lambda _x: htyclient(['stop']),
 	Sequence([
 		Constant("mount"),
