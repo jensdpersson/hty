@@ -27,6 +27,8 @@ class Constant:
 		self.value = value
 	def consume(self, argv, index):
 		#print "%s == %s" % (self.value, argv[index])
+                if index >= len(argv):
+                    return False
 		return self.value == argv[index]
 
 class Slot:
@@ -47,7 +49,7 @@ def mount(cmd):
         htyclient(['mount', dir, site, hostport])
 
 def htyclient(params):
-	command = 'erl -sname htyclient -noshell -pa target/beam -s htyclient'
+	command = 'erl -sname htyclient -noshell -pa ebin -s htyclient'
 	for param in params:
 		command += ' '
 		command += param
@@ -56,7 +58,7 @@ def htyclient(params):
 
 
 commands = {
-	Constant("start"): lambda _x: system('erl -sname haughty@localhost -pa ebin -s htyboot start'),
+	Constant("start"): lambda _x: system('erl -sname haughty@localhost -noshell -pa ebin -s htyboot start'),
 	Constant("stop") : lambda _x: htyclient(['stop']),
 	Sequence([
 		Constant("mount"),
@@ -76,7 +78,7 @@ commands = {
 
 import sys
 import os
-os.chdir('/home/user/projekt/haughty')
+os.chdir('/opt/hty')
 
 ok = False
 for (cmd,fun) in commands.items():
