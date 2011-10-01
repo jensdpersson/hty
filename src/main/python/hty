@@ -56,10 +56,17 @@ def htyclient(params):
         print "issuing command [%s]" % command
 	system(command)
 
+def start(debug):
+        debugargs = '-detached'
+        if debug:
+            debugargs = ''
+        system('erl -sname haughty@localhost %s -pa ebin -s htyboot start' % (debugargs,))
+
 
 commands = {
-	Constant("start"): lambda _x: system('erl -sname haughty@localhost -noshell -pa ebin -s htyboot start'),
-	Constant("stop") : lambda _x: htyclient(['stop']),
+	Constant("start"): lambda _x: start(False),
+	Constant("debug"): lambda _x: start(True),
+        Constant("stop") : lambda _x: htyclient(['stop']),
 	Sequence([
 		Constant("mount"),
 		Slot("dir"),
