@@ -1,0 +1,14 @@
+
+
+Bort med vhostar ur hty. De blir resurser som andra
+
+/etc/hty/app1.vhost
+        /app2.vhost/
+
+monteringsregler kan ligga varsom i trädet.
+Rootresursen läser defaultmonteringsregler från samma www-träd.
+
+resurser längre ner kan överrida, lägga till och ta bort monteringsregler.
+
+monterare ska nog inte vara moduler utan bara regler som matchar
+på  Filnamnpattern | Fil, folder eller symlänk | parentkatalog | första raden i filen
