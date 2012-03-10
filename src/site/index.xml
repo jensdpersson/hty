@@ -1,0 +1,6 @@
+<?xml-stylesheet type="text/xsl" href="prosith-dropdown.xsl"?>
+<project-site title="Haughty HTTP Server" xmlns="http://prosith.hoverview.org">
+    <section title="Documentation" href="about.html"/>
+    <section title="EDoc" href="edoc/index.html"/>
+    <section title="Unit test results" href="test-results"/>
+</project-site>
