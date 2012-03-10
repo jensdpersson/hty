@@ -1,0 +1,10 @@
+<tarball name="hty.tar" xmlns="http://recipy.hoverview.org/default">
+  <folder name="hty">
+    <folder name="bin">
+      <copies of="src/main/sh/hty"/>
+    </folder>
+    <folder name="ebin">
+      <artifact name="beams"/>
+    </folder>
+  </folder>
+</tarball>
