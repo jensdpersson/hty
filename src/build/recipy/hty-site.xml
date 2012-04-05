@@ -11,6 +11,9 @@
             </folder>
             <artifact project="verdict" name="xslt"/>
             <artifact project="prosith" name="pkg"/>
+	    <folder name="download">
+	      <artifact name="beams"/>
+	    </folder>
         </folder>
     </folder>
 </recipe>
