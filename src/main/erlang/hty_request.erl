@@ -1,15 +1,5 @@
--module(hty_request, [State]).
+-module(hty_request,[Req,Rsp]).
 
 
-
-
-
-
-
-
-
-
-
-header(Name) -> lists:keyfind(State#http.headers, 1, Name).
-
-
+next()->no.
+    

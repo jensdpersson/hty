@@ -1,0 +1,14 @@
+<recipe xmlns="http://recipy.hoverview.org/default"
+        xmlns:e="http://recipy.hoverview.org/erlang">
+  <e:beamfiles src="src/main/behaviours/*"/>
+  <e:beamfiles>
+    <e:includes>
+      <copies of="src/main/hrl/*"/>
+      <artifact name="hrl" project="helm"/>
+    </e:includes>
+    <e:codepathprefix>
+      <e:beamfiles src="src/main/behaviours/*"/>
+    </e:codepathprefix>
+    <e:flags>+debug_info</e:flags>
+  </e:beamfiles>
+</recipe>
