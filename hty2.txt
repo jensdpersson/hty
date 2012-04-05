@@ -12,3 +12,22 @@ resurser längre ner kan överrida, lägga till och ta bort monteringsregler.
 
 monterare ska nog inte vara moduler utan bara regler som matchar
 på  Filnamnpattern | Fil, folder eller symlänk | parentkatalog | första raden i filen
+
+Starta en site:
+hty serve bollhav from /var/bollhav/www 
+
+Stoppa en site:
+hty no serve bollhav [from /var/bollhav/www]
+
+Starta:
+hty start
+
+Stoppa:
+hty stop
+
+Om tcpportar ska monteras från filer blir det skumt att stoppa och starta siter
+under samma port. 
+
+Om man inte anger en subpath för att starta/stoppa 
+
+hty off 
