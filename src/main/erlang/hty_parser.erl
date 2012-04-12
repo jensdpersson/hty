@@ -99,8 +99,8 @@ header_parser(Req, Data) ->
     end.
 
 body_parser(Req, Data) ->
-    case header(Req,'Content-Length') of
-      [] -> {done, Req:entity(entity=Data) };
+    case Req:header('Content-Length') of
+      [] -> {done, Req:entity(Data) };
       ContentLength -> {Req, Data, fun(Req1, Data1) -> 
                       assemble_body(Req1, Data1, [], string:to_integer(ContentLength))
                                    end}

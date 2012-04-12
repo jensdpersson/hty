@@ -6,8 +6,18 @@
 
 
 -export([start/0, listen/2, serve/3, install/2]).
+-export([mount/1]).
 
 %External API
+
+
+mount(Folder) ->
+	Walker = hty_walker:new([[ 
+            hty_listen_rule, 
+	    hty_vhost_rule
+	]]),
+        Walker:walk(Folder, ?MODULE).
+
 
 start() ->
     Dispatcher = spawn(fun() -> loop_dispatch(hty_state:new([],[],[])) end),
@@ -52,6 +62,7 @@ install(EngineId, Engine) ->
     end.
 
 loop_dispatch(ServerState) ->
+	io:format("LoopDispatch"),
     receive
         {mount, SiteId, EngineId, DocRoot, ReplyTo} -> 
 	    spawn(fun() -> 
