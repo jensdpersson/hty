@@ -5,10 +5,10 @@
 -module(hty_parser).
 
 
--export([parse/1]).
+-export([parse/1, respond/2]).
 
 
-%External API
+%doc Format a timestamp
 tstamp() ->
     {{Y,M,D},{H,Mi,S}} = erlang:localtime(),
     integer_to_list(Y) ++ "-" ++

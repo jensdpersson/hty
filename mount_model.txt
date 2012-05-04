@@ -1,0 +1,55 @@
+
+
+Vi låter en site vara en enda stor nästlad struct
+
+{collection, Onpost, Index, Items} =
+{collection,
+	saxforms2xml,
+	directory_listing,
+	{
+		.... subresurser
+	}	
+}
+
+Monterarna får då en roll där de måste kunna trigga olika rekursering
+och sätta resultatet i olika fält.
+
+En collection_mounter till exempel:
+
+mount(Mountable) ->
+		 case Mountable:type() of
+		    dir -> mountdir(Mountable);
+		    _ -> no
+		 end.
+
+mountdir(Mountable) ->
+		    % Check for sub named post[.EXT]
+		    Onpost = case Mountable:mount(post) of
+		    	     no -> fixed_status(405); %eller undefined eller ngt
+			     Resource -> Resource
+			   end,
+		    Index = case Mountable:mount(index) of
+		    	     no -> fixed_status(403); %eller undefined eller ngt
+			     Resource -> Resource
+			   end,
+	            Items = directory:new() ... eller via mount() också.
+
+Skillnad mellan collection och directory:
+ den förra kan konfas att hantera post och lista ett svar etc, directory är bara en lista av filer och kataloger, eller hmm.
+collections Items fält där ska nog inte vara en resurs eller jo.
+Om man vill ha en collection av datafiler bara så gör man en där Items är ett directory, filer däri monteras inte utan kommer läsas i samband med request direkt från disk. Ska den heta location isf directory kanske?
+Vill man ha en djupare hierarki nästlar man collections.
+
+Bara det att... hur ska tex en post hanteras då?
+collection-resursen får in frågan, ser metoden, ser att det finns en Post
+
+Items får vara en hty_folder-instans. 
+Instance är ett ett fält som svarar mot en instance[.X[.Y[.Z..]]] fil.
+subresurser på collectionen körs på den resursklassen, med den hty_file som motsvarar filen. hur blir det då, anta att vi anger en resursklass 'document', specar vi vad som ska hända med GET, PUT och så? En vanlig document-resursklass kan inte göra det kanske. Nog bättre att inte ha en Instance-resurs och istället speca oninstanceget.
+
+Vad ställer detta för constraints på mount-proceduren?
+mount får vara en funktion FsEntry -> Resource
+med andra ord måste en mounter som monterar ngt som motsvaras av en katalog själv hantera hur man i fs rekurserar.
+
+		   
+

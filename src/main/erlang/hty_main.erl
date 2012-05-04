@@ -12,10 +12,10 @@
 
 
 mount(Folder) ->
-	Walker = hty_walker:new([[ 
+	Walker = hty_walker:new([
             hty_listen_rule, 
 	    hty_vhost_rule
-	]]),
+	]),
         Walker:walk(Folder, ?MODULE).
 
 
@@ -98,7 +98,7 @@ loop_dispatch(ServerState) ->
 	    ReplyTo ! {ok, loaded},
 	    loop_dispatch(ServerState:add_engine(EngineId, Engine));
         {listen, [Ip, Port], ReplyTo} ->
-            Server = hty_server:new(Ip, Port),
+            Server = hty_server:new(Ip, Port, self()),
             case Server:start() of
                 {ok, Server1} -> 
 		    ReplyTo ! {ok, listening, Ip, Port},
@@ -107,6 +107,8 @@ loop_dispatch(ServerState) ->
 		    ReplyTo ! {error, Error},
 		    loop_dispatch(ServerState)
 	    end;
+	{request, ReplyTo} ->
+	    ReplyTo ! {route, hty_root:new(ServerState:sites())};
 	SomeMessage -> 
             io:format("Unknown message ~p~n", [SomeMessage]),
             loop_dispatch(ServerState)
