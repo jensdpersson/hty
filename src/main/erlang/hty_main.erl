@@ -6,7 +6,7 @@
 
 
 -export([start/0, listen/2, serve/3, install/2]).
--export([mount/1]).
+-export([mount/1, load/1]).
 
 %External API
 
@@ -48,6 +48,10 @@ serve(SiteId, EngineId, DocRoot) ->
 	    ?MODULE ! {no, {mount, SiteId, EngineId, DocRoot, self()}},
 	    {timeout, 5000}
     end.
+
+%@doc Bollhav bollhav limsmed
+load(Path) ->
+    no.
 
 %@doc install a new site engine, call it Id
 install(EngineId, Engine) -> 
