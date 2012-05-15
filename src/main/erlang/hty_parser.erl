@@ -8,17 +8,6 @@
 -export([parse/1, respond/2]).
 
 
-%doc Format a timestamp
-tstamp() ->
-    {{Y,M,D},{H,Mi,S}} = erlang:localtime(),
-    integer_to_list(Y) ++ "-" ++
-    integer_to_list(M) ++ "-" ++
-    integer_to_list(D) ++ "T" ++
-    integer_to_list(H) ++ ":" ++
-    integer_to_list(Mi) ++ ":" ++
-    integer_to_list(S).
-
-log(Msg) -> io:format("~p~n", [Msg]).
 
 pack_status({Code, Message}) when is_integer(Code) -> integer_to_list(Code) ++ " " ++ Message;
 pack_status(Message) -> Message.

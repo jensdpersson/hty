@@ -6,23 +6,25 @@
 
 
 -export([start/0, listen/2, serve/3, install/2]).
--export([mount/1, load/1]).
+-export([mount/1, status/0]).
 
 %External API
 
 
-mount(Folder) ->
-	Walker = hty_walker:new([
-            hty_listen_rule, 
-	    hty_vhost_rule
-	]),
-        Walker:walk(Folder, ?MODULE).
+mount(Fscursor) ->
+	      Rules = [
+              	     hty_listen_rule, 
+	    	     hty_vhost_rule,
+		     hty_recurse_rule
+		     ],
+        hty_mounter:walk(Fscursor, Rules).
 
 
 start() ->
-    Dispatcher = spawn(fun() -> loop_dispatch(hty_state:new([],[],[])) end),
+    Dispatcher = spawn(fun() ->
+    	       loop_dispatch(hty_state:new([],[],[])) end),
     register(?MODULE, Dispatcher),
-    {ok, started}.
+    ok.
 
 
 %@doc Ip is an ipv4 address as a 4-tuple of bytes, Port is an integer
@@ -49,9 +51,6 @@ serve(SiteId, EngineId, DocRoot) ->
 	    {timeout, 5000}
     end.
 
-%@doc Bollhav bollhav limsmed
-load(Path) ->
-    no.
 
 %@doc install a new site engine, call it Id
 install(EngineId, Engine) -> 
@@ -64,6 +63,21 @@ install(EngineId, Engine) ->
 	    ?MODULE ! {no, {install, EngineId, Engine}},
 	    {timeout, 5000}
     end.
+
+status() ->
+	 io:format("a0"),
+	 ?MODULE ! {status, self()},
+	 io:format("a"),
+	 receive
+		{status, Status} -> 
+		 	 io:format("b"),
+			 io:format("~p~n", [Status]);
+		Other -> io:format("Bad status ~p~n",[Other])
+	 after 
+		10000 -> io:format("timeout")
+	 end.
+		
+	     
 
 loop_dispatch(ServerState) ->
 	io:format("LoopDispatch"),
