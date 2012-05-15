@@ -12,7 +12,7 @@ start([Path]) ->
 	    	 true -> 
 		       case hty_main:start() of
 		       	    ok -> 
-			       hty_main:mount(Fscursor)
+			       hty_main:reload(Fscursor)
 		       end
 	    end.
 

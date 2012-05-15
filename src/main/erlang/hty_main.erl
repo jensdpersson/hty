@@ -6,18 +6,23 @@
 
 
 -export([start/0, listen/2, serve/3, install/2]).
--export([mount/1, status/0]).
+-export([reload/1, status/0]).
 
 %External API
 
 
-mount(Fscursor) ->
+reload(Fscursor) ->
 	      Rules = [
+	      	     hty_cfg_rule,
               	     hty_listen_rule, 
-	    	     hty_vhost_rule,
-		     hty_recurse_rule
+	    	     hty_vhost_rule
 		     ],
-        hty_mounter:walk(Fscursor, Rules).
+        Cfg = hty_walker:walk(Fscursor, Rules),
+	io:format("Reloading configuration ~p~n", [Cfg]),
+	?MODULE ! {reload, Cfg, self()},
+	receive
+	   {ok, reloaded
+	Cfg:load(hty_main).
 
 
 start() ->

@@ -1,11 +1,17 @@
--module(hty_walker, [Rules]).
+-module(hty_walker).
 
--export([walk/1]).
+-export([walk/2]).
 
+walk(Fscursor, Rules) -> match(Fscursor, Rules, Rules).
 
-walk(_Path) ->
-	   no.
-
+match(Fscursor, [], Allrules) -> {no, orphan, Fscursor, Allrules};
+match(Fscursor, [Rule|Rules], Allrules) ->
+		case Rule:match(Fscursor, Allrules) of
+		     {claim, Module} -> 
+		     		{ok, Module, Fscursor, Rule};
+		     block -> {no, blocked, Fscursor, Rule};
+		     next -> match(Fscursor, Rules, Allrules)
+		end.
 
 		  
 
