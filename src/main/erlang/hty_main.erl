@@ -19,11 +19,7 @@ reload(Fscursor) ->
 		     ],
         Cfg = hty_walker:walk(Fscursor, Rules),
 	io:format("Reloading configuration ~p~n", [Cfg]),
-	?MODULE ! {reload, Cfg, self()},
-	receive
-	   {ok, reloaded
-	Cfg:load(hty_main).
-
+	Cfg:reload().
 
 start() ->
     Dispatcher = spawn(fun() ->
