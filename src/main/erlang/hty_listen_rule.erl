@@ -2,7 +2,12 @@
 
 -export([match/2]).
 
-match(Fscursor, Rules) ->
-		case Fscursor:parts() of
-		     [Port, http] when is_integer(Port) ->
-		     	    {claim, };
+match(Fspath, _Rules) ->
+		case Fspath:parts() of
+		     [Port, "http"] -> claim(Port, http);
+		     [Port, "https"] -> claim(Port, https);
+		     _ -> next
+		end.
+
+claim(Port, Type) ->
+	    {claim, {listen, Type, list_to_integer(Port)}}.

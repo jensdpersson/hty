@@ -13,13 +13,33 @@
 
 reload(Fscursor) ->
 	      Rules = [
-	      	     hty_cfg_rule,
-              	     hty_listen_rule, 
-	    	     hty_vhost_rule
-		     ],
-        Cfg = hty_walker:walk(Fscursor, Rules),
+		    hty_listen_rule,
+		    hty_site_rule
+	      ],
+        Cfg = Fscursor:walk(Rules),
 	io:format("Reloading configuration ~p~n", [Cfg]),
-	Cfg:reload().
+	Sort = fun(Item, {Ls, Ss, Is}) -> 
+	     case Item of 
+	     	  {ok, Cmd, _Path, _Rule} -> 
+		       case Cmd of
+		       	    {listen, _Proto, _Port} = L ->
+			    	     {[L|Ls], Ss, Is};
+		            {site, _Name, _Root} = S ->
+			    	     {Ls, [S|Ss], Is}
+		       end;
+		  {no, _Reason, _Path, _Ruleinfo} = I ->
+		       	    {Ls, Ss, [I|Is]}
+	      end
+	  end,
+	A0 = {[],[],[]},
+	{Listens, Sites, _Ignored} = lists:foldl(Sort, A0, Cfg),
+	?MODULE ! {reload, Listens, Sites},
+	receive 
+		{ok, _Status} -> ok;
+		{no, _Reason} -> no
+	after
+		60000 -> timeout
+	end.
 
 start() ->
     Dispatcher = spawn(fun() ->
@@ -126,6 +146,31 @@ loop_dispatch(ServerState) ->
 		    ReplyTo ! {error, Error},
 		    loop_dispatch(ServerState)
 	    end;
+	{reload, Listens, Sites} -> 
+		 Servers = ServerState:servers(),
+		 Cmp = fun(Server, Listen) ->
+		    Port = Server:port(),
+		    Proto = Server:protocol(),
+		    case Listen of 
+		    	 {listen, Proto, Port} -> true;
+			 _ -> false
+		    end,
+		 Ctor = fun(Listen) -> 
+		      Ip = {0,0,0,0},
+		      {listen, Proto, Port} = Listen,
+		      Server = hty_server:new(Ip, Port),
+		      Server:start(),
+		      Server
+		 end,
+		 Cull = fun(Server) -> Server:stop() end,
+		 Vector = hty_vector:new(Cmp, Cull, Ctor),
+		 Servers1 = Vector:filter(Servers, Listens),
+
+		 State1 = ServerState:servers(Servers1),
+
+		 
+
+		 loop_dispatch();
 	{request, ReplyTo} ->
 	    ReplyTo ! {route, hty_root:new(ServerState:sites())};
 	SomeMessage -> 

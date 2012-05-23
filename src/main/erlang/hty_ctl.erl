@@ -5,7 +5,7 @@
 -spec start(atom()) -> ok | {error, string()}.
 %@spec start(atom()) -> ok | {error, string()}.
 start([Path]) ->
-	    Fscursor = hty_fs:cursor(Path),
+	    Fscursor = hty_fs_cursor:new(atom_to_list(Path)),
 	    case Fscursor:exists() of
 	    	 false ->
 		       {error, enoexist};
