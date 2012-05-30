@@ -17,12 +17,31 @@ start() ->
 		  end,
 	    Accepter = spawn(Fun),
 	    ok = gen_tcp:controlling_process(Listen, Accepter),
+	    register(process_key(), 
+	    			    spawn(fun() -> 
+	    			    		loop_control([])
+				          end)
+		    ),
 	    Accepter ! go,
             ok
     end.
 
+loop_control(Sites) ->
+       receive
+           stop -> ok;
+	   {sites, Sites1} -> loop_control(Sites1)
+       end.
+			
 
-stop() -> no.
+stop() ->
+       Key = process_key(),
+       Key ! stop,
+       ok.
+
+process_key() -> 
+	      atom_to_list(hty_server) ++ 
+	      " running on port " ++ Port.
+	      
 
 loop_accept(Listen) ->
     case gen_tcp:accept(Listen) of
