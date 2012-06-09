@@ -1,0 +1,8 @@
+
+
+kan man lägga till regler i ett katalognamn tro?
+
+ext-mp3-audio|mp3.module
+
+så kan man göra.
+MEN då blir det låånga configkedjor om man måste gå igenom alla såna.

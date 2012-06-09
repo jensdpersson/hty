@@ -1,0 +1,13 @@
+
+
+
+/etc/hty/
+	listen/
+		http_80/
+			a -> ../../sites/a
+			b -> ../../sites/b
+		https_443/
+			a -> ../../sites/a
+	sites/
+		a
+		b
