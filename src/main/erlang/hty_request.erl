@@ -1,5 +1,2 @@
--module(hty_request,[Req,Rsp]).
+-module(hty_request).
 
-
-next()->no.
-    

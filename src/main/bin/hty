@@ -1,0 +1,31 @@
+#!/usr/bin/env escript
+
+main(["start"]) -> start();
+main(["stop"]) -> stop();
+main(["status"]) -> status();
+main(_) -> print("Usage: hty start|stop|status|restart").
+
+
+
+print(M) -> io:format(M), io:format("~n").
+
+
+start() -> 
+	print("Starting Haughty Http Server"),
+	code:add_pathz("/opt/hty/ebin"),
+        case hty_main:start() of
+	  {ok,started} -> print("Ok"),
+	     hty_main:mount("/etc/hty"),
+	     loop();
+	  {error, Error} -> print(Error)
+	end.
+ 
+
+loop() ->
+	receive
+	   stop -> ok
+	after 10000 -> loop()
+	end.
+
+stop() -> print("Stopping").
+status() -> print("Not implemented").

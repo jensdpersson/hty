@@ -1,0 +1,1 @@
+erl -pz target/site/downloads/ -s hty_ctl start $1
