@@ -147,30 +147,29 @@ loop_dispatch(ServerState) ->
 		    loop_dispatch(ServerState)
 	    end;
 	{reload, Listens, Sites} -> 
-		 Servers = ServerState:servers(),
-		 Cmp = fun(Server, Listen) ->
-		    Port = Server:port(),
-		    Proto = Server:protocol(),
-		    case Listen of 
-		    	 {listen, Proto, Port} -> true;
-			 _ -> false
-		    end,
-		 Ctor = fun(Listen) -> 
-		      Ip = {0,0,0,0},
-		      {listen, Proto, Port} = Listen,
-		      Server = hty_server:new(Ip, Port),
-		      Server:start(),
-		      Server
-		 end,
-		 Cull = fun(Server) -> Server:stop() end,
-		 Vector = hty_vector:new(Cmp, Cull, Ctor),
-		 Servers1 = Vector:filter(Servers, Listens),
+	    Servers = ServerState:servers(),
+	    Cmp = fun(Server, Listen) ->
+			  Port = Server:port(),
+			  Proto = Server:protocol(),
+			  case Listen of 
+			      {listen, Proto, Port} -> true;
+			      _ -> false
+			  end
+		  end,
+	    Ctor = fun(Listen) -> 
+			   Ip = {0,0,0,0},
+			   {listen, Proto, Port} = Listen,
+			   Server = hty_server:new(Ip, Port),
+			   Server:start(),
+			   Server
+		   end,
+	    Cull = fun(Server) -> Server:stop() end,
+	    Vector = hty_vector:new(Cmp, Cull, Ctor),
+	    Servers1 = Vector:filter(Servers, Listens),
+	    
+	    State1 = ServerState:servers(Servers1),
 
-		 State1 = ServerState:servers(Servers1),
-
-		 
-
-		 loop_dispatch();
+	    loop_dispatch(State1);
 	{request, ReplyTo} ->
 	    ReplyTo ! {route, hty_root:new(ServerState:sites())};
 	SomeMessage -> 
