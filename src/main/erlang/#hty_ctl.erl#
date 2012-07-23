@@ -1,0 +1,12 @@
+-module(hty_ctl).
+
+-export([start/1, stop/0]).
+
+-spec start(atom()) -> ok | {error, string()}.
+start(Path) ->
+    case hty_main:start() of
+	ok ->
+	    case hty_fs:cursor(Path) of
+		
+	    
+    hty_main:serve()

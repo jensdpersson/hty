@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite tests="1" failures="0" errors="1" skipped="0" time="1.004" name="module 'hty_site'">
+  <testcase time="1.001" name="hty_site_tests:basic_test/0_0" description="module 'hty_site_tests'">
+    <error type="error">
+::error:{badmatch,{no,timeout}}
+  in function hty_site_tests:basic_test/0
+    </error>
+    <system-out>
+    </system-out>
+  </testcase>
+</testsuite>

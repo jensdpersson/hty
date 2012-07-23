@@ -1,19 +1,19 @@
 <recipe xmlns="http://recipy.hoverview.org/default"
         xmlns:e="http://recipy.hoverview.org/erlang">
     <folder name="target">
+        <folder name="downloads">
+	      <artifact name="beams"/>
+	    </folder>
         <folder name="site">
             <copies of="src/site"/>
             <folder name="edoc">
                 <e:edoc/>
             </folder>
             <folder name="test-results">
-                 <e:verdict/>
+                 <e:eunit-reports ebin="target/beams"/>
             </folder>
             <artifact project="verdict" name="xslt"/>
             <artifact project="prosith" name="pkg"/>
-	    <folder name="downloads">
-	      <artifact name="beams"/>
-	    </folder>
         </folder>
     </folder>
 </recipe>
