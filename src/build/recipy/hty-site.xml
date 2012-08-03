@@ -10,7 +10,7 @@
                 <e:edoc/>
             </folder>
             <folder name="test-results">
-                 <e:eunit-reports ebin="target/beams"/>
+                 <e:eunit-reports ebin="target/downloads"/>
             </folder>
             <artifact project="verdict" name="xslt"/>
             <artifact project="prosith" name="pkg"/>
