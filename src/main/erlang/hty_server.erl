@@ -1,5 +1,5 @@
 %@doc Ip is an ipv4 address as a 4-tuple of bytes, Port is an integer
--module(hty_server, [Ip, Port, Router]).
+-module(hty_server, [Ip, Port, Resource]).
 -export([start/0, stop/0]).
 
 start() ->
@@ -44,20 +44,23 @@ process_key() ->
 	      
 
 loop_accept(Listen) ->
-    case gen_tcp:accept(Listen) of
-	{error, Error} -> log(Error);
-	{ok, Socket} ->
-	    Handler = spawn(fun() -> 
-				    receive {route, Route} ->
-					    Req = hty_parser:parse(Socket),
-					    Rsp = Route:handle(Req),
-					    hty_parser:respond(Socket, Rsp)
-				    end 
-			    end),
-	    ok = gen_tcp:controlling_process(Socket, Handler),
-	    Router ! {request, Handler},
-	    loop_accept(Listen)
-    end.
+	case gen_tcp:accept(Listen) of
+		{error, Error} -> log(Error);
+		{ok, Socket} ->
+			Handler = 
+				spawn(
+				  fun() -> 
+						  receive 
+							  go ->
+								  Req = hty_parser:parse(Socket),
+								  Rsp = Resource:handle(Req),
+								  hty_parser:respond(Socket, Rsp)
+						  end 
+				  end),
+			ok = gen_tcp:controlling_process(Socket, Handler),
+			Handler ! go,
+			loop_accept(Listen)
+	end.
 
 
 log(Msg) -> io:format("~p~n", [Msg]).

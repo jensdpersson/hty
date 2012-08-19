@@ -16,11 +16,15 @@
 %% API Functions
 %%
 basic_test() ->
-	Pid = hty_site:start(),
-	ok = hty_site:mount(Pid, [], root),
-	ok = hty_site:mount(Pid, [js], dir),
-	ok = hty_site:mount(Pid, [js, 'bogus.js'], jslib),
-	jslib = hty_site:lookup(Pid, [js, 'bogus.js']).
+	Site = hty_sites:create(aSiteId),
+	io:format("Mounting root"),
+	ok = Site:mount(Pid, [], root),
+	io:format("Mounting dir"),
+	ok = Site:mount(Pid, [js], dir),
+	io:format("Mounting jslib"),
+	ok = Site:mount(Pid, [js, 'bogus.js'], jslib),
+	io:format("Lookup jslib"),
+	{ok, jslib} = Site:lookup(Pid, [js, 'bogus.js']).
 
 %%
 %% Local Functions

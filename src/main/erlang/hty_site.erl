@@ -1,79 +1,35 @@
-<<<<<<< local
-%% Author: jens
-%% Created: 19 jul 2012
-%% Description: TODO: Add description to hty_site
-=======
->>>>>>> other
--module(hty_site).
+-module(hty_site, [Siteid, Sitepid]).
 
-<<<<<<< local
 %%
 %% Include files
 %%
-=======
->>>>>>> other
-
-<<<<<<< local
 %%
 %% Exported Functions
 %%
--export([start/0, mount/3, lookup/2]).
-=======
--export([start/1]).
->>>>>>> other
+-export([mount/2, lookup/1]).
 
-<<<<<<< local
 %%
 %% API Functions
 %%
-=======
-start(Name) ->
-    Pid = spawn(fun() -> loop(dict:)),
-    Pid.
->>>>>>> other
-
-<<<<<<< local
-start() ->
-	spawn(fun() -> loop([]) end).
-
-lookup(Sitepid, Path) ->
-	Sitepid ! {follow, Path},
+lookup(Path) ->
+	Sitepid ! {lookup, Path, self()},
 	receive
-		{path, Res} -> {ok, Res}
+		{ok, Res} -> {ok, Res};
+		{no, Path} -> {no, novalue}
 	after 
 			1000 -> {no, timeout}
 	end.
 		
-mount(Sitepid, Path, Resource) ->
-	no.
-
-%%
-%% Local Functions
-%%
-loop(Tree) ->
+mount(Path, Resource) ->
+	Sitepid ! {mount, Path, Resource, self()},
 	receive
-		{follow, Path, ReplyTo} -> 
-			Res = follow(Tree, Path),
-			ReplyTo ! {path, Res},
-			loop(Tree)
+		{ok, Path, Resource} -> ok;
+		{no, Reason} -> {no, Reason}
+	after
+			1000 -> {no, timeout}
 	end.
 
-follow([], []) -> no.
-	
-
-
-=======
-loop(State) ->
-    receive
-	{list, Path, ReplyTo} ->
-	    list(State, Path, ReplyTo);
-	{mount, Path, Resource, ReplyTo} ->
-	    mount(State, Path, Resource, ReplyTo);
-	{lookup, Path, ReplyTo} ->
-	    lookup(Path, ReplyTo);
-	{stop} -> 
-	    ok
-    end.
-	    
-	    
->>>>>>> other
+name() -> Siteid.
+%% 
+%% Local Functions
+%%	

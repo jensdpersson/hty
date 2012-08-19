@@ -4,10 +4,11 @@
 
 match(Fspath, _Rules) ->
 		case Fspath:parts() of
-		     [Port, "http"] -> claim(Port, http);
-		     [Port, "https"] -> claim(Port, https);
+		     [Port, "http"] -> claim(Port, http, Fspath);
+		     [Port, "https"] -> claim(Port, https, Fspath);
 		     _ -> next
 		end.
 
-claim(Port, Type) ->
-	    {claim, {listen, Type, list_to_integer(Port)}}.
+claim(Port, Type, Fspath) ->
+	Root = Fspath:walk([hty_siteref_rule]), 	
+	{claim, {listen, Type, list_to_integer(Port), Root}}.

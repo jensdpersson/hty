@@ -8,6 +8,7 @@
     </e:includes>
     <e:codepathprefix>
       <e:beamfiles src="src/main/behaviours/*"/>
+  	  <artifact name="beams" project="trema"/>
     </e:codepathprefix>
     <e:flags>+debug_info</e:flags>
   </e:beamfiles>
