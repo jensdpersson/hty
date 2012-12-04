@@ -29,7 +29,7 @@ start() ->
 loop_control(Sites) ->
        receive
            stop -> ok;
-	   {sites, Sites1} -> loop_control(Sites1)
+	   	   {sites, Sites} -> loop_control(Sites)
        end.
 			
 

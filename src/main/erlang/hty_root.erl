@@ -2,14 +2,14 @@
 
 -export([handle/1]).
 
-handle(HtyRequest) ->
-    Host = HtyRequest:request_header(host),
-	case lists:keysearch(Host, 1, Sites) of
+handle(Htx) ->
+    Host = Htx:request_header(host),
+    case lists:keysearch(Host, 1, Sites) of
 		{value, {_,Site}} ->
-			Site:handle(HtyRequest);
+	    	Site:handle(Htx);
 		false ->
-			HtyRequest:not_found()
-	end.
+	    	Htx:not_found()
+    end.
 			
     
     

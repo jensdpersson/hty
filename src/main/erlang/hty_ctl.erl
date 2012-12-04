@@ -2,8 +2,8 @@
 
 -export([start/1, stop/0]).
 
--spec start(atom()) -> ok | {error, string()}.
-%@spec start(atom()) -> ok | {error, string()}.
+
+
 start([Path]) ->
 	    Fscursor = hty_fs_cursor:new(atom_to_list(Path)),
 	    case Fscursor:exists() of

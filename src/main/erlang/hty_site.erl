@@ -1,35 +1,14 @@
--module(hty_site, [Siteid, Sitepid]).
+-module(hty_site, [Name, Vhosts, Root]).
 
-%%
-%% Include files
-%%
-%%
-%% Exported Functions
-%%
--export([mount/2, lookup/1]).
+-export([match/1, name/0]).
 
-%%
-%% API Functions
-%%
-lookup(Path) ->
-	Sitepid ! {lookup, Path, self()},
-	receive
-		{ok, Res} -> {ok, Res};
-		{no, Path} -> {no, novalue}
-	after 
-			1000 -> {no, timeout}
-	end.
-		
-mount(Path, Resource) ->
-	Sitepid ! {mount, Path, Resource, self()},
-	receive
-		{ok, Path, Resource} -> ok;
-		{no, Reason} -> {no, Reason}
-	after
-			1000 -> {no, timeout}
+-spec match(Host :: atom()) -> {ok, any()} | false.
+match(Host) ->
+    case lists:member(Host, Vhosts) of
+		true ->
+			{ok, Root};
+		false ->
+			no
 	end.
 
-name() -> Siteid.
-%% 
-%% Local Functions
-%%	
+name() -> Name.
