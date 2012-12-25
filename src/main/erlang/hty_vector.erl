@@ -1,12 +1,28 @@
 -module(hty_vector, [Cmp, Cull, Ctor]).
 
--export([filter/2]).
+-export([update/2, update/3]).
 	
+update(Olds, Remove, Add) ->
+	Olds1 = remove([], Olds, Remove, Remove),
+	add(Add, Olds1). 
 
-
-filter(Olds, News) ->
+update(Olds, News) ->
 	f2(Olds, News, [], []).
 
+remove(Os1, [], _, _) ->
+	lists:reverse(Os1);
+remove(Os1, [O|Os], [], Rs0) ->
+	remove([O|Os1], Os, Rs0, Rs0);
+remove(Os1, [O|Os], [R|Rs], Rs0) ->
+	case Cmp(O,R) of
+		true ->
+			Cull(O),
+			remove(Os1, Os, Rs, Rs0);
+		false ->
+			remove(Os1, [O|Os], Rs, Rs0)
+	end.
+			
+			
 f2([O|Os], [N|Ns], Ks, N1s) ->
 	case Cmp(O,N) of
 	    true -> 
@@ -24,3 +40,5 @@ add([], L) -> L;
 add([N|Ns], L) -> 
 	add(Ns, [Ctor(N)|L]).
        
+
+	

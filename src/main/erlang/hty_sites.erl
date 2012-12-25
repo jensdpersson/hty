@@ -16,7 +16,7 @@
 %%
 %% API Functions
 %%
-%@doc Start a new process for the site id given. Return and store a reference.
+%% Start a new process for the site id given. Return and store a reference.
 %% start(SiteId) ->
 %%     Pid = spawn(fun() -> loop([]) end),
 %%     register(key(SiteId), Pid),

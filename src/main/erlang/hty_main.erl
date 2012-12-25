@@ -100,7 +100,7 @@ reload_servers(ServerState, Listens) ->
 	   end,
     Cull = fun(Server) -> Server:stop() end,
     Vector = hty_vector:new(Cmp, Cull, Ctor),
-    Servers1 = Vector:filter(Servers, Listens),
+    Servers1 = Vector:update(Servers, Listens),
     
     ServerState:servers(Servers1).
 
@@ -119,6 +119,6 @@ reload_sites(ServerState, Sitespecs) ->
 	   end,
     Cull = fun(_Site) -> ok end,
     Vector = hty_vector:new(Cmp, Cull, Ctor),
-    Sites1 = Vector:filter(Sites, Sitespecs),
+    Sites1 = Vector:update(Sites, Sitespecs),
     
     ServerState:sites(Sites1).

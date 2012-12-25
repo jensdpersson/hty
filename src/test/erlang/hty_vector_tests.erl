@@ -10,7 +10,7 @@
 %%
 %% Exported Functions
 %%
--export([basic_test/0]).
+-export([basic_test/0, add_remove_test/0]).
 
 %%
 %% API Functions
@@ -22,10 +22,18 @@ basic_test() ->
 	New = [b, e, d],
 	Facit = [{wrap, e}, {wrap, d}, {wrap, b}],
 	io:format("Checking filtered data"),
-	Facit = Dut:filter(Old, New),
+	Facit = Dut:update(Old, New),
 	io:format("Checking culled elements"),
 	[{wrap, c}, {wrap, a}] = get(culled).
 	
+
+add_remove_test() ->
+	Dut = setup(),
+	Old = [{wrap, a}, {wrap, b}, {wrap, c}, {wrap, d}],
+	Add = [f,g],
+	Remove = [r, b],
+	Facit = [{wrap, a}, {wrap, c}, {wrap, d}, {wrap,f}, {wrap, g}],
+    Facit = Dut:update(Old, Remove, Add).
 %%
 %% Local Functions
 %%

@@ -19,7 +19,7 @@ match(Fspath, _Rules) ->
     case Fspath:parts() of
 		[Siteref, siteref] ->
 	    	%% egentligen, kolla i Siteref.siteref som en fil efter alias.
-	    	{claim, {resource, hty_siteref_resource}};
+	    	{claim, {resource, hty_siteref_resource:new(Siteref)}};
 		_ ->
 			next
     end.
