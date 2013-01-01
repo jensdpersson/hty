@@ -17,13 +17,25 @@
 %%
 
 match(Fspath, Allrules) ->
+	Content = fun(Fspath1) ->
+					  case Fspath1:parts() of
+						  ["content"|_] -> 
+							  true;
+						  _ -> false
+					  end
+			  end,
 	case Fspath:parts() of
 		[Rules, "rules"] ->
 			case change_rules(Rules, Allrules) of
 				{ok, Rules2} ->
-					Fspath:walk(Rules2);
+					case Fspath:walk(Rules2, Content) of
+						[{ok, Resource, _, _}] ->
+							{claim, Resource};
+						Que ->
+							{block, {badwalk, Que}}
+					end;		
 				{no, _} ->
-					block
+					{block, badrules}
 			end;
 		_ -> next
 	end.

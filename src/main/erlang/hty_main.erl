@@ -17,7 +17,7 @@ reload(Fscursor) ->
 		   case Item of 
 		       {ok, Cmd, _Path, _Rule} -> 
 			   case Cmd of
-			       {listen, _Proto, _Port} = L ->
+			       {listen, _Proto, _Port, _Root} = L ->
 				   {[L|Ls], Ss, Is};
 			       {site, _Name, _Root} = S ->
 				   {Ls, [S|Ss], Is}
@@ -29,11 +29,12 @@ reload(Fscursor) ->
     A0 = {[],[],[]},
     {Listens, Sites, _Ignored} = lists:foldl(Sort, A0, Cfg),
     ?MODULE ! {reload, Listens, Sites},
+	io:format("Before recv"),
     receive 
-	{ok, _Status} -> ok;
-	{no, _Reason} -> no
+		{ok, _Status} -> ok;
+		{no, _Reason} -> no
     after
-	60000 -> timeout
+		60000 -> timeout
     end.
 
 start() ->

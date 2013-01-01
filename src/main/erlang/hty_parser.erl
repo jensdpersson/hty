@@ -18,19 +18,34 @@ pack_header(HeaderName, HeaderValue) -> HeaderName ++ ": " ++ HeaderValue.
 
 respond(Socket, Rsp) ->
     send_line(Socket, "HTTP/1.1 " ++ pack_status(Rsp:status())),
-    send_line(Socket, "Server: haughty 0.3"),
-    lists:foreach(fun({HName, HValue}) -> send_line(Socket, pack_header(HName, HValue)) end, Rsp:headers()),
+    send_line(Socket, "Server: haughty 0.4"),
+    lists:foreach(fun({HName, HValue}) -> send_line(Socket, pack_header(HName, HValue)) end, Rsp:rsp_headers()),
     send_line(Socket, ""),
-    gen_tcp:send(Socket, Rsp:entity()).
+	lists:foreach(fun(Out) ->
+						case Out of
+							{file, Filepath} ->
+								case file:sendfile(Filepath, Socket) of
+									{ok, BytesSent} ->
+										io:format("Sendfile ok~n");
+									{error, Reason} ->
+										io:format("Sendfile fails with ~p~n", [Reason])	
+								end;
+							{data, Binary} ->
+								gen_tcp:send(Socket, Binary)
+						end
+				  end, lists:reverse(Rsp:outs())).
 
 send_line(Socket, Line) -> gen_tcp:send(Socket,  Line ++ "\r\n").
 
-parse(Socket) -> parse_loop(hty_request:new(), [], fun method_parser/2, Socket).
+parse(Socket) -> 
+	Htx0 = hty_tx:new(http, 'GET', {[],[]}, "200 OK", [], [], [], []),
+	parse_loop(Htx0, [], fun method_parser/2, Socket).
 
 parse_loop(Req, Unparsed, Parser, Socket) ->
     case Parser(Req, Unparsed) of
         {Req1, Unparsed1, Parser1} -> parse_loop(Req1, Unparsed1, Parser1, Socket);
         more -> recv(Req, Unparsed, Parser, Socket);
+		{more, []} -> recv(Req, Unparsed, Parser, Socket);
         {done, Req1} -> Req1;
         {error, Error} -> {error, Error}
     end.
@@ -61,7 +76,9 @@ canonical_method(Method) -> Method.
 
 path_parser(Req, Data) ->
     case token(Data, 32) of
-        {token, Path, Rest} -> {Req:path(Path),Rest,fun protocol_parser/2};
+        {token, Path, Rest} -> 
+			Pathzipper = {[], string:tokens(Path, "/")},
+			{Req:path(Pathzipper), Rest, fun protocol_parser/2};
         {more, _Token} -> more
     end.
 
@@ -80,7 +97,7 @@ header_parser(Req, Data) ->
         {token, Name, Data1} ->
             case line(Data1) of
                {token, Value, Data2} -> {
-                   Req:header(list_to_atom(Name), string:strip(Value)),
+                   Req:req_header(list_to_atom(Name), string:strip(Value)),
                                          Data2, fun header_parser/2};
                {more, _Token} -> more
             end;
@@ -88,14 +105,14 @@ header_parser(Req, Data) ->
     end.
 
 body_parser(Req, Data) ->
-    case Req:header('Content-Length') of
-      [] -> {done, Req:entity(Data) };
+    case Req:req_header('Content-Length') of
+      [] -> {done, Req:req_entity(Data) };
       ContentLength -> {Req, Data, fun(Req1, Data1) -> 
                       assemble_body(Req1, Data1, [], string:to_integer(ContentLength))
                                    end}
     end.
 
-assemble_body(Req, _Data, Buffered, 0) -> {done, Req:entity(lists:reverse(Buffered))};
+assemble_body(Req, _Data, Buffered, 0) -> {done, Req:req_entity(lists:reverse(Buffered))};
 assemble_body(Req, [Char|Data], Buffered, Len) -> assemble_body(Req, Data, [Char|Buffered], Len-1);
 assemble_body(_Req, [], Buffered, _Len) -> {more, Buffered}.
 

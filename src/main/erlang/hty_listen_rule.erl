@@ -11,7 +11,7 @@ match(Fspath, _Rules) ->
 
 claim(Port, Proto, Fspath) ->
 	case Fspath:walk([hty_siteref_rule, hty_rules_rule]) of
-    	{claim, {resource, Root}} -> 	
+    	[{ok, {resource, Root}, _, _}] -> 	
     		{claim, {listen, Proto, list_to_integer(Port), Root}};
 		{no, _Reason, _Path, _Rules} ->
 			block

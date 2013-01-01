@@ -39,8 +39,8 @@ stop() ->
        ok.
 
 process_key() -> 
-	      atom_to_list(hty_server) ++ 
-	      " running on port " ++ Port.
+	      list_to_atom(atom_to_list(hty_server) ++ 
+	      " running on port " ++ integer_to_list(Port)).
 	      
 
 loop_accept(Listen) ->

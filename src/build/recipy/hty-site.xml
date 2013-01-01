@@ -3,7 +3,7 @@
     <folder name="target">
         <folder name="ebin">
 	      <artifact name="beams"/>
-	      <artifact name="beams" project="trema"/>
+	      
 	    </folder>
         <folder name="site">
             <copies of="src/site"/>

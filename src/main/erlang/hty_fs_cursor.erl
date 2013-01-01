@@ -1,8 +1,12 @@
 -module(hty_fs_cursor, [Path]).
 
--export([exists/0, match/1, walk/1, walk/2, parts/0, ext/0]).
+-export([exists/0, isdir/0]).
+-export([match/1, walk/1, walk/2, list/0, parts/0, ext/0, subpath/1]).
+
+-export([filepath/0, basename/0]).
 
 exists() -> filelib:is_file(Path).
+isdir() -> filelib:is_dir(Path).
 
 match(Rules) -> 
 	    This = this(),	    
@@ -14,6 +18,7 @@ match(This, [Rule|Rules], Allrules) ->
 		     {claim, Response} -> 
 		     		{ok, Response, Path, Rule};
 		     block -> {no, blocked, Path, Rule};
+			 {block, Why} -> {no, {blocked, Why}, Path, Rule};
 		     next -> match(This, Rules, Allrules)
 		end.
 
@@ -41,11 +46,25 @@ walk(Rules, Filter) ->
 
 this() -> hty_fs_cursor:new(Path).
 
-parts() ->
-	Basename = filename:basename(Path),
-	string:tokens(Basename, ".").
+parts() -> 
+	string:tokens(basename(), ".").
 
 ext() ->
 	[Rv|_] = lists:reverse(parts()),
 	Rv.
+
+filepath() -> Path.
+basename() -> filename:basename(Path).
 	
+subpath(Pathsegments) ->
+	case lists:foldl(fun(Item, Acc) -> 
+						case Item of
+							".." -> no;
+							_ -> lists:reverse(Item) ++ "/" ++ Acc
+						end
+				end,
+				lists:reverse(Path),
+				Pathsegments) of
+		no -> notfound;
+		Path1 -> hty_fs_cursor:new(lists:reverse(Path1))
+	end.

@@ -16,8 +16,8 @@
 %% API Functions
 %%
 match(Fspath, Rules) ->
-	case Fspath:parts() of
-		["filter"] ->
+	case Fspath:ext() of
+		"filter" ->
 			Walked = Fspath:walk(Rules, fun(X) -> "content" /= hd(X:parts()) end),
 			Filters = lists:flatmap(
 						  fun(Item) ->
@@ -29,7 +29,7 @@ match(Fspath, Rules) ->
 								  end
 						  end, Walked),
 			case Fspath:walk(Rules, fun(X) -> "content" == hd(X:parts()) end) of
-				[{ok,Resource,_,_}] -> 
+				[{ok,{resource, Resource},_,_}] -> 
 					io:format("Resource:~p~n", [Resource]),
 					Rv = hty_filter_resource:new(Filters, Resource),
 					{claim, {resource, Rv}};

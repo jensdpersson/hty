@@ -4,7 +4,7 @@
 -export([add_server/2, add_engine/2, add_site/2]).
 -export([get_server/1, get_engine/1, get_site/1]).
 -export([remove_server/1, remove_engine/1, remove_site/1]).
--export([sites/0]).
+-export([sites/0, servers/0, sites/1, servers/1]).
 
 add_server(Id, Server) -> 
     hty_state:new(store(Id, Server, Servers), Engines, Sites).
@@ -16,6 +16,12 @@ add_site(Id, Site) ->
     hty_state:new(Servers, Engines, store(Id, Site, Sites)).
 
 sites() -> Sites.
+sites(Sites1) -> 
+	hty_state:new(Servers, Engines, Sites1).
+
+servers() -> Servers.
+servers(Servers1) -> 
+	hty_state:new(Servers1, Engines, Sites).
      
 get_server(Id) ->
     case lookup(Id, Servers) of

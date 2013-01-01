@@ -4,11 +4,11 @@
   <e:beamfiles>
     <e:includes>
       <copies of="src/main/hrl/*"/>
-      <artifact name="hrl" project="helm"/>
+      <!--artifact name="hrl" project="helm"/-->
     </e:includes>
     <e:codepathprefix>
       <e:beamfiles src="src/main/behaviours/*"/>
-  	  <artifact name="beams" project="trema"/>
+  	  <!--artifact name="beams" project="trema"/-->
     </e:codepathprefix>
     <e:flags>+debug_info</e:flags>
   </e:beamfiles>
