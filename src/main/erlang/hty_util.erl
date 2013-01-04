@@ -22,8 +22,6 @@ first_match(Pred, [X|Xs]) ->
 		{ok, X1} -> {ok, X1};
 		no -> first_match(Pred, Xs)
 	end.
-	
-
 
 %%
 %% Local Functions

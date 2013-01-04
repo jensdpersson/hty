@@ -24,14 +24,16 @@ respond(Socket, Rsp) ->
 	lists:foreach(fun(Out) ->
 						case Out of
 							{file, Filepath} ->
+								io:format("sendfile('~p')~n",[Filepath]),
 								case file:sendfile(Filepath, Socket) of
-									{ok, BytesSent} ->
+									{ok, _BytesSent} ->
 										io:format("Sendfile ok~n");
 									{error, Reason} ->
 										io:format("Sendfile fails with ~p~n", [Reason])	
 								end;
-							{data, Binary} ->
-								gen_tcp:send(Socket, Binary)
+							{data, IOList} ->
+								io:format("data('~p')~n", [IOList]),
+								gen_tcp:send(Socket, IOList)
 						end
 				  end, lists:reverse(Rsp:outs())).
 
