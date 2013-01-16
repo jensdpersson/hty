@@ -17,7 +17,7 @@
 %%
 handle(Htx) ->
 	Htx1 = Htx:rsp_header('Content-Type', "text/html"),
-	Htx1:out({binary, <<"<html><h1>Hello World!</h1></html>">>}).
+	Htx1:echo(<<"<html><h1>Hello World!</h1></html>">>).
 
 %%
 %% Local Functions

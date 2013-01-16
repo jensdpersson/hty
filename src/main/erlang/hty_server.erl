@@ -52,9 +52,10 @@ loop_accept(Listen) ->
 				  fun() -> 
 						  receive 
 							  go ->
-								  Req = hty_parser:parse(Socket),
-								  Rsp = Resource:handle(Req),
-								  hty_parser:respond(Socket, Rsp)
+								  Htx = hty_parser:parse(Socket),
+								  Htx1 = Resource:handle(Htx),
+									Htx2 = Htx1:flush(),									
+								  hty_parser:respond(Socket, Htx2)
 						  end 
 				  end),
 			ok = gen_tcp:controlling_process(Socket, Handler),

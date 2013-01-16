@@ -33,7 +33,7 @@ handle(Htx) ->
 					Htx:sendfile(Filepath);
 				'POST' ->
 					Htx:recvfile(
-					  [fun hty_formtree:parse/1, 
+					  [fun hty_formtree_spaf:parse/1, 
 					   fun hty_xml:format/1], Filepath)
 			end;
 		_ -> 

@@ -4,10 +4,8 @@
 %
 -module(hty_parser).
 
-
 -export([parse/1, respond/2]).
-
-
+-include("hty_tx.hrl").
 
 pack_status({Code, Message}) when is_integer(Code) -> integer_to_list(Code) ++ " " ++ Message;
 pack_status(Message) -> Message.
@@ -40,7 +38,7 @@ respond(Socket, Rsp) ->
 send_line(Socket, Line) -> gen_tcp:send(Socket,  Line ++ "\r\n").
 
 parse(Socket) -> 
-	Htx0 = hty_tx:new(http, 'GET', {[],[]}, "200 OK", [], [], [], []),
+	Htx0 = hty_tx:new(#tx{}),
 	parse_loop(Htx0, [], fun method_parser/2, Socket).
 
 parse_loop(Req, Unparsed, Parser, Socket) ->
@@ -61,10 +59,10 @@ recv(Req, Unparsed, Parser, Socket) ->
        {tcp_closed, _} -> Req
     end.
 
-
 method_parser(Req, Data) -> 
     case token(Data, 32) of
-        {token, Method, Rest} -> {Req:method(canonical_method(Method)),Rest,fun path_parser/2};
+        {token, Method, Rest} -> 
+			{Req:method(canonical_method(Method)),Rest,fun path_parser/2};
         {more, _Token} -> more
     end.
 
@@ -106,17 +104,19 @@ header_parser(Req, Data) ->
         {more, _Token} -> more
     end.
 
-body_parser(Req, Data) ->
-    case Req:req_header('Content-Length') of
-      [] -> {done, Req:req_entity(Data) };
-      ContentLength -> {Req, Data, fun(Req1, Data1) -> 
-                      assemble_body(Req1, Data1, [], string:to_integer(ContentLength))
+body_parser(Htx, Data) ->
+    case Htx:req_header('Content-Length') of
+      [] -> {done, Htx:buffer(Data) };
+      ContentLength -> {Htx, Data, fun(Htx1, Data1) -> 
+                      assemble_body(Htx1, Data1, [], string:to_integer(ContentLength))
                                    end}
     end.
 
-assemble_body(Req, _Data, Buffered, 0) -> {done, Req:req_entity(lists:reverse(Buffered))};
-assemble_body(Req, [Char|Data], Buffered, Len) -> assemble_body(Req, Data, [Char|Buffered], Len-1);
-assemble_body(_Req, [], Buffered, _Len) -> {more, Buffered}.
+assemble_body(Htx, _Data, Buffered, 0) ->
+	{done, Htx:buffer(lists:reverse(Buffered))};
+assemble_body(Htx, [Char|Data], Buffered, Len) -> 
+	assemble_body(Htx, Data, [Char|Buffered], Len-1);
+assemble_body(_Htx, [], Buffered, _Len) -> {more, Buffered}.
 
 
 %Helpers

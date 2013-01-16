@@ -19,7 +19,7 @@ handle(Htx) ->
 	Fun = fun(Resource) ->
 				  Rsp = Resource:handle(Htx),
 				  case Rsp:status() of
-					  "404 Not Found" -> 
+					  {404, _} -> 
 						  no;
 					  _ ->
 						  {ok, Rsp}
