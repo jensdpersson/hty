@@ -10,4 +10,7 @@
 		 ondata=fun(_Data, _State) -> {ok, noop_state} end,
 		 ondata_state=q0,
 		 rsph=[],
-		 outs=[]}).
+		 outs=[],
+		 loggedin= <<"guest">>,
+		 realm=hty_empty_realm,
+		 attributes={}}).

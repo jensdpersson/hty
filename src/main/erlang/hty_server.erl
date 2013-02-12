@@ -4,7 +4,12 @@
 
 start() ->
     io:format("Trying to listen on ~p:~p", [Ip,Port]),
-    case gen_tcp:listen(Port, [list, {packet, 0}, {active, once}, {ip, Ip}, {reuseaddr, true}]) of
+    case gen_tcp:listen(Port, [list, 
+															 {packet, 0}, 
+															 {active, once}, 
+															 {ip, Ip}, 
+															 {reuseaddr, true},
+															 binary]) of
         {error, Error} ->
             io:format(", failed : ~p~n", [Error]),
             {error, Error};

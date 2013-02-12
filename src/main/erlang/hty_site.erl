@@ -1,6 +1,6 @@
 -module(hty_site, [Name, Vhosts, Root]).
 
--export([match/1, name/0]).
+-export([match/1, name/0, root/0]).
 
 -spec match(Host :: atom()) -> {ok, any()} | false.
 match(Host) ->
@@ -12,3 +12,4 @@ match(Host) ->
 	end.
 
 name() -> Name.
+root() -> Root.

@@ -1,8 +1,8 @@
 -module(hty_tx, [Tx]).
 
 -export([protocol/1, method/0, method/1, 
-				 next_in_path/0, path/1, path_below/0, 
-				 status/2, status/0, req_header/1, req_header/2]).
+				 consume/1, consume/0, path/1, path_below/0, 
+				 status/2, status/0, req_header/1, req_header/2, req_headers/0]).
 
 -export([outs/0, sendfile/1, echo/1]).
 -export([rsp_header/2, rsp_headers/0]).
@@ -13,9 +13,15 @@
 				 method_not_allowed/1,
 				 service_unavailable/0]).
 
+-export([realm/0, realm/1]).
+-export([loggedin/0, loggedin/1]).
+-export([bind/2,bound/1]).
+
+-export([dispatch/1]).
+
 -include("hty_tx.hrl").
 
-
+-type htx() :: {hty_tx, any()}.
 
 protocol(Proto) ->
 	hty_tx:new(Tx#tx{proto=Proto}).
@@ -30,13 +36,35 @@ path_below() ->
 	{_Above, Below} = Tx#tx.path, 
 	Below.
 
-next_in_path() ->
+consume() ->
 	case Tx#tx.path of
 		{Above, [Current|Below]} -> 
-			hty_tx:new(Tx#tx{path={[Current|Above], Below}});
+			{Current, hty_tx:new(Tx#tx{path={[Current|Above], Below}})};
 		_ ->
 			no
 	end.
+
+-spec consume(string()) -> htx() | no.
+consume(Segment) ->
+	case Tx#tx.path of
+		{Above, [Segment|Below]} -> 
+			hty_tx:new(Tx#tx{path={[Segment|Above], Below}});
+		_ ->
+			no
+	end.
+
+bind(Key, Value) ->
+	Attrs = Tx#tx.attributes,
+	hty_tx:new(Tx#tx{attributes=[{Key, Value}|Attrs]}).
+
+bound(Key) ->
+	case lists:keyfind(Key, 1, Tx#tx.attributes) of
+		false ->
+			no;
+		{_, Value} ->
+			{ok, Value}
+	end.
+			
 
 not_found() -> status(404, "Not Found").
 method_not_allowed(Okmethods) -> 
@@ -51,12 +79,14 @@ status(Code, Message) -> hty_tx:new(Tx#tx{status={Code, Message}}).
 req_header(Name, Value) -> hty_tx:new(Tx#tx{reqh=[{Name,Value}|Tx#tx.reqh]}).
 
 req_header(Name) ->
-	lists:filter(fun(Item) -> 
+	lists:flatmap(fun(Item) -> 
 						 case Item of
-							 Name -> true;
-							 _ -> false
+							 {Name, Value} -> [Value];
+							 _ -> []
 						 end
 				 end, Tx#tx.reqh).
+
+req_headers() -> Tx#tx.reqh.
 
 flush() ->
 	Binlist = lists:reverse([eos|Tx#tx.buffered]),
@@ -86,49 +116,71 @@ rsp_headers() -> Tx#tx.rsph.
 
 recvdata(OnRecvData) -> hty_tx:new(Tx#tx{ondata=OnRecvData}).
 
-recvfile(Spafchain, Filepath) -> 
-	Filter = hty_spaf:chain(Spafchain),
-	recvdata(fun(Data, State) ->
-								case Data of
-									eos -> case State of
-													q0 -> {ok, done};
-													{open, File} -> 
-														case file:close(File) of
-															ok -> {ok, done};
-															{error, Error} ->
-																{no, Error}
-														end;
-													done -> {ok, done}
-												end;
-									_ ->
-										ErrorOrIO = case State of 
-													 q0 ->
-														 Opts = [raw, write, delayed_write],
-														 %file:open has the same type as we use here
-														 % {ok, IO}|{error,Error}
-														 file:open(Filepath, Opts);
-													 {open, Openfile} ->
-														 {ok, Openfile};
-													 done	->
-														 {error, more_data_in_state_done}
-												 end,
-										case ErrorOrIO of
-											{ok, IO} ->
-												case Filter(Data) of
-													{ok, Data1} ->
-														case file:write(IO, Data1) of
-															ok -> {ok, {open, IO}};
-															{error, Error} -> {no, Error}
-														end;
-													{no, Error} -> {no, Error}
-												end;
+recvfile(Spafs, Filepath) -> 
+	Filter = hty_spaf:chain(Spafs),
+	Fwrite = fun(IO, Data, ChainQ) -> 
+								case Filter(Data, ChainQ) of
+									{ok, ChainQ1, Data1} ->
+										case file:write(IO, Data1) of
+											ok -> {ok, {IO, ChainQ1}};
 											{error, Error} -> {no, Error}
-										end
+										end;
+									{no, Error} -> {no, Error}
+								end
+					 end,
+	recvdata(fun(Data, State) ->
+								{Fd, WriteRes} = case State of
+														 q0 -> 
+															 Opts = [raw, write, delayed_write],
+															 case file:open(Filepath, Opts) of
+																 {ok, IODevice} -> {IODevice, Fwrite(IODevice, Data, q0)};
+																 {error, E} -> {nofilehandle, {no, E}}
+															 end;
+														 {IOFile, Q} -> {IOFile, Fwrite(IOFile, Data, Q)}
+													 end,
+								CloseRes = case Data of
+														 eos -> 
+															 case Fd of
+																 nofilehandle -> {no, nofilehandle};
+																 File -> file:close(File)
+															 end;
+														 _ -> ok
+													 end,
+								case {WriteRes, CloseRes} of
+									{{ok, {IO, Q1}}, ok} -> {ok, {IO, Q1}};
+									{{ok, _}, {error, Reason}} -> {no, Reason};
+									{{error, Reason}, ok} -> {no, Reason};
+									{{error, Reason}, {error, Reason1}} ->
+										{no, {Reason, Reason1}}
 								end
 					 end).
+
+
 
 sendfile(Filename) -> hty_tx:new(Tx#tx{outs=[{file, Filename}|Tx#tx.outs]}).
 
 echo(IOList) -> hty_tx:new(Tx#tx{outs=[{data, IOList}|Tx#tx.outs]}).
 
 outs() -> Tx#tx.outs.
+
+dispatch(Resources) ->
+	This = hty_tx:new(Tx),
+	io:format("dispatch(~p)~n", [Resources]),
+	case hty_util:fold(fun(Resource, _Htx) ->
+																Htx = Resource:handle(This),
+																case Htx:status() of
+																	{404, _} -> 
+																		{next, Htx};
+																	_ ->
+																		{break, Htx}
+																end
+													 end, This:not_found(), Resources) of
+		{break, Rsp, _} -> Rsp;
+		{nobreak, Rsp} -> Rsp
+	end.
+
+realm() -> Tx#tx.realm.
+realm(Realm) -> hty_tx:new(Tx#tx{realm=Realm}).
+
+loggedin() -> Tx#tx.loggedin.
+loggedin(Loggedin) -> hty_tx:new(Tx#tx{loggedin=Loggedin}).

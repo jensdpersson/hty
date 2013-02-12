@@ -116,7 +116,7 @@ reload_sites(ServerState, Sitespecs) ->
 	  end,
     Ctor = fun(Sitespec) -> 
 		   {site, Name, Root} = Sitespec,
-		   hty_site:new(Name, Name, Root)
+		   hty_site:new(Name, [Name], Root)
 	   end,
     Cull = fun(_Site) -> ok end,
     Vector = hty_vector:new(Cmp, Cull, Ctor),

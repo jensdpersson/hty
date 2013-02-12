@@ -10,14 +10,26 @@
 %%
 %% Exported Functions
 %%
--export([format/1, format/2]).
+-export([format/2]).
 
 %%
 %% API Functions
 %%
-format(Evt) ->
-	Q0 = {not_in_start, []},
-	format(Evt, Q0).
+%format(Evt) ->
+%	Q0 = q0,
+%	format(Evt, Q0).
+
+format(Evt, q0) ->
+	format(Evt, {not_in_start, []});
+				
+%format(Evt, Q) when is_list(Evt) ->
+%	case Evt of
+%		[] -> {ok, Q, []};
+%		[E] -> format(E, Q);
+%		[E|Es] ->
+%			case format(E, Q) of
+%				{ok, Q1, O} ->
+%					format()
 
 format(Evt, {Instart, Stack}) ->
 			case Evt of 
@@ -59,7 +71,7 @@ format(Evt, {Instart, Stack}) ->
 										 not_in_start ->
 											 Out
 									 end,
-					{ok, {not_instart, Stack}, Out1}
+					{ok, {not_in_start, Stack}, Out1}
 			end.
 				
 			

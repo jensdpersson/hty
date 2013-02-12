@@ -32,9 +32,7 @@ handle(Htx) ->
 				'GET' ->							
 					Htx:sendfile(Filepath);
 				'POST' ->
-					Htx:recvfile(
-					  [fun hty_formtree_spaf:parse/1, 
-					   fun hty_xml:format/1], Filepath)
+					Htx:recvfile([hty_formtree_spaf, hty_xml_spaf], Filepath)
 			end;
 		_ -> 
 			Htx:not_found()

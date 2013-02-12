@@ -2,7 +2,7 @@
 %
 % @doc HTTP parser
 %
--module(hty_parser).
+-module(hty_parser_old).
 
 -export([parse/1, respond/2]).
 -include("hty_tx.hrl").
@@ -39,7 +39,7 @@ send_line(Socket, Line) -> gen_tcp:send(Socket,  Line ++ "\r\n").
 
 parse(Socket) -> 
 	Htx0 = hty_tx:new(#tx{}),
-	parse_loop(Htx0, <<>>, fun method_parser/2, Socket).
+	parse_loop(Htx0, [], fun method_parser/2, Socket).
 
 parse_loop(Req, Unparsed, Parser, Socket) ->
     case Parser(Req, Unparsed) of
@@ -54,56 +54,51 @@ recv(Req, Unparsed, Parser, Socket) ->
     receive
        {tcp, Socket1, Data} ->
            inet:setopts(Socket, [{active, once}]),
-           Unparsed1 = <<Unparsed/binary, Data/binary>>,
+           Unparsed1 = Unparsed ++ Data,
            parse_loop(Req, Unparsed1, Parser, Socket1);
        {tcp_closed, _} -> Req
     end.
 
-method_parser(Htx, Data) -> 
+method_parser(Req, Data) -> 
     case token(Data, 32) of
         {token, Method, Rest} -> 
-					{Htx:method(canonical_method(Method)),Rest,fun path_parser/2};
+			{Req:method(canonical_method(Method)),Rest,fun path_parser/2};
         {more, _Token} -> more
     end.
 
-canonical_method(<<"GET">>) -> 'GET';
-canonical_method(<<"POST">>) -> 'POST';
-canonical_method(<<"PUT">>) -> 'PUT';
-canonical_method(<<"DELETE">>) -> 'DELETE';
-canonical_method(<<"OPTIONS">>) -> 'OPTIONS';
-canonical_method(<<"HEAD">>) -> 'HEAD';
+canonical_method("GET") -> 'GET';
+canonical_method("POST") -> 'POST';
+canonical_method("PUT") -> 'PUT';
+canonical_method("DELETE") -> 'DELETE';
+canonical_method("OPTIONS") -> 'OPTIONS';
+canonical_method("HEAD") -> 'HEAD';
 canonical_method(Method) -> Method.
 
 path_parser(Req, Data) ->
-	case token(Data, 32) of
-		{token, Path, Rest} ->
-			Path1 = binary_to_list(Path),
-			Pathzipper = {[], string:tokens(Path1, "/")},
+    case token(Data, 32) of
+        {token, Path, Rest} -> 
+			Pathzipper = {[], string:tokens(Path, "/")},
 			{Req:path(Pathzipper), Rest, fun protocol_parser/2};
-		{more, _Token} -> more
-	end.
+        {more, _Token} -> more
+    end.
 
 protocol_parser(Req, Data) ->
     case line(Data) of
-        {token, Protocol, Rest} -> 
-					{Req:protocol(Protocol),Rest,fun header_parser/2};
+        {token, Protocol, Rest} -> {Req:protocol(Protocol),Rest,fun header_parser/2};
         {more, _Token} -> more
     end.
 
 
-header_parser(Req, <<13,10,Data/binary>>) -> {Req, Data, fun body_parser/2};
-header_parser(Req, <<13, Data/binary>>) -> {Req, Data, fun body_parser/2};
-header_parser(Req, <<10, Data/binary>>) -> {Req, Data, fun body_parser/2};
-header_parser(Htx, Data) ->
+header_parser(Req, [13,10|Data]) -> {Req, Data, fun body_parser/2};
+header_parser(Req, [13|Data]) -> {Req, Data, fun body_parser/2};
+header_parser(Req, [10|Data]) -> {Req, Data, fun body_parser/2};
+header_parser(Req, Data) ->
     case token(Data, $:) of
         {token, Name, Data1} ->
             case line(Data1) of
-							{token, Value, Data2} -> 
-								{
-								 Htx:req_header(list_to_atom(binary_to_list(Name)), 
-																hty_util:ltrim(Value)),
-								 Data2,
-								 fun header_parser/2};
+               {token, Value, Data2} -> {
+                   Req:req_header(list_to_atom(Name), string:strip(Value)),
+                                         Data2, fun header_parser/2};
                {more, _Token} -> more
             end;
         {more, _Token} -> more
@@ -125,38 +120,18 @@ assemble_body(_Htx, [], Buffered, _Len) -> {more, Buffered}.
 
 
 %Helpers
-token(Data, Delim) ->
-	{Token, Rest} = hty_util:until(Data, Delim), 
-	case Rest of
-		<<Delim:8/integer, Rest1/binary>> ->
-			{token, Token, Rest1};
-		<<>> ->
-			{more, Token}
-	end.
+token(Data, Delim) -> token([], Data, Delim).
+line(Data) -> line([], Data).
 
-line(Data) -> 
-	{Line, Rest} = hty_util:until_either(Data, 13, 10),
-	case Rest of 
-		<<13, 10, R2/binary>> ->
-			{token, Line, R2};
-		<<13, R2/binary>> ->
-			{token, Line, R2};
-		<<10, R2/binary>> ->
-			{token, Line, R2};
-		<<>> ->
-			{more, Line}
-	end.
+token(Token, [Delim|Input], Delim) -> {token, lists:reverse(Token), Input};
+token(Token, [Char|Input], Delim) -> token([Char|Token], Input, Delim);
+token(Token, [], _Delim) -> {more, Token}.
 
-
-%token(Token, [Delim|Input], Delim) -> {token, lists:reverse(Token), Input};
-%token(Token, [Char|Input], Delim) -> token([Char|Token], Input, Delim);
-%token(Token, [], _Delim) -> {more, Token}.
-
-%line(Token, [13, 10|Input]) -> {token, lists:reverse(Token), Input};
-%line(Token, [13|Input]) -> {token, lists:reverse(Token), Input};
-%line(Token, [10|Input]) -> {token, lists:reverse(Token), Input};
-%line(Token, [Char|Input]) -> line([Char|Token], Input);
-%line(Token, []) -> {more, Token, []}.
+line(Token, [13, 10|Input]) -> {token, lists:reverse(Token), Input};
+line(Token, [13|Input]) -> {token, lists:reverse(Token), Input};
+line(Token, [10|Input]) -> {token, lists:reverse(Token), Input};
+line(Token, [Char|Input]) -> line([Char|Token], Input);
+line(Token, []) -> {more, Token, []}.
 
 
 

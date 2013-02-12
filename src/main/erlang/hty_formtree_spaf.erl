@@ -7,14 +7,17 @@
 %% Exported Functions
 %%
 -export([parse/1, parse/2]).
-
+-import(hty_util, [until/2]).
 %%
 %% API Functions
 %%
 
 parse(Data) ->
-	Q0 = {{expect_eq, <<>>}, []},
+	Q0 = q0,
 	parse(Data, Q0).
+
+parse(Data, q0) ->
+	parse(Data, {{expect_eq, <<>>}, []});
 
 parse(Data, {Expect, Stack}) ->
 	case Data of
@@ -92,18 +95,7 @@ make_out(Key, Value, Stack) ->
 			{Stack, {kv, Key, Value}}
 	end.
 
-until(Data, Char) ->
-	until(0, Data, Char).
 
-until(Index, B, Char) ->
-	case B of
-		<<Prefix:Index/binary, Char:8/integer, Rest/binary>> ->
-			{Prefix, <<Char/integer,Rest/binary>>};
-		<<Prefix:Index/binary, "">> ->
-			{Prefix, <<"">>};
-		Other when is_binary(Other) ->
-			until(Index+1, B, Char)
-	end.
 
 
 				
