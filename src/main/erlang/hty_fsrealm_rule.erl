@@ -19,7 +19,8 @@ match(Fspath, Rules) ->
 	case lists:reverse(Fspath:parts()) of
 		["fsrealm", Name | _] ->
 			Subs = hty_util:subs(Fspath, Rules),
-			Res = hty_realm_resource:new(Name, Subs),
+			Realm = hty_fsrealm:new(Name, Fspath),
+			Res = hty_realm_resource:new(Realm, Subs),
 			{claim, {resource, Res}};
 		_ ->
 			next

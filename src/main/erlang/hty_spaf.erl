@@ -10,8 +10,19 @@
 %%
 %% Exported Functions
 %%
--export([chain/1]).
+-export([chain/1, binder/1]).
 
+-type state() :: any().
+-type output() :: list().
+-type result() :: {ok, state(), output()} | {no, any()}.
+
+-type event() :: {push, binary()} |
+									{pop, binary()} |
+				 {kv, binary(), binary()} |
+				  {text, binary()}.
+
+-export_type([state/0, result/0]).
+-export_type([event/0]).
 %%
 %% API Functions
 %%
@@ -21,11 +32,11 @@ chain([Parser, Formatter]) ->
 										q0 -> [q0, q0];
 										Other -> Other
 									end,
-			 case Parser:parse(Bin, Qp) of
+			 case Parser(Bin, Qp) of
 				 {ok, Qp1, Evts} ->
 					 Fold = fun(Item, {Qn, Outs}) ->
-											 case Formatter:format(Item, Qn) of
-												 {ok, Qn1, Out1} -> {next, {Qn1, [Out1|Outs]}};
+											 case Formatter(Item, Qn) of
+												 {ok, Qn1, Out1} -> {next, {Qn1, Out1 ++ Outs}};
 												 {no, Reason} -> {break, {Item, Reason}}
 											 end 
 									end,
@@ -40,7 +51,44 @@ chain([Parser, Formatter]) ->
 			 end
 	end.
 
+binder(Schema) ->
+	fun(E, Q) ->
+			 Bindings = case Q of
+							q0 -> Schema;
+							_ -> Q 
+						end,
+			 io:format("spaf ~p~n", [E]),
+			 case E of
+				 {kv, Key, Value} ->
+				   io:format("Bind ~p in ~p~n", [E, Bindings]),
+			  	 case bind(Key, Value, [], Bindings) of
+						 {ok, Bindings1} ->
+							 {ok, Bindings1, []};
+						 {no, Error} ->
+							 {no, Error}
+					 end;
+				 eos ->
+					 {ok, qf, Bindings};
+				 {_Other, _Key} ->
+					 {ok, Bindings, []}
+			 end
+	end.
+
 %%
 %% Local Functions
 %%
+bind(Key, Val, Aboves, [{Key, Old, Constraints}|Bs]) ->
+	New = [Val|Old],
+	{ok, rewind([{Key, New, Constraints}|Aboves], Bs)};
+bind(Key, Val, Aboves, [Other|Bs]) ->
+	bind(Key, Val, [Other|Aboves], Bs);
+bind(_Key, _Val, Aboves, []) ->
+	{ok, lists:reverse(Aboves)}.
 
+rewind([X|Xs], Ys) ->
+	rewind(Xs, [X|Ys]);
+rewind([], Ys) -> Ys.
+
+%violations([C|Cs], Values) ->
+%	case C of
+%		{occurs, Min, Max}

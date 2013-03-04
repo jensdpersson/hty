@@ -42,13 +42,18 @@ parse(Socket) ->
 	parse_loop(Htx0, <<>>, fun method_parser/2, Socket).
 
 parse_loop(Req, Unparsed, Parser, Socket) ->
-    case Parser(Req, Unparsed) of
-        {Req1, Unparsed1, Parser1} -> parse_loop(Req1, Unparsed1, Parser1, Socket);
-        more -> recv(Req, Unparsed, Parser, Socket);
-		{more, []} -> recv(Req, Unparsed, Parser, Socket);
-        {done, Req1} -> Req1;
-        {error, Error} -> {error, Error}
-    end.
+	case Parser(Req, Unparsed) of
+		{Req1, Unparsed1, Parser1} -> 
+			parse_loop(Req1, Unparsed1, Parser1, Socket);
+		more -> 
+			recv(Req, Unparsed, Parser, Socket);
+		{more, []} -> 
+			recv(Req, Unparsed, Parser, Socket);
+		{done, Req1} -> 
+			Req1;
+		{error, Error} -> 
+			{error, Error}
+	end.
 
 recv(Req, Unparsed, Parser, Socket) ->
     receive
@@ -77,10 +82,16 @@ canonical_method(Method) -> Method.
 path_parser(Req, Data) ->
 	case token(Data, 32) of
 		{token, Path, Rest} ->
-			Path1 = binary_to_list(Path),
-			Pathzipper = {[], string:tokens(Path1, "/")},
-			{Req:path(Pathzipper), Rest, fun protocol_parser/2};
-		{more, _Token} -> more
+			{Segments, Query} = hty_uri:parse_path(Path),
+			Segments1 = lists:map(fun(Seg) ->
+																 binary_to_list(Seg) 
+														end, Segments),
+			Pathzipper = {[], Segments1},
+			Req1 = Req:path(Pathzipper),
+			{Req1:queryparams(Query),
+			 Rest, fun protocol_parser/2};
+		{more, _Token} -> 
+			more
 	end.
 
 protocol_parser(Req, Data) ->
@@ -110,19 +121,32 @@ header_parser(Htx, Data) ->
     end.
 
 body_parser(Htx, Data) ->
-    case Htx:req_header('Content-Length') of
-      [] -> {done, Htx:buffer(Data) };
-      ContentLength -> {Htx, Data, fun(Htx1, Data1) -> 
-                      assemble_body(Htx1, Data1, [], string:to_integer(ContentLength))
-                                   end}
-    end.
+	case Htx:req_header('Content-Length') of
+		[] -> {done, Htx:buffer(Data) };
+		[ContentLength] -> 
+				{Len, []} = string:to_integer(binary_to_list(ContentLength)),
+				io:format("Conlen [~p]~n",[ContentLength]),
+				{Htx, 
+				 Data, 
+				 fun (Htx1, Data1) -> 
+							assemble_body(Htx1, Data1, Len) 
+				 end
+				}
+	end.
 
-assemble_body(Htx, _Data, Buffered, 0) ->
-	{done, Htx:buffer(lists:reverse(Buffered))};
-assemble_body(Htx, [Char|Data], Buffered, Len) -> 
-	assemble_body(Htx, Data, [Char|Buffered], Len-1);
-assemble_body(_Htx, [], Buffered, _Len) -> {more, Buffered}.
-
+assemble_body(Htx, Data, Len) ->
+	case Len =< 0 of
+		true ->
+			{done, Htx:buffer(Data)};
+		false ->
+			{
+			 Htx:buffer(Data),
+			 <<>>,
+			 fun (Htx1, Data1) ->
+						io:format("Len [~p]~n", [Len]),
+						assemble_body(Htx1, Data1, Len - size(Data)) 
+			end}
+	end.
 
 %Helpers
 token(Data, Delim) ->

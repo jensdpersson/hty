@@ -1,5 +1,5 @@
 %% Author: jens
--module(hty_formdocs_resource, [Fspath, Segment]).
+-module(hty_formdocs_resource, [Fspath]).
 
 %%
 %% Include files
@@ -18,24 +18,23 @@ handle(Htx) ->
 	io:format("formdocs:handle(~p)~n", [Htx:path_below()]),
 	
 	case Htx:path_below() of
-		[Segment] -> 
+		[] -> 
 			case Htx:method() of
 				'GET' ->							
 					dirlist(Htx);
 				'POST' ->
 					Htx:method_not_allowed(['GET'])
 			end;
-		[Segment|Segments] ->
+		Segments ->
 			Fspath1 = Fspath:subpath(Segments),
 			Filepath = Fspath1:filepath(),
 			case Htx:method() of
 				'GET' ->							
 					Htx:sendfile(Filepath);
 				'POST' ->
-					Htx:recvfile([hty_formtree_spaf, hty_xml_spaf], Filepath)
-			end;
-		_ -> 
-			Htx:not_found()
+					Htx:recvfile([fun hty_formtree_spaf:parse/2,
+												fun hty_xml_spaf:format/2], Filepath)
+			end
 	end.
 %%
 %% Local Functions

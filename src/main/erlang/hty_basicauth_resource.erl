@@ -40,7 +40,8 @@ check(Htx, Auth) ->
 		{ok, Principal} -> 
 			Htx1 = Htx:loggedin(Principal),
 			Htx1:dispatch(Subs);
-		no -> Htx:forbidden()
+		no -> 
+			challenge(Htx)
 	end.
 													
 													

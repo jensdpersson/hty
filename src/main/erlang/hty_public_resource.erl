@@ -35,7 +35,9 @@ handle(Htx) ->
 								end,
 							L = ["index.html", "index.xml"],
 							case lists:flatmap(F, L) of
-								[Welcome|_] -> Htx1:sendfile(Welcome:filepath());
+								[Welcome|_] -> 
+									Htx2 = Htx1:sendfile(Welcome:filepath()),
+									Htx2:ok();
 								[] -> Htx1:not_found()
 							end;
 						false ->

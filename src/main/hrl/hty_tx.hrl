@@ -13,4 +13,5 @@
 		 outs=[],
 		 loggedin= <<"guest">>,
 		 realm=hty_empty_realm,
-		 attributes={}}).
+		 attributes={},
+		 queryparams=[]}).

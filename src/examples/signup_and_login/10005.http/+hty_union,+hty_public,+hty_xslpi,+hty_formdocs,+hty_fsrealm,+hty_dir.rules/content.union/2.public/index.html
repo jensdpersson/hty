@@ -1,44 +1,28 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>Simple example page</title>
-    <style type="text/css">
-      div { 
-      background: khaki;
-      color: darkgreen;
-      font-family: sans-serif; 
-      margin: 4px;
-      padding: 4px;
-      border: solid 2px teal;
-   
-      }
-      iframe {
-      	width: 45%;
-      	height: 75%; 
-      	margin: 4px;
-      padding: 4px;
-      border: solid 2px teal;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="css/khaki.css" />
   </head>
   <body>
-    <div>
+    <div class="box">
       This example config uses a folder realm for creating users and manipulating user 
-      data.
+      data. 
     </div>
-    <div>The way it works is </div>
+    <div class="box">
     <div>
-    	<form name="signupform" action="signup">
+    	<form name="signupform" method="POST" action="/signup">
     	  <input type="text" name="nick" />
+    	  <input type="text" name="pass" />
     	  <input type="submit" value="Signup"/>
     	</form>
     </div>
     <div> or </div>
     <div>
-      <form name="loginform" action="login">
+      <form name="loginform" action="/login">
     	  <input type="text" name="nick" />
-    	  <input type="text" name="pass" />
     	  <input type="submit" value="Login"/>
     	</form>
     </div>	
+    </div>
   </body>
 </html>

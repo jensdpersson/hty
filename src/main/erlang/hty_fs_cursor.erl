@@ -1,12 +1,14 @@
 -module(hty_fs_cursor, [Path]).
 
--export([exists/0, isdir/0]).
--export([match/1, walk/1, walk/2, list/0, parts/0, ext/0, subpath/1]).
+-export([exists/0, isdir/0, mkdir/0]).
+-export([match/1, walk/1, walk/2, list/0, list/1, parts/0, prefix/0, ext/0, subpath/1]).
 
 -export([filepath/0, basename/0]).
 
+
 exists() -> filelib:is_file(Path).
 isdir() -> filelib:is_dir(Path).
+mkdir() -> file:make_dir(Path).
 
 match(Rules) -> 
 	    This = this(),	    
@@ -14,13 +16,21 @@ match(Rules) ->
 
 match(_, [], Allrules) -> {no, orphan, Path, Allrules};
 match(This, [Rule|Rules], Allrules) ->
-		case Rule:match(This, Allrules) of
-		     {claim, Response} -> 
-		     		{ok, Response, Path, Rule};
-		     block -> {no, blocked, Path, Rule};
-			 {block, Why} -> {no, {blocked, Why}, Path, Rule};
-		     next -> match(This, Rules, Allrules)
-		end.
+	%io:format("Matching ~p with ~p gives", [Rule, Path]),
+	case Rule:match(This, Allrules) of
+		{claim, Response} -> 
+			%io:format(" ~p~n", [claim]),
+			{ok, Response, Path, Rule};
+		block ->
+			%io:format(" ~p~n", [block]),
+			{no, blocked, Path, Rule};
+		{block, Why} -> 
+			%io:format(" ~p~n", [block]),
+			{no, {blocked, Why}, Path, Rule};
+		next -> 
+			%io:format(" ~p~n", [next]),
+			match(This, Rules, Allrules)
+	end.
 
 list() ->
 	{ok, Names} = file:list_dir(Path),
@@ -53,6 +63,10 @@ ext() ->
 	[Rv|_] = lists:reverse(parts()),
 	Rv.
 
+prefix() ->
+	[A|_] = parts(),
+	A.
+
 filepath() -> Path.
 basename() -> filename:basename(Path).
 	
@@ -60,6 +74,8 @@ subpath(Pathsegments) ->
 	case lists:foldl(fun(Item, Acc) -> 
 						case Item of
 							".." -> no;
+							[$/, Item1] -> lists:reverse(Item1) ++ Acc;
+							"" -> Acc;
 							_ -> lists:reverse(Item) ++ "/" ++ Acc
 						end
 				end,

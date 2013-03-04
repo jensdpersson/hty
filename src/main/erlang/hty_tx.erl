@@ -7,15 +7,22 @@
 -export([outs/0, sendfile/1, echo/1]).
 -export([rsp_header/2, rsp_headers/0]).
 
--export([recvdata/1, recvfile/2, buffer/1, flush/0]).
+-export([recvdata/1, recvfile/2, recvform/2, buffer/1, flush/0]).
 
--export([not_found/0, 
+-export([ok/0,
+				 not_found/0, 
 				 method_not_allowed/1,
-				 service_unavailable/0]).
+				 service_unavailable/0,
+				 see_other/1,
+				 bad_request/0,
+				 server_error/0,
+				 forbidden/0]).
 
 -export([realm/0, realm/1]).
 -export([loggedin/0, loggedin/1]).
--export([bind/2,bound/1]).
+-export([bind/2, bound/1]).
+
+-export([queryparams/0, queryparams/1]).
 
 -export([dispatch/1]).
 
@@ -46,6 +53,7 @@ consume() ->
 
 -spec consume(string()) -> htx() | no.
 consume(Segment) ->
+	io:format("NextInPath(~p=?~p)~n",[Segment, Tx#tx.path]),
 	case Tx#tx.path of
 		{Above, [Segment|Below]} -> 
 			hty_tx:new(Tx#tx{path={[Segment|Above], Below}});
@@ -65,16 +73,31 @@ bound(Key) ->
 			{ok, Value}
 	end.
 			
+queryparams() ->
+	Tx#tx.queryparams.
+queryparams(QueryParams) ->
+	hty_tx:new(Tx#tx{queryparams=QueryParams}).
 
+ok() -> status(200, "OK").
 not_found() -> status(404, "Not Found").
 method_not_allowed(Okmethods) -> 
 	Htx1 = rsp_header("Allow", lists:concat(Okmethods)),
 	Htx1:status(405, "Method Not Allowed").
 service_unavailable() -> status(503, "Temporarily Unavailable").
-
+server_error() ->
+	status(500, "Internal Server Error").
+bad_request() ->
+	status(400, "Bad Request").
+see_other(URI) ->
+	Htx1 = rsp_header("Location", URI),
+	Htx1:status(303, "See Other").
+forbidden() ->
+	status(403, "Forbidden").
 
 status() -> Tx#tx.status.
-status(Code, Message) -> hty_tx:new(Tx#tx{status={Code, Message}}).
+status(Code, Message) -> 
+	io:format("Status=~p~n", [Message]),
+	hty_tx:new(Tx#tx{status={Code, Message}}).
 
 req_header(Name, Value) -> hty_tx:new(Tx#tx{reqh=[{Name,Value}|Tx#tx.reqh]}).
 
@@ -114,7 +137,32 @@ rsp_header(Name, Value) -> hty_tx:new(Tx#tx{rsph=[{Name,Value}|Tx#tx.rsph]}).
 
 rsp_headers() -> Tx#tx.rsph.
 
+
+
 recvdata(OnRecvData) -> hty_tx:new(Tx#tx{ondata=OnRecvData}).
+
+recvform(FormSchema, Callback) ->
+	Spafs = [fun hty_formurlencoded_spaf:parse/2,
+					 hty_spaf:binder(FormSchema)],
+	Chain = hty_spaf:chain(Spafs),
+	recvdata(fun(Data, State) ->
+								case Chain(Data, State) of
+									{ok, State1, Out} ->
+										case Data of
+											eos ->
+												case Callback(Out) of
+													ok ->
+														{ok, State1};
+													{no, Error} ->
+														{no, Error}
+												end;
+											_ ->
+												{ok, State1}
+										end;
+									{no, Error} ->
+										{no, Error}										
+								end
+					 end).
 
 recvfile(Spafs, Filepath) -> 
 	Filter = hty_spaf:chain(Spafs),
@@ -166,13 +214,13 @@ outs() -> Tx#tx.outs.
 dispatch(Resources) ->
 	This = hty_tx:new(Tx),
 	io:format("dispatch(~p)~n", [Resources]),
-	case hty_util:fold(fun(Resource, _Htx) ->
-																Htx = Resource:handle(This),
-																case Htx:status() of
+	case hty_util:fold(fun(Resource, Htx) ->
+																Htx1 = Resource:handle(This),
+																case Htx1:status() of
 																	{404, _} -> 
 																		{next, Htx};
 																	_ ->
-																		{break, Htx}
+																		{break, Htx1}
 																end
 													 end, This:not_found(), Resources) of
 		{break, Rsp, _} -> Rsp;

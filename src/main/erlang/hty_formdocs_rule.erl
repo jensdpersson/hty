@@ -18,8 +18,7 @@
 match(Fspath, _Rules) ->
 	case Fspath:ext() of
 		"formdocs" -> 
-			[_, Segment|_] = lists:reverse(Fspath:parts()),
-			{claim, {resource, hty_formdocs_resource:new(Fspath, Segment)}};
+			{claim, {resource, hty_formdocs_resource:new(Fspath)}};
 		_ -> next
 	end.
 
