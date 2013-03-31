@@ -1,5 +1,5 @@
 %% Author: jens
--module(hty_formdocs_resource, [Fspath]).
+-module(hty_formdocs_resource, [Fspath, Index]).
 
 %%
 %% Include files
@@ -18,10 +18,10 @@ handle(Htx) ->
 	io:format("formdocs:handle(~p)~n", [Htx:path_below()]),
 	
 	case Htx:path_below() of
-		[] -> 
+		[] ->
 			case Htx:method() of
-				'GET' ->							
-					dirlist(Htx);
+				'GET' ->							 
+					Htx:dispatch([Index]);
 				'POST' ->
 					Htx:method_not_allowed(['GET'])
 			end;
@@ -40,8 +40,3 @@ handle(Htx) ->
 %% Local Functions
 %%
 
-dirlist(Htx) ->
-	Htx1 = Htx:rsp_header("Content-Type", "application/xml"),
-	Htx1:echo(hty_xml:format({"dir", lists:map(fun(Fsp) ->
-		{"file", [Fsp:basename()]}
-	end, Fspath:list())})).

@@ -1,6 +1,5 @@
 %% Author: jens
 %% Created: 5 jan 2013
-%% Description: TODO: Add description to hty_formtree
 -module(hty_formurlencoded_spaf).
 
 %%
@@ -8,6 +7,7 @@
 %%
 -export([parse/2]).
 -import(hty_util, [until/2]).
+-import(hty_percentencoding, [decode/1]).
 %%
 %% API Functions
 %%
@@ -72,8 +72,11 @@ p(I, E, S, O) ->
 
 -spec make_out(binary(), binary(), list()) -> 
 				{no, any()} | {list(), any()}.
-make_out(Key, Value, Stack) -> {Stack, {kv, Key, Value}}.
+make_out(Key, Value, Stack) -> 
+	{Stack, {kv, decode(Key), decode(Value)}}.
 
+
+			
 
 
 

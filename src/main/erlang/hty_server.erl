@@ -59,6 +59,7 @@ loop_accept(Listen) ->
 							  go ->
 								  Htx = hty_parser:parse(Socket),
 								  Htx1 = Resource:handle(Htx),
+									io:format("handle done~n"),
 									Htx2 = Htx1:flush(),									
 								  hty_parser:respond(Socket, Htx2)
 						  end 

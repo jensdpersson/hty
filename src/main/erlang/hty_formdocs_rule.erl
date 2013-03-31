@@ -17,10 +17,21 @@
 %%
 match(Fspath, _Rules) ->
 	case Fspath:ext() of
-		"formdocs" -> 
-			{claim, {resource, hty_formdocs_resource:new(Fspath)}};
-		_ -> next
+		"formdocs" ->
+			Index = hty_listing_resource:new("", Fspath),
+			{claim, {resource, hty_formdocs_resource:new(Fspath, Index)}};
+		_ ->
+			next
 	end.
+	
+%	case lists:reverse(Fspath:parts()) of
+%		["formdocs", IndexClassName|_] ->
+%			IndexClass = list_to_atom(IndexClassName),
+%			Index = IndexClass:new(Fspath),
+%			{claim, {resource, hty_formdocs_resource:new(Fspath, Index)}};
+%		_ -> 
+%			next
+%	end.
 
 
 %%

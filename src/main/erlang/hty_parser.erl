@@ -5,7 +5,6 @@
 -module(hty_parser).
 
 -export([parse/1, respond/2]).
--include("hty_tx.hrl").
 
 pack_status({Code, Message}) when is_integer(Code) -> integer_to_list(Code) ++ " " ++ Message;
 pack_status(Message) -> Message.
@@ -38,7 +37,7 @@ respond(Socket, Rsp) ->
 send_line(Socket, Line) -> gen_tcp:send(Socket,  Line ++ "\r\n").
 
 parse(Socket) -> 
-	Htx0 = hty_tx:new(#tx{}),
+	Htx0 = hty_tx_factory:new(),
 	parse_loop(Htx0, <<>>, fun method_parser/2, Socket).
 
 parse_loop(Req, Unparsed, Parser, Socket) ->

@@ -1,7 +1,7 @@
 -module(hty_tx, [Tx]).
 
 -export([protocol/1, method/0, method/1, 
-				 consume/1, consume/0, path/1, path_below/0, 
+				 consume/1, consume/0, path/1, path_below/0, path_below/1,
 				 status/2, status/0, req_header/1, req_header/2, req_headers/0]).
 
 -export([outs/0, sendfile/1, echo/1]).
@@ -15,6 +15,7 @@
 				 service_unavailable/0,
 				 see_other/1,
 				 bad_request/0,
+				 created/0,
 				 server_error/0,
 				 forbidden/0]).
 
@@ -42,6 +43,10 @@ path(Path) -> hty_tx:new(Tx#tx{path=Path}).
 path_below() -> 
 	{_Above, Below} = Tx#tx.path, 
 	Below.
+
+path_below(Below) ->
+	{Above, _Below} = Tx#tx.path,
+	hty_tx:new(Tx#tx{path={Above, Below}}).
 
 consume() ->
 	case Tx#tx.path of
@@ -88,6 +93,8 @@ server_error() ->
 	status(500, "Internal Server Error").
 bad_request() ->
 	status(400, "Bad Request").
+created() ->
+	status(201, "Created").
 see_other(URI) ->
 	Htx1 = rsp_header("Location", URI),
 	Htx1:status(303, "See Other").
@@ -111,21 +118,25 @@ req_header(Name) ->
 
 req_headers() -> Tx#tx.reqh.
 
+this() ->
+	hty_tx:new(Tx).
+
 flush() ->
 	Binlist = lists:reverse([eos|Tx#tx.buffered]),
 	Sink = Tx#tx.ondata,
 	Laststate = Tx#tx.ondata_state,
-	F = fun(Data, State) ->
-				case Sink(Data, State) of
-					{ok, NewState} -> {next, NewState};
+	F = fun(Data, {State, Htx}) ->
+				case Sink(Data, State, Htx) of
+					{ok, NewState, Htx1} -> {next, {NewState, Htx1}};
 					{no, Error} -> {break, Error}
 				end
 		end, 
-	case hty_util:fold(F, Laststate, Binlist) of
+	case hty_util:fold(F, {Laststate, this()}, Binlist) of
 		{break, Error, Remains} ->
 			hty_tx:new(Tx#tx{status=Error, buffered=Remains});
-		{nobreak, State} ->
-			hty_tx:new(Tx#tx{buffered=[], ondata_state=State})
+		{nobreak, {State, Htx2}} ->
+			{hty_tx, Tx1} = Htx2,
+			hty_tx:new(Tx1#tx{buffered=[], ondata_state=State})
 	end.
 	
 
@@ -145,19 +156,20 @@ recvform(FormSchema, Callback) ->
 	Spafs = [fun hty_formurlencoded_spaf:parse/2,
 					 hty_spaf:binder(FormSchema)],
 	Chain = hty_spaf:chain(Spafs),
-	recvdata(fun(Data, State) ->
+	recvdata(fun(Data, State, Htx) ->
 								case Chain(Data, State) of
 									{ok, State1, Out} ->
 										case Data of
 											eos ->
-												case Callback(Out) of
-													ok ->
-														{ok, State1};
+												case Callback(Out, Htx) of
+													{ok, Htx1} ->
+														io:format("CallbackStatus~p~n", [Htx1:status()]),
+														{ok, State1, Htx1};
 													{no, Error} ->
 														{no, Error}
 												end;
 											_ ->
-												{ok, State1}
+												{ok, State1, Htx}
 										end;
 									{no, Error} ->
 										{no, Error}										
@@ -176,10 +188,11 @@ recvfile(Spafs, Filepath) ->
 									{no, Error} -> {no, Error}
 								end
 					 end,
-	recvdata(fun(Data, State) ->
+	recvdata(fun(Data, State, Htx) ->
 								{Fd, WriteRes} = case State of
 														 q0 -> 
 															 Opts = [raw, write, delayed_write],
+															 io:format("Recvfile(~p)~n", [Filepath]),
 															 case file:open(Filepath, Opts) of
 																 {ok, IODevice} -> {IODevice, Fwrite(IODevice, Data, q0)};
 																 {error, E} -> {nofilehandle, {no, E}}
@@ -195,15 +208,13 @@ recvfile(Spafs, Filepath) ->
 														 _ -> ok
 													 end,
 								case {WriteRes, CloseRes} of
-									{{ok, {IO, Q1}}, ok} -> {ok, {IO, Q1}};
+									{{ok, {IO, Q1}}, ok} -> {ok, {IO, Q1}, Htx};
 									{{ok, _}, {error, Reason}} -> {no, Reason};
 									{{error, Reason}, ok} -> {no, Reason};
 									{{error, Reason}, {error, Reason1}} ->
 										{no, {Reason, Reason1}}
 								end
 					 end).
-
-
 
 sendfile(Filename) -> hty_tx:new(Tx#tx{outs=[{file, Filename}|Tx#tx.outs]}).
 
@@ -213,8 +224,9 @@ outs() -> Tx#tx.outs.
 
 dispatch(Resources) ->
 	This = hty_tx:new(Tx),
-	io:format("dispatch(~p)~n", [Resources]),
+	io:format("dispatch   ~n"),
 	case hty_util:fold(fun(Resource, Htx) ->
+														io:format("Try ~p~n", [Resource]),
 																Htx1 = Resource:handle(This),
 																case Htx1:status() of
 																	{404, _} -> 

@@ -1,0 +1,60 @@
+Hur gör man collection-resurser?
+
+Det känns som att det finns massa olika beteenden för framförallt POST som 
+kan vara rätt i olika lägen. 
+
+Antingen gör man väl en uppsättning collection-resurser med olika beteenden
+vad gäller POST, etaggar, directory listing etc eller så försöker man göra
+det dynamiskt.
+
+I det dynamiska fallet plockar man då ihop ett antal resursklasser i en 
+union och låter dessa hantera olika fall. Kanske
+
+a.dir
+   index.html
+   post.append
+   twig...
+   
+eller a.dir
+        twig
+           store_segment_in_storage_path.method.cases
+              post.ctor
+        leaf 
+        
+ Inte så lätt att få klockers. Vilka kombinationer vill vi ha?
+ 
+ Typ formdocs:
+ Post på en resurs skapar en subresurs. Get på empty listar.
+ 
+ Typ json-collection:
+ Put direkt på en resurs. Post körs inte. Get på empty listar.
+ 
+ En variant är att göra en collection som har vettiga defaults.
+ om det går.
+ 
+ Vad är vettiga defaults?
+ If-Match och If-None-Match respekteras, ETag sätts från ändringsdatum.
+ put ändrar/skapar nya versioner av löv om etag stämmer.
+ POST på ett löv kan skapa ny version om matrix_etag stämmer.
+ POST för att skapa en sub har ingen vettig default annat än att skapa
+ en tom resurs eller spara ner entiteten as-is. Namnet på segmentet är
+ svårt att defaulta. Antingen räknar man upp ngt nummer eller så
+ eller så gör man en best-effort att låta klienten bestämma.
+ För att stödja forms bör man läsa ut det önskade namnet ur posten.
+ 
+ Så, lite variabler: NamePolicy - hur namnger man ett nytt segment när en post
+ skapar ett? Index/Listing - vad levererar man som svar på tomma pathens GET?
+ Även inom de idealiserade formdocs/collection känns det som att iaf NamePolicy
+ och faktiskt även vad man skriver dit för resurs varierar. Man vill
+ ha ngn slags ctor.copy som lägger dit en blueprint beroende på
+ en typ-parameter eller ngt. 
+ 
+ Sedan kommer frågan till hur man hanterar inmixade statiska collections i
+ ett dynamiskt träd under en annan collection.
+ 
+ Versioner av dokument kan vara bra att stöda.
+ 
+ 
+ 
+ 
+

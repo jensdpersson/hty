@@ -59,7 +59,7 @@ auth(Nick, Pass) ->
 					_ ->
 						no
 				end;
-				{error, Error} ->
+				{error, _Error} ->
 					no
 			end;
 		no ->

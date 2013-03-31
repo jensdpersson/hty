@@ -76,7 +76,9 @@ p(I, E, S, O) ->
 
 -spec make_out(binary(), binary(), list()) -> 
 				{no, any()} | {list(), any()}.
-make_out(Key, Value, Stack) ->
+make_out(Key0, Value0, Stack) ->
+	Key = hty_percentencoding:decode(Key0),
+	Value = hty_percentencoding:decode(Value0),
 	case Key of
 		<<$[>> ->
 			{[Value|Stack], {push, Value}};

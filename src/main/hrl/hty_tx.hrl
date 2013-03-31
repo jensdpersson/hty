@@ -7,7 +7,7 @@
 		 status={200, "OK"},
 		 reqh=[],
 		 buffered=[],
-		 ondata=fun(_Data, _State) -> {ok, noop_state} end,
+		 ondata=fun(_Data, _State, Htx) -> {ok, noop_state, Htx} end,
 		 ondata_state=q0,
 		 rsph=[],
 		 outs=[],

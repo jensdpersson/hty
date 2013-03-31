@@ -35,8 +35,9 @@ chain([Parser, Formatter]) ->
 			 case Parser(Bin, Qp) of
 				 {ok, Qp1, Evts} ->
 					 Fold = fun(Item, {Qn, Outs}) ->
+											 io:format("SPAF(~p)~n", [Item]),
 											 case Formatter(Item, Qn) of
-												 {ok, Qn1, Out1} -> {next, {Qn1, Out1 ++ Outs}};
+												 {ok, Qn1, Out1} -> {next, {Qn1, lists:reverse(Out1) ++ Outs}};
 												 {no, Reason} -> {break, {Item, Reason}}
 											 end 
 									end,

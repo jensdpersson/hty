@@ -17,23 +17,20 @@
 %%
 
 match(Fspath, Allrules) ->
-	Content = fun(Fspath1) ->
-					  case Fspath1:parts() of
-						  ["content"|_] -> 
-							  true;
-						  _ -> false
-					  end
-			  end,
-	case Fspath:parts() of
-		[Rules, "rules"] ->
+	%Content = fun(Fspath1) ->
+	%				  case Fspath1:parts() of
+	%					  ["content"|_] -> 
+	%						  true;
+	%					  _ -> false
+	%				  end
+	%		  end,
+ % Subs = Fspatch:subs(),
+	case lists:reverse(Fspath:parts()) of
+		["rules", Rules|_] ->
 			case change_rules(Rules, Allrules) of
 				{ok, Rules2} ->
-					case Fspath:walk(Rules2, Content) of
-						[{ok, Resource, _, _}] ->
-							{claim, Resource};
-						Que ->
-							{block, {badwalk, Que}}
-					end;		
+					Subs = hty_util:subs(Fspath, Rules2),
+					{claim, {resource, hty_union_resource:new(Subs)}};
 				{no, _} ->
 					{block, badrules}
 			end;

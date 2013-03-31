@@ -13,7 +13,7 @@ print(M) -> io:format(M), io:format("~n").
 start() -> 
 	print("Starting Haughty Http Server"),
 	code:add_pathz("/opt/hty/ebin"),
-    case hty_ctl:start("/etc/hty") of
+    case hty_ctl:start(['/etc/hty']) of
 	   {ok,started} -> 
 	      print("Ok"),
 	      loop();

@@ -23,7 +23,7 @@ handle(Htx) ->
 										{<<"pass">>, [], [{occurs, 1, 1}, 
 																			{len, 6, 30}]}
 									 ], 
-			Htx1=Htx:recvform(FormSchema, fun(Form) -> onform(Form, Htx) end),
+			Htx1=Htx:recvform(FormSchema, fun(Form, Htx2) -> onform(Form, Htx2) end),
 			Htx1:ok();
 		_ ->
 			Htx:method_not_allowed(['POST'])
@@ -38,7 +38,7 @@ onform(Form, Htx) ->
 	{_, [Pass], _} = lists:keyfind(<<"pass">>, 1, Form),
 	Realm = Htx:realm(),
 	case Realm:signup(binary_to_list(Nick), Pass) of
-		ok -> ok;
+		ok -> {ok, Htx:created()};
 		{no, Error} -> {no, Error}
 	end.
 	

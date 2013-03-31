@@ -17,8 +17,9 @@
 %%
 
 handle(Htx) ->
-	Htx1 = Htx:echo([<<"?xml-stylesheet type=\"text/xsl\" href=\"">>,
-									  Xslpi, <<"\"?>">>]),
+	XslURL = hty_percentencoding:decode(list_to_binary(Xslpi)), 
+	Htx1 = Htx:echo([<<"<?xml-stylesheet type=\"text/xsl\" href=\"">>,
+									  XslURL, <<".xsl\"?>">>]),
 	Htx1:dispatch(Subs).
 %%
 %% Local Functions
