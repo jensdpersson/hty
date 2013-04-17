@@ -11,7 +11,9 @@
 		 ondata_state=q0,
 		 rsph=[],
 		 outs=[],
-		 loggedin= <<"guest">>,
+		 principal= <<"guest">>,
 		 realm=hty_empty_realm,
 		 attributes={},
-		 queryparams=[]}).
+		 queryparams=[],
+		 socketreader=no,
+		 unread=0}).

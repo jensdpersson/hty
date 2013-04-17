@@ -23,8 +23,7 @@ handle(Htx) ->
 										{<<"pass">>, [], [{occurs, 1, 1}, 
 																			{len, 6, 30}]}
 									 ], 
-			Htx1=Htx:recvform(FormSchema, fun(Form, Htx2) -> onform(Form, Htx2) end),
-			Htx1:ok();
+			Htx:recvform(FormSchema, fun(Form, Htx2) -> onform(Form, Htx2) end);
 		_ ->
 			Htx:method_not_allowed(['POST'])
 	end.

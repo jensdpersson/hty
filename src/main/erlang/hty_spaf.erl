@@ -26,8 +26,13 @@
 %%
 %% API Functions
 %%
+chain([]) ->
+	fun(Bin, Q) ->
+			 {ok, Q, [Bin]}
+	end;
 chain([Parser, Formatter]) ->
 	fun(Bin, Q) -> 
+			 io:format("invoking chain(~p,~p)~n", [Bin, Q]),
 			 [Qp, Qf] = case Q of
 										q0 -> [q0, q0];
 										Other -> Other
@@ -58,7 +63,7 @@ binder(Schema) ->
 							q0 -> Schema;
 							_ -> Q 
 						end,
-			 io:format("spaf ~p~n", [E]),
+			 io:format("spaf binder got ~p~n", [E]),
 			 case E of
 				 {kv, Key, Value} ->
 				   io:format("Bind ~p in ~p~n", [E, Bindings]),

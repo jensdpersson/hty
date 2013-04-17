@@ -45,15 +45,12 @@ list(Htx) ->
 	SpafEvts2 = [{push, <<"dir">>}|SpafEvts1],
 	{Htx2, _} = lists:foldl(
 								fun(Evt, {Htxn, Qn}) ->
-										 io:format("Evt, Qn [~p, ~p]~n", [Evt, Qn]),
 										 {ok, Qn1, Bin} = hty_xml_spaf:format(Evt, Qn),
-										 io:format("Bin, ~p~n", [Bin]),
 										 Htxn1 = Htxn:echo(Bin), 
 										 {Htxn1, Qn1}
-									;(E, Q) -> io:format("PIM ~p,~p~n", [E,Q]) end, 
+									;(E, Q) -> io:format("BADCASE:PIM ~p,~p~n", [E,Q]) end, 
 								{Htx1, q0},
 								SpafEvts2),
-	io:format("LIM!"),
 	Htx2:ok().
 
 add_files([In|Ins], Outs) ->

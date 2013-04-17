@@ -38,7 +38,7 @@ check(Htx, Auth) ->
 	Realm = Htx:realm(),
 	case Realm:auth(Username, Password) of
 		{ok, Principal} -> 
-			Htx1 = Htx:loggedin(Principal),
+			Htx1 = Htx:principal(Principal),
 			Htx1:dispatch(Subs);
 		no -> 
 			challenge(Htx)

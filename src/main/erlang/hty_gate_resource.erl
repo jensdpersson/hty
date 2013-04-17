@@ -16,8 +16,8 @@
 %% API Functions
 %%
 handle(Htx) ->
-	io:format("Principal = ~p~n", [Htx:loggedin()]),
-	{_Nick, Roles} = Htx:loggedin(),
+	io:format("Principal = ~p~n", [Htx:principal()]),
+	{_Nick, Roles} = Htx:principal(),
 	Role = Lookup(Htx),
 	io:format("member? ~p ~p~n", [Role, Roles]),
 	case lists:member(Role, Roles) of

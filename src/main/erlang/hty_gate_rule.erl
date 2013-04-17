@@ -18,10 +18,10 @@
 
 match(Fspath, Rules) ->
 	case lists:reverse(Fspath:parts()) of
-		["gate", Role] ->
+		["gate"|Rest] ->
 			Subs = hty_util:subs(Fspath, Rules),
-			case Role of
-				"$segment" -> 
+			case Rest of
+				[] -> 
 					Lookup = fun segment_lookup/1,
 					{claim, {resource, hty_gate_resource:new(Lookup, Subs)}};
 				_ ->

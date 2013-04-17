@@ -4,10 +4,11 @@
 		<html>
 			<head>
 				<title></title>
+				<link rel="stylesheet" type="text/css" href="../css/khaki.css" />
 			</head>
 			<body>
 				<t:for-each select="file">
-					<div>
+					<div class="box">
 						<a target="form" href="/data/{.}">
 							<t:value-of select="."/>
 						</a>		

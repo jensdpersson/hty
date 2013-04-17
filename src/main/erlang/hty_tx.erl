@@ -7,7 +7,9 @@
 -export([outs/0, sendfile/1, echo/1]).
 -export([rsp_header/2, rsp_headers/0]).
 
--export([recvdata/1, recvfile/2, recvform/2, buffer/1, flush/0]).
+-export([recvdata/1, recvfile/2, recvform/2, 
+				 buffer/1, unread/0, unread/1, flush/0]).
+-export([process_entity/1]).
 
 -export([ok/0,
 				 not_found/0, 
@@ -20,10 +22,11 @@
 				 forbidden/0]).
 
 -export([realm/0, realm/1]).
--export([loggedin/0, loggedin/1]).
+-export([principal/0, principal/1]).
 -export([bind/2, bound/1]).
 
 -export([queryparams/0, queryparams/1]).
+-export([socketreader/1]).
 
 -export([dispatch/1]).
 
@@ -122,9 +125,10 @@ this() ->
 	hty_tx:new(Tx).
 
 flush() ->
-	Binlist = lists:reverse([eos|Tx#tx.buffered]),
+	Binlist = lists:reverse(Tx#tx.buffered),
 	Sink = Tx#tx.ondata,
 	Laststate = Tx#tx.ondata_state,
+	io:format("flush in state ~p~n", [Laststate]),
 	F = fun(Data, {State, Htx}) ->
 				case Sink(Data, State, Htx) of
 					{ok, NewState, Htx1} -> {next, {NewState, Htx1}};
@@ -138,11 +142,41 @@ flush() ->
 			{hty_tx, Tx1} = Htx2,
 			hty_tx:new(Tx1#tx{buffered=[], ondata_state=State})
 	end.
-	
 
+unread() ->
+	Tx#tx.unread.
+unread(Leng) ->
+	hty_tx:new(Tx#tx{unread=Leng}).
+	
 buffer(Data) ->
 	Buffered = [Data|Tx#tx.buffered],
-	hty_tx:new(Tx#tx{buffered=Buffered}).
+	Unread = unread() - case Data of
+												eos -> 0;
+												_ -> size(Data)
+											end,
+	hty_tx:new(Tx#tx{buffered=Buffered, unread=Unread}).
+
+socketreader(SocketReader) ->
+	hty_tx:new(Tx#tx{socketreader=SocketReader}).
+
+process_entity(F) ->
+	Htx = recvdata(F),
+	Htx1 = Htx:flush(),
+	SocketReader = Tx#tx.socketreader,
+	pump(SocketReader, Htx1).
+
+pump(SocketReader, Htx) ->
+	case SocketReader:recv(Htx:unread()) of
+		timeout ->
+			{no, timeout};
+		{done, _Reason} ->
+			Htx1 = Htx:buffer(eos),
+			Htx1:flush();
+		{data, Data, SocketReader1} ->
+			Htx1 = Htx:buffer(Data),
+			Htx2 = Htx1:flush(),
+			pump(SocketReader1, Htx2)
+	end.
 
 rsp_header(Name, Value) -> hty_tx:new(Tx#tx{rsph=[{Name,Value}|Tx#tx.rsph]}).
 
@@ -156,7 +190,8 @@ recvform(FormSchema, Callback) ->
 	Spafs = [fun hty_formurlencoded_spaf:parse/2,
 					 hty_spaf:binder(FormSchema)],
 	Chain = hty_spaf:chain(Spafs),
-	recvdata(fun(Data, State, Htx) ->
+	process_entity(fun(Data, State, Htx) ->
+											io:format("invoking entity processor~n"),
 								case Chain(Data, State) of
 									{ok, State1, Out} ->
 										case Data of
@@ -188,7 +223,7 @@ recvfile(Spafs, Filepath) ->
 									{no, Error} -> {no, Error}
 								end
 					 end,
-	recvdata(fun(Data, State, Htx) ->
+	process_entity(fun(Data, State, Htx) ->
 								{Fd, WriteRes} = case State of
 														 q0 -> 
 															 Opts = [raw, write, delayed_write],
@@ -226,15 +261,17 @@ dispatch(Resources) ->
 	This = hty_tx:new(Tx),
 	io:format("dispatch   ~n"),
 	case hty_util:fold(fun(Resource, Htx) ->
-														io:format("Try ~p~n", [Resource]),
-																Htx1 = Resource:handle(This),
-																case Htx1:status() of
-																	{404, _} -> 
-																		{next, Htx};
-																	_ ->
-																		{break, Htx1}
-																end
-													 end, This:not_found(), Resources) of
+													io:format("Try ~p~n", [Resource]),
+													Htx1 = Resource:handle(This),
+													case Htx1:status() of
+														{404, _} -> 
+															{next, Htx};
+														{405, _} ->
+															{next, Htx};
+														_ ->
+															{break, Htx1}
+													end
+										 end, This:not_found(), Resources) of
 		{break, Rsp, _} -> Rsp;
 		{nobreak, Rsp} -> Rsp
 	end.
@@ -242,5 +279,5 @@ dispatch(Resources) ->
 realm() -> Tx#tx.realm.
 realm(Realm) -> hty_tx:new(Tx#tx{realm=Realm}).
 
-loggedin() -> Tx#tx.loggedin.
-loggedin(Loggedin) -> hty_tx:new(Tx#tx{loggedin=Loggedin}).
+principal() -> Tx#tx.principal.
+principal(Principal) -> hty_tx:new(Tx#tx{principal=Principal}).

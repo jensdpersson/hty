@@ -1,4 +1,3 @@
-
 %
 % @doc HTTP parser
 %
@@ -13,10 +12,12 @@ pack_header(HeaderName, HeaderValue) when is_atom(HeaderName) ->
     atom_to_list(HeaderName) ++ ": " ++ HeaderValue;
 pack_header(HeaderName, HeaderValue) -> HeaderName ++ ": " ++ HeaderValue.
 
-respond(Socket, Rsp) ->
-    send_line(Socket, "HTTP/1.1 " ++ pack_status(Rsp:status())),
+respond(Socket, Htx) ->
+    send_line(Socket, "HTTP/1.1 " ++ pack_status(Htx:status())),
     send_line(Socket, "Server: haughty 0.4"),
-    lists:foreach(fun({HName, HValue}) -> send_line(Socket, pack_header(HName, HValue)) end, Rsp:rsp_headers()),
+    lists:foreach(fun({HName, HValue}) -> 
+											 send_line(Socket, pack_header(HName, HValue)) 
+									end, Htx:rsp_headers()),
     send_line(Socket, ""),
 	lists:foreach(fun(Out) ->
 						case Out of
@@ -32,7 +33,7 @@ respond(Socket, Rsp) ->
 								io:format("data('~p')~n", [IOList]),
 								gen_tcp:send(Socket, IOList)
 						end
-				  end, lists:reverse(Rsp:outs())).
+				  end, lists:reverse(Htx:outs())).
 
 send_line(Socket, Line) -> gen_tcp:send(Socket,  Line ++ "\r\n").
 
@@ -40,27 +41,27 @@ parse(Socket) ->
 	Htx0 = hty_tx_factory:new(),
 	parse_loop(Htx0, <<>>, fun method_parser/2, Socket).
 
-parse_loop(Req, Unparsed, Parser, Socket) ->
-	case Parser(Req, Unparsed) of
-		{Req1, Unparsed1, Parser1} -> 
-			parse_loop(Req1, Unparsed1, Parser1, Socket);
+parse_loop(Htx, Unparsed, Parser, Socket) ->
+	case Parser(Htx, Unparsed) of
+		{Htx1, Unparsed1, Parser1} -> 
+			parse_loop(Htx1, Unparsed1, Parser1, Socket);
 		more -> 
-			recv(Req, Unparsed, Parser, Socket);
+			recv(Htx, Unparsed, Parser, Socket);
 		{more, []} -> 
-			recv(Req, Unparsed, Parser, Socket);
-		{done, Req1} -> 
-			Req1;
-		{error, Error} -> 
+			recv(Htx, Unparsed, Parser, Socket);
+		{done, Htx1} -> 
+			Htx1:socketreader(hty_socketreader);
+		{error, Error} ->
 			{error, Error}
 	end.
 
-recv(Req, Unparsed, Parser, Socket) ->
+recv(Htx, Unparsed, Parser, Socket) ->
     receive
        {tcp, Socket1, Data} ->
            inet:setopts(Socket, [{active, once}]),
            Unparsed1 = <<Unparsed/binary, Data/binary>>,
-           parse_loop(Req, Unparsed1, Parser, Socket1);
-       {tcp_closed, _} -> Req
+           parse_loop(Htx, Unparsed1, Parser, Socket1);
+       {tcp_closed, _} -> Htx
     end.
 
 method_parser(Htx, Data) -> 
@@ -101,9 +102,9 @@ protocol_parser(Req, Data) ->
     end.
 
 
-header_parser(Req, <<13,10,Data/binary>>) -> {Req, Data, fun body_parser/2};
-header_parser(Req, <<13, Data/binary>>) -> {Req, Data, fun body_parser/2};
-header_parser(Req, <<10, Data/binary>>) -> {Req, Data, fun body_parser/2};
+header_parser(Htx, <<13,10,Data/binary>>) -> {Htx, Data, fun body_parser/2};
+header_parser(Htx, <<13, Data/binary>>) -> {Htx, Data, fun body_parser/2};
+header_parser(Htx, <<10, Data/binary>>) -> {Htx, Data, fun body_parser/2};
 header_parser(Htx, Data) ->
     case token(Data, $:) of
         {token, Name, Data1} ->
@@ -120,32 +121,38 @@ header_parser(Htx, Data) ->
     end.
 
 body_parser(Htx, Data) ->
+	Leng = get_content_length(Htx),
+	Htx1 = Htx:unread(Leng),
+	{done, Htx1:buffer(Data)}.
+
+get_content_length(Htx) ->
 	case Htx:req_header('Content-Length') of
-		[] -> {done, Htx:buffer(Data) };
+		[] -> -1;
 		[ContentLength] -> 
 				{Len, []} = string:to_integer(binary_to_list(ContentLength)),
 				io:format("Conlen [~p]~n",[ContentLength]),
-				{Htx, 
-				 Data, 
-				 fun (Htx1, Data1) -> 
-							assemble_body(Htx1, Data1, Len) 
-				 end
-				}
+				Len
+				%{Htx, 
+				 %Data, 
+				 %fun (Htx1, Data1) -> 
+				%			assemble_body(Htx1, Data1, Len) 
+				% end
+				%}
 	end.
 
-assemble_body(Htx, Data, Len) ->
-	case Len =< 0 of
-		true ->
-			{done, Htx:buffer(Data)};
-		false ->
-			{
-			 Htx:buffer(Data),
-			 <<>>,
-			 fun (Htx1, Data1) ->
-						io:format("Len [~p]~n", [Len]),
-						assemble_body(Htx1, Data1, Len - size(Data)) 
-			end}
-	end.
+%assemble_body(Htx, Data, Len) ->
+%	case Len =< 0 of
+%		true ->
+%			{done, Htx:buffer(Data)};
+%		false ->
+%			{
+%			 Htx:buffer(Data),
+%			 <<>>,
+%			 fun (Htx1, Data1) ->
+%						io:format("Len [~p]~n", [Len]),
+%						assemble_body(Htx1, Data1, Len - size(Data)) 
+%			end}
+%	end.
 
 %Helpers
 token(Data, Delim) ->

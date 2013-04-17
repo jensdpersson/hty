@@ -15,8 +15,6 @@
 %%
 
 handle(Htx) ->
-	io:format("formdocs:handle(~p)~n", [Htx:path_below()]),
-	
 	case Htx:path_below() of
 		[] ->
 			case Htx:method() of

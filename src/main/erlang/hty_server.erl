@@ -60,8 +60,8 @@ loop_accept(Listen) ->
 								  Htx = hty_parser:parse(Socket),
 								  Htx1 = Resource:handle(Htx),
 									io:format("handle done~n"),
-									Htx2 = Htx1:flush(),									
-								  hty_parser:respond(Socket, Htx2)
+									%Htx2 = Htx1:flush(),									
+								  hty_parser:respond(Socket, Htx1)
 						  end 
 				  end),
 			ok = gen_tcp:controlling_process(Socket, Handler),
