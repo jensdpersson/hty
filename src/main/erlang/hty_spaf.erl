@@ -55,7 +55,19 @@ chain([Parser, Formatter]) ->
 				 {no, Reason} -> 
 					 {no, Reason}
 			 end
+	end;
+chain(Fs) ->
+	fun(P, Q) -> 
+		Q1 = case Q of
+					 q0 ->
+						 lists:map(fun(F) -> {F, q0} end, Fs);
+					 _ ->
+						 Q
+				 end,
+		chain2(P, Q1, [])
 	end.
+
+chain2
 
 binder(Schema) ->
 	fun(E, Q) ->

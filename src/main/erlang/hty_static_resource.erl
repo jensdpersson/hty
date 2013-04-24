@@ -20,7 +20,7 @@ handle(Htx) ->
 		'GET' ->
 			%Htx1 = Htx:rsp_header('Content-Type', "text/html"),
 			case Fspath:subpath(Htx:path_below()) of
-				notfound ->
+				ascension_denied ->
 					Htx:not_found();
 				Fspath1 ->
 					case Fspath1:isdir() of
@@ -42,8 +42,13 @@ handle(Htx) ->
 								[] -> Htx:not_found()
 							end;
 						false ->
-							Htx2 = Htx:rsp_header('Content-Type', "text/" ++ Fspath1:ext()),
-							Htx2:sendfile(Fspath1:filepath())
+							case Fspath1:exists() of
+								true ->
+									Htx2 = Htx:rsp_header('Content-Type', "text/" ++ Fspath1:ext()),
+									Htx2:sendfile(Fspath1:filepath());
+								false ->
+									Htx:not_found()
+							end
 					end
 			end;
 		_Method -> Htx:method_not_allowed(['GET']) %parametern är för att skriva en korrekt Allow-header

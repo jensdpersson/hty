@@ -1,5 +1,5 @@
 %% Author: jens
--module(hty_storage_resource, [Fspath, Tofs]).
+-module(hty_storage_resource, [Tofs]).
 
 %%
 %% Include files
@@ -15,20 +15,18 @@
 %%
 
 handle(Htx) ->
-	PathBelow = Tofs(Htx:path_below()),
-	Index = hty_listing_resource:new("", Fspath),
-	case PathBelow of
-		[] ->
+	Fspath = Tofs(Htx:path_below()),
+	case Fspath:is_dir() of
+		true ->
 			case Htx:method() of
 				'GET' ->							 
-					Htx:dispatch([Index]);
+					hty_listing:list(Htx, Fspath);
 				_ ->
 					Htx:method_not_allowed(['GET'])
 			end;
-		Segments ->
-			Fspath1 = Fspath:subpath(Segments),
-			Filepath = Fspath1:filepath(),
-			Exists = Fspath1:exists(),
+		false ->
+			Filepath = Fspath:filepath(),
+			Exists = Fspath:exists(),
 			case Htx:method() of
 				'GET' ->
 					case Exists of

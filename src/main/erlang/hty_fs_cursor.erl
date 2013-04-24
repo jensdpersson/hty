@@ -85,6 +85,6 @@ subpath(Pathsegments) ->
 				end,
 				lists:reverse(Path),
 				Pathsegments) of
-		no -> notfound;
+		no -> ascension_denied;
 		Path1 -> hty_fs_cursor:new(lists:reverse(Path1))
 	end.
