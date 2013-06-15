@@ -24,16 +24,21 @@ decode(Bin) ->
 %%
 
 decode(In, Out) ->
-	{A, B} = hty_util:until(In, $%),
+	{A, B} = hty_scan:until_either(In, $%, $+),
 	case B of 
 		<<>> ->
 			<<Out/binary, A/binary>>;
+                <<$+, Rest/binary>> ->
+                    Int = 32,
+		    Out1 = <<Out/binary, A/binary, Int:8/integer>>,	
+		  decode(Rest, Out1);
 		<<$%, H1:8/integer, H2:8/integer, Rest/binary>> ->
 			Int = dehex(H1) * 16 + dehex(H2),
 			Out1 = <<Out/binary, A/binary, Int:8/integer>>,	
 		  decode(Rest, Out1)
 	end.
 
+dehex($0) -> 0;
 dehex($1) -> 1;
 dehex($2) -> 2;
 dehex($3) -> 3;

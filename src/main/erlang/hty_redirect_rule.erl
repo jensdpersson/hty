@@ -35,14 +35,14 @@ match(Fspath, _Rules) ->
 %%
 
 create(Fs) ->
-	case file:read_file(Fs:filepath()) of
-		{ok, Content} ->
-			case hty_slots:parse(Content) of
-				{no, Error} ->
-					{no, Error};
-				Slots ->
-					hty_redirect_resource:new(Slots)
-			end;
-		{error, Error} ->
-			{no, Error}
-end.
+    case file:read_file(Fs:filepath()) of
+	{ok, Content} ->
+	    case hty_slots:parse(Content) of
+		{no, Error} ->
+		    {no, Error};
+		Slots ->
+		    hty_redirect_resource:new(Slots)
+	    end;
+	{error, Error} ->
+	    {no, Error}
+    end.

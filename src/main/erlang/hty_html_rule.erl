@@ -16,12 +16,12 @@
 %% API Functions
 %%
 match(Fspath, _Rules) ->
-	case Fspath:ext() of
-		"html" ->
-			{claim, {resource, hty_sendfile_resource:new("text/html", Fspath)}};
-		_ ->
-			next
-	end.
+    case Fspath:ext() of
+	"html" ->
+	    {claim, {resource, hty_sendfile_resource:new("text/html", Fspath)}};
+	_ ->
+	    next
+    end.
 
 
 %%

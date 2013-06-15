@@ -16,12 +16,12 @@
 %% API Functions
 %%
 match(Fspath, _Rules) ->
-	case Fspath:parts() of
-		[Siteref, "siteref"] ->
-			{claim, {resource, hty_siteref_resource:new(Siteref)}};
-		_ ->
-			next
-	end.
+    case Fspath:parts() of
+	[Siteref, "siteref"] ->
+	    {claim, {resource, hty_siteref_resource:new(Siteref)}};
+	_ ->
+	    next
+    end.
 
 %%
 %% Local Functions

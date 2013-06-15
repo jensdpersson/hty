@@ -20,52 +20,52 @@ name() -> Realmname.
 -spec signup(string(), string()) -> 
 				ok | {no, badnick} | {no, exists} | {no, createerror}.
 signup(Nick, Pass) ->
-	case validate(Nick) of
-		no ->
-			{no, badnick};
-		ok ->
-			Userdir = Fspath:subpath(["data", Nick]),
-			case Userdir:exists() of
-				true ->
-					{no, exists};
-				false ->
-					case Userdir:mkdir() of
-						{error, _Error} ->
-							{no, createerror};
-						ok ->
-							Secretfile = Userdir:subpath(["secret"]),
-							Secret = crypto:md5(Pass),
-							case file:write_file(Secretfile:filepath(), [Secret, 10]) of
-								{error, _Error} ->
-									%TODO log inconsistent user
-									{no, createerror};
-								ok ->
-									ok
-							end
-					end
-			end
-	end.
+    case validate(Nick) of
+	no ->
+	    {no, badnick};
+	ok ->
+	    Userdir = Fspath:subpath(["data", Nick]),
+	    case Userdir:exists() of
+		true ->
+		    {no, exists};
+		false ->
+		    case Userdir:mkdir() of
+			{error, _Error} ->
+			    {no, createerror};
+			ok ->
+			    Secretfile = Userdir:subpath(["secret"]),
+			    Secret = crypto:md5(Pass),
+			    case file:write_file(Secretfile:filepath(), [Secret, 10]) of
+				{error, _Error} ->
+						%TODO log inconsistent user
+				    {no, createerror};
+				ok ->
+				    ok
+			    end
+		    end
+	    end
+    end.
 
 auth(Nick, Pass) ->
-	case validate(Nick) of 
-		ok ->
-			Secretfile = Fspath:subpath(["data", binary_to_list(Nick), "secret"]),
-		  case file:read_file(Secretfile:filepath()) of
-				{ok, Binary} -> 
-				Md5 = crypto:md5(Pass),
-				case <<Md5/binary, 10>> of
-					Binary ->
-						{ok, {Nick, [Nick]}};
-					_ ->
-						no
-				end;
-				{error, _Error} ->
-					no
-			end;
-		no ->
-			no
-	end.
-						
+    case validate(Nick) of 
+	ok ->
+	    Secretfile = Fspath:subpath(["data", binary_to_list(Nick), "secret"]),
+	    case file:read_file(Secretfile:filepath()) of
+		{ok, Binary} -> 
+		    Md5 = crypto:md5(Pass),
+		    case <<Md5/binary, 10>> of
+			Binary ->
+			    {ok, {Nick, [Nick]}};
+			_ ->
+			    no
+		    end;
+		{error, _Error} ->
+		    no
+	    end;
+	no ->
+	    no
+    end.
+
 %%
 %% Local Functions
 %%

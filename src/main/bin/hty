@@ -2,13 +2,15 @@
 
 main(["start"]) -> start();
 main(["stop"]) -> stop();
+main(["reload"]) -> reload();
 main(["status"]) -> status();
-main(_) -> print("Usage: hty start|stop|status|restart").
-
-
+main(_) -> print("Usage: hty start|stop|status|reload").
 
 print(M) -> io:format(M), io:format("~n").
 
+reload() ->
+    Fscursor = hty_fs_cursor:new("/etc/hty"),
+    hty_main:reload(Fscursor).
 
 start() -> 
 	print("Starting Haughty Http Server"),
@@ -18,7 +20,9 @@ start() ->
 	      print("Ok"),
 	      loop();
 	   {no, Error} -> 
-	      print(Error)
+	      print(Error);
+           {error, Error} ->
+              print(Error)
 	end.
  
 

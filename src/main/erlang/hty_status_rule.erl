@@ -16,24 +16,28 @@
 %% API Functions
 %%
 match(Fspath, Rules) ->
-	case Fspath:ext() of
-		"status" ->
-			Content = fun(Fspath1) ->
-										 case Fspath1:parts() of
-											 ["content"|_] -> 
-												 true;
-											 _ -> false
-										 end
-								end,
-			case Fspath:walk(Rules, Content) of
-				[{ok, {resource, Subresource}, _, _}] ->
-					Resource = hty_status_resource:new(Fspath, Subresource),
-					{claim, {resource, Resource}};
-				Que ->
-					{block, {badwalk, Que}}
-			end;		
-		_ -> next
-	end.
+    case Fspath:ext() of
+	"status" ->
+	    Statusmap = lists:flatmap(fun(File) ->
+					      Prefix = File:prefix(),
+					      case (catch list_to_integer(Prefix)) of
+						  {'EXIT', _} -> 
+						      [];
+						  Integer ->
+						      case File:match(Rules) of
+							  {ok, {resource, Resource},_,_} ->
+							      [{Integer, Resource}];
+							  {no, _, _, _} ->
+							      []
+						      end
+					      end
+				      end,
+				      Fspath:list()),
+	    io:format("Status map ~p~n", [Statusmap]),
+	    [{ok, {resource, Content}, _, _}] = Fspath:walk(Rules, fun(Fs) -> case Fs:prefix() of "content" -> true; _ -> false end end),
+	    {claim, {resource, hty_status_resource:new(Content, Statusmap)}};
+	_ -> next
+    end.
 
 %%
 %% Local Functions

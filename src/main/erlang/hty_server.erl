@@ -5,11 +5,11 @@
 start() ->
     io:format("Trying to listen on ~p:~p", [Ip,Port]),
     case gen_tcp:listen(Port, [list, 
-															 {packet, 0}, 
-															 {active, once}, 
-															 {ip, Ip}, 
-															 {reuseaddr, true},
-															 binary]) of
+			       {packet, 0}, 
+			       {active, once}, 
+			       {ip, Ip}, 
+			       {reuseaddr, true},
+			       binary]) of
         {error, Error} ->
             io:format(", failed : ~p~n", [Error]),
             {error, Error};
@@ -23,20 +23,19 @@ start() ->
 	    Accepter = spawn(Fun),
 	    ok = gen_tcp:controlling_process(Listen, Accepter),
 	    register(process_key(), 
-	    			    spawn(fun() -> 
-	    			    		loop_control([])
-				          end)
+		     spawn(fun() -> 
+				   loop_control([])
+			   end)
 		    ),
 	    Accepter ! go,
             ok
     end.
 
 loop_control(Sites) ->
-       receive
-           stop -> ok;
-	   	   {sites, Sites} -> loop_control(Sites)
-       end.
-			
+    receive
+	stop -> ok;
+	{sites, Sites} -> loop_control(Sites)
+    end.
 
 stop() ->
        Key = process_key(),

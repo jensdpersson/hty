@@ -7,7 +7,7 @@
 %% Exported Functions
 %%
 -export([parse/1, parse/2]).
--import(hty_util, [until/2]).
+-import(hty_scan, [until/2]).
 %%
 %% API Functions
 %%

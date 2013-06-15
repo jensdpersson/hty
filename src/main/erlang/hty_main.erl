@@ -1,5 +1,4 @@
 % @doc Entry point and central hub for the Haughty web server.
-% Servers are added with listen() and web sites mounted with serve().
 -module(hty_main).
 
 -export([start/0]).
@@ -29,33 +28,31 @@ reload(Fscursor) ->
     A0 = {[],[],[]},
     {Listens, Sites, _Ignored} = lists:foldl(Sort, A0, Cfg),
     ?MODULE ! {reload, Listens, Sites},
-	io:format("Before recv"),
+    io:format("Before recv"),
     receive 
-		{ok, _Status} -> ok;
-		{no, _Reason} -> no
+	{ok, _Status} -> ok;
+	{no, _Reason} -> no
     after
-		60000 -> timeout
+	60000 -> timeout
     end.
 
 start() ->
     Dispatcher = spawn(fun() ->
-    	       loop_dispatch(hty_state:new([],[],[])) 
+    	       loop_dispatch(hty_state:new([],[])) 
 					   end),
     register(?MODULE, Dispatcher),
     ok.
 
 status() ->
-	 io:format("a0"),
-	 ?MODULE ! {status, self()},
-	 io:format("a"),
-	 receive
-		{status, Status} -> 
-		 	 io:format("b"),
-			 io:format("~p~n", [Status]);
-		Other -> io:format("Bad status ~p~n",[Other])
-	 after 
-		10000 -> io:format("timeout")
-	 end.
+    ?MODULE ! {status, self()},
+    receive
+	{status, Status} -> 
+	    Status;
+	Other -> 
+	    io:format("Bad status ~p~n",[Other])
+    after 
+	10000 -> io:format("timeout")
+    end.
 		
 	     
 

@@ -17,19 +17,19 @@
 %%
 
 match(Fspath, Rules) ->
-	case lists:reverse(Fspath:parts()) of
-		["gate"|Rest] ->
-			Subs = hty_util:subs(Fspath, Rules),
-			case Rest of
-				[] -> 
-					Lookup = fun segment_lookup/1,
-					{claim, {resource, hty_gate_resource:new(Lookup, Subs)}};
-				_ ->
-					{block, "unsupported"}
-			end;
+    case lists:reverse(Fspath:parts()) of
+	["gate"|Rest] ->
+	    Subs = Fspath:subs(Rules),
+	    case Rest of
+		[] -> 
+		    Lookup = fun segment_lookup/1,
+		    {claim, {resource, hty_gate_resource:new(Lookup, Subs)}};
 		_ ->
-			next
-	end.
+		    {block, "unsupported"}
+	    end;
+	_ ->
+	    next
+    end.
 
 %%
 %% Local Functions

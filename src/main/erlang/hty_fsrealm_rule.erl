@@ -16,15 +16,15 @@
 %% API Functions
 %%
 match(Fspath, Rules) ->
-	case lists:reverse(Fspath:parts()) of
-		["fsrealm", Name | _] ->
-			Subs = hty_util:subs(Fspath, Rules),
-			Realm = hty_fsrealm:new(Name, Fspath),
-			Res = hty_realm_resource:new(Realm, Subs),
-			{claim, {resource, Res}};
-		_ ->
-			next
-	end.
+    case lists:reverse(Fspath:parts()) of
+	["fsrealm", Name | _] ->
+	    Subs = Fspath:subs(Rules),
+	    Realm = hty_fsrealm:new(Name, Fspath),
+	    Res = hty_realm_resource:new(Realm, Subs),
+	    {claim, {resource, Res}};
+	_ ->
+	    next
+    end.
 
 
 %%

@@ -30,7 +30,7 @@ fill(Slots, Data) ->
 %% Local Functions
 %%
 find_start(Input, Output) ->
-	{Token, Rest} = hty_util:until(Input, ${),
+	{Token, Rest} = hty_scan:until(Input, ${),
 	case Rest of
 		<<${, Input1/binary>> ->
 			find_end(Input1, [Token|Output]);
@@ -39,7 +39,7 @@ find_start(Input, Output) ->
 	end.
 
 find_end(Input, Output) ->
-	{Token, Rest} = hty_util:until(Input, $}),
+	{Token, Rest} = hty_scan:until(Input, $}),
 	case Rest of
 		<<$}, Input1/binary>> ->
 			find_start(Input1, [{key, Token}|Output]);

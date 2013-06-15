@@ -3,13 +3,13 @@
 -export([handle/1]).
 
 handle(Htx) ->
-	hty_main ! {root, self()},
-	receive
-		{root, Root} ->
-			Root:handle(Htx)
-	after 
-		1000 -> 
-			Htx:service_unavailable()
+    hty_main ! {root, self()},
+    receive
+	{root, Root} ->
+	    Root:handle(Htx)
+    after 
+	1000 -> 
+	    Htx:service_unavailable()
     end.
 
 

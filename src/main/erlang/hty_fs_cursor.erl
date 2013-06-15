@@ -1,7 +1,7 @@
 -module(hty_fs_cursor, [Path]).
 
 -export([exists/0, isdir/0, mkdir/0]).
--export([match/1, walk/1, walk/2, list/0, list/1, parts/0, prefix/0, ext/0, subpath/1]).
+-export([match/1, walk/1, walk/2, subs/1, list/0, list/1, parts/0, prefix/0, ext/0, subpath/1]).
 
 -export([filepath/0, basename/0, parent/0]).
 
@@ -53,6 +53,12 @@ walk(Rules, Filter) ->
 	lists:map(fun(Fscursor) -> 
 					  Fscursor:match(Rules)
 			  end, List).
+
+subs(Rules) ->
+    lists:flatmap(fun({ok, {resource, R}, _, _}) -> [R];
+		     (_) -> []
+		  end, walk(Rules)).
+
 
 this() -> hty_fs_cursor:new(Path).
 

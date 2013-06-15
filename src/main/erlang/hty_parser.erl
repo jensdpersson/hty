@@ -16,24 +16,24 @@ respond(Socket, Htx) ->
     send_line(Socket, "HTTP/1.1 " ++ pack_status(Htx:status())),
     send_line(Socket, "Server: haughty 0.4"),
     lists:foreach(fun({HName, HValue}) -> 
-											 send_line(Socket, pack_header(HName, HValue)) 
-									end, Htx:rsp_headers()),
+			  send_line(Socket, pack_header(HName, HValue)) 
+		  end, Htx:rsp_headers()),
     send_line(Socket, ""),
-	lists:foreach(fun(Out) ->
-						case Out of
-							{file, Filepath} ->
-								io:format("sendfile('~p')~n",[Filepath]),
-								case file:sendfile(Filepath, Socket) of
-									{ok, _BytesSent} ->
-										io:format("Sendfile ok~n");
-									{error, Reason} ->
-										io:format("Sendfile fails with ~p~n", [Reason])	
-								end;
-							{data, IOList} ->
-								io:format("data('~p')~n", [IOList]),
-								gen_tcp:send(Socket, IOList)
-						end
-				  end, lists:reverse(Htx:outs())).
+    lists:foreach(fun(Out) ->
+			  case Out of
+			      {file, Filepath} ->
+				  io:format("sendfile('~p')~n",[Filepath]),
+				  case file:sendfile(Filepath, Socket) of
+				      {ok, _BytesSent} ->
+					  io:format("Sendfile ok~n");
+				      {error, Reason} ->
+					  io:format("Sendfile fails with ~p~n", [Reason])	
+				  end;
+			      {data, IOList} ->
+				  io:format("data('~p')~n", [IOList]),
+				  gen_tcp:send(Socket, IOList)
+			  end
+		  end, lists:reverse(Htx:outs())).
 
 send_line(Socket, Line) -> gen_tcp:send(Socket,  Line ++ "\r\n").
 
@@ -79,26 +79,29 @@ canonical_method(<<"OPTIONS">>) -> 'OPTIONS';
 canonical_method(<<"HEAD">>) -> 'HEAD';
 canonical_method(Method) -> Method.
 
-path_parser(Req, Data) ->
-	case token(Data, 32) of
-		{token, Path, Rest} ->
-			{Segments, Query} = hty_uri:parse_path(Path),
-			Segments1 = lists:map(fun(Seg) ->
-																 binary_to_list(Seg) 
-														end, Segments),
-			Pathzipper = {[], Segments1},
-			Req1 = Req:path(Pathzipper),
-			{Req1:queryparams(Query),
-			 Rest, fun protocol_parser/2};
-		{more, _Token} -> 
-			more
-	end.
+path_parser(Htx, Data) ->
+    case token(Data, 32) of
+	{token, Path, Rest} ->
+	    {Segments, Query} = hty_uri:parse_path(Path),
+	    Segments1 = lists:map(fun(Seg) when is_binary(Seg) ->
+					  binary_to_list(Seg); 
+				     ({Name, Matrix}) ->
+					  {binary_to_list(Name), Matrix}
+				  end, Segments),
+	    Pathzipper = {[], Segments1},
+	    Htx1 = Htx:path(Pathzipper),
+	    {Htx1:queryparams(Query),
+	     Rest, fun protocol_parser/2};
+	{more, _Token} -> 
+	    more
+    end.
 
 protocol_parser(Req, Data) ->
     case line(Data) of
         {token, Protocol, Rest} -> 
-					{Req:protocol(Protocol),Rest,fun header_parser/2};
-        {more, _Token} -> more
+	    {Req:protocol(Protocol),Rest,fun header_parser/2};
+        {more, _Token} -> 
+	    more
     end.
 
 
@@ -156,7 +159,7 @@ get_content_length(Htx) ->
 
 %Helpers
 token(Data, Delim) ->
-	{Token, Rest} = hty_util:until(Data, Delim), 
+	{Token, Rest} = hty_scan:until(Data, Delim), 
 	case Rest of
 		<<Delim:8/integer, Rest1/binary>> ->
 			{token, Token, Rest1};
@@ -165,7 +168,7 @@ token(Data, Delim) ->
 	end.
 
 line(Data) -> 
-	{Line, Rest} = hty_util:until_either(Data, 13, 10),
+	{Line, Rest} = hty_scan:until_either(Data, 13, 10),
 	case Rest of 
 		<<13, 10, R2/binary>> ->
 			{token, Line, R2};
