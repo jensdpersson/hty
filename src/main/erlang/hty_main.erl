@@ -27,10 +27,10 @@ reload(Fscursor) ->
 	   end,
     A0 = {[],[],[]},
     {Listens, Sites, _Ignored} = lists:foldl(Sort, A0, Cfg),
-    ?MODULE ! {reload, Listens, Sites},
+    ?MODULE ! {reload, Listens, Sites, self()},
     io:format("Before recv"),
     receive 
-	{ok, _Status} -> ok;
+	{ok, Status} -> {ok, Status};
 	{no, _Reason} -> no
     after
 	60000 -> timeout
@@ -57,7 +57,7 @@ status() ->
 	     
 
 loop_dispatch(ServerState) ->
-    io:format("LoopDispatch"),
+    io:format("LoopDispatch~n"),
     receive
      	{status, ReplyTo} ->
 	    	ReplyTo ! {status, ServerState}, 
@@ -65,12 +65,15 @@ loop_dispatch(ServerState) ->
 		{stop, ReplyTo} -> 
 			ReplyTo ! {stopping}, 
 			init:stop();
-		{reload, Listens, Sites} ->
+		{reload, Listens, Sites, ReplyTo} ->
 			ServerState1 = reload_servers(ServerState, Listens),
 			ServerState2 = reload_sites(ServerState1, Sites),
+                        ReplyTo ! {ok, started},
 	    	loop_dispatch(ServerState2);
-		{root, ReplyTo} ->
-	    	ReplyTo ! {root, hty_root:new(ServerState:sites())},
+		{root, SiteID, ReplyTo} ->
+	    	ReplyTo ! {root, hty_util:find(fun(S) -> 
+                                             S:match(SiteID) 
+                                           end, ServerState:sites())},
 			loop_dispatch(ServerState);
 		SomeMessage -> 
             io:format("Unknown message ~p~n", [SomeMessage]),

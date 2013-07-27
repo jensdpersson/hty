@@ -2,10 +2,11 @@
 
 -export([match/2]).
 
-match(Fspath, _Rules) ->
+match(Fspath, Rules) ->
     case lists:reverse(Fspath:parts()) of
 	["vhost", Vhost|_] ->
-	    {claim, {resource, hty_vhost_resource:new(Vhost)}};
+            Subs = Fspath:walk(Rules),
+	    {claim, {resource, hty_vhost_resource:new([Vhost], Subs)}};
 	_ ->
 	    next
     end.

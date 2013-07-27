@@ -36,7 +36,7 @@ handle(Htx) ->
 			    L = ["index.html", "index.xml"],
 			    case lists:flatmap(F, L) of
 				[Welcome|_] -> 
-				    Htx2 = Htx:rsp_header('Content-Type', "text/" ++ Welcome:ext()),
+				    Htx2 = Htx:rsp_header('Content-Type', Htx:mimemap(Welcome:ext())),
 				    Htx3 = Htx2:sendfile(Welcome:filepath()),
 				    Htx3:ok();
 				[] -> 
@@ -45,7 +45,7 @@ handle(Htx) ->
 			false ->
 			    case Fspath1:exists() of
 				true ->
-				    Htx2 = Htx:rsp_header('Content-Type', "text/" ++ Fspath1:ext()),
+				    Htx2 = Htx:rsp_header('Content-Type', Htx:mimemap(Fspath1:ext())),
 				    Htx3 = Htx2:sendfile(Fspath1:filepath()),
 				    Htx3:ok();
 				false ->

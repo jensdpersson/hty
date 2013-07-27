@@ -38,7 +38,7 @@
 
 -export([ndc_push/1, ndc_pop/0, ndc_peek/0]).
 
--export([log/0, log/2]).
+-export([log/0, log/2, mimemap/1]).
 
 -include("hty_tx.hrl").
 
@@ -47,6 +47,13 @@
 %log(Category, Severity, Message) ->
 %    LogEntry = {Category, Severity, hty_log:tstamp(), Message},
  %   hty_tx:new(Tx#tx{log=[LogEntry|Tx#tx.log]}).
+
+mimemap("ogg") -> "audio/ogg";
+mimemap("html") -> "text/html";
+mimemap("xsl") -> "text/xsl";
+mimemap("css") -> "text/css";
+mimemap("javascript") -> "text/javascript";
+mimemap("xml") -> "text/xml".
 
 protocol(Proto) ->
 	hty_tx:new(Tx#tx{proto=Proto}).
@@ -285,8 +292,10 @@ ndc_pop() ->
     hty_tx:new(Tx#tx{ndc=Ndc}).
 
 ndc_peek() ->
-    [Top|_] = Tx#tx.ndc,
-    Top.
+    case Tx#tx.ndc of
+        [Top|_] -> Top;
+        [] -> {'/'}
+    end.
 
 log() ->
     Tx#tx.log.
