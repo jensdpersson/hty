@@ -10,9 +10,6 @@ match(Fspath, _Rules) ->
     end.
 
 claim(Port, Proto, Fspath) ->
-	case Fspath:walk([hty_siteref_rule, hty_rules_rule]) of
-    	[{ok, {resource, Root}, _, _}] -> 	
-    		{claim, {listen, Proto, list_to_integer(Port), Root}};
-		{no, _Reason, _Path, _Rules} ->
-			block
-	end.
+        Subs = Fspath:subs([hty_siteref_rule, hty_rules_rule]),
+        Root = hty_union_resource:new(Subs),
+	{claim, {listen, Proto, list_to_integer(Port), Root}}.

@@ -56,7 +56,7 @@ walk(Rules, Filter) ->
 
 subs(Rules) ->
     lists:flatmap(fun({ok, {resource, R}, _, _}) -> [R];
-		     (_) -> []
+		     (Other) -> io:format("subs:~p~n", [Other]), []
 		  end, walk(Rules)).
 
 
