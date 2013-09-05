@@ -1,4 +1,5 @@
 #!/usr/bin/env escript
+%%! -detached
 
 main(["start"]) -> start();
 main(["stop"]) -> stop();
@@ -14,6 +15,11 @@ reload() ->
 
 start() -> 
 	print("Starting Haughty Http Server"),
+
+        Pid = os:getpid(),
+        {ok, Pidfile} = file:open("/var/run/hty.pid", [write]),
+        file:write(Pidfile, Pid),
+
 	code:add_pathz("/opt/hty/ebin"),
     case hty_ctl:start(['/etc/hty']) of
 	   {ok,started} -> 

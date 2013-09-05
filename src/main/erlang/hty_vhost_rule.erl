@@ -4,8 +4,9 @@
 
 match(Fspath, Rules) ->
     case lists:reverse(Fspath:parts()) of
-	["vhost", Vhost|_] ->
-            Subs = Fspath:walk(Rules),
+	["vhost"|VhostParts] ->
+            Subs = Fspath:subs(Rules),
+            Vhost = list_to_binary(string:join(lists:reverse(VhostParts), ".")),
 	    {claim, {resource, hty_vhost_resource:new([Vhost], Subs)}};
 	_ ->
 	    next
