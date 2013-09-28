@@ -54,6 +54,7 @@ mimemap("xsl") -> "text/xsl";
 mimemap("css") -> "text/css";
 mimemap("javascript") -> "text/javascript";
 mimemap("js") -> "text/javascript";
+mimemap("png") -> "image/png";
 mimemap("xml") -> "text/xml".
 
 protocol(Proto) ->
