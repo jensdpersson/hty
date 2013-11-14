@@ -37,10 +37,20 @@ reload(Fscursor) ->
     end.
 
 start() ->
-    Dispatcher = spawn(fun() ->
-    	       loop_dispatch(hty_state:new([],[])) 
-					   end),
+    spawn(fun loop_supervise/0),
+    ok.
+
+loop_supervise() ->
+    process_flag(trap_exit, true),
+    Dispatcher = spawn_link(fun() ->
+                    loop_dispatch(hty_state:new([],[])) 
+                 end),
     register(?MODULE, Dispatcher),
+    receive
+        {'EXIT', _FromPid, Reason} ->
+            io:format("Restarting due to ~p ~n", [Reason]),
+            loop_supervise()
+    end,
     ok.
 
 status() ->
@@ -62,20 +72,20 @@ loop_dispatch(ServerState) ->
      	{status, ReplyTo} ->
 	    	ReplyTo ! {status, ServerState}, 
 	    	loop_dispatch(ServerState);
-		{stop, ReplyTo} -> 
-			ReplyTo ! {stopping}, 
-			init:stop();
-		{reload, Listens, Sites, ReplyTo} ->
-			ServerState1 = reload_servers(ServerState, Listens),
-			ServerState2 = reload_sites(ServerState1, Sites),
-                        ReplyTo ! {ok, started},
+	{stop, ReplyTo} -> 
+		ReplyTo ! {stopping}, 
+		init:stop();
+	{reload, Listens, Sites, ReplyTo} ->
+		ServerState1 = reload_servers(ServerState, Listens),
+		ServerState2 = reload_sites(ServerState1, Sites),
+                ReplyTo ! {ok, started},
 	    	loop_dispatch(ServerState2);
-		{root, SiteID, ReplyTo} ->
+	{root, SiteID, ReplyTo} ->
 	    	ReplyTo ! {root, hty_util:find(fun(S) -> 
                                              S:match(SiteID) 
                                            end, ServerState:sites())},
-			loop_dispatch(ServerState);
-		SomeMessage -> 
+		loop_dispatch(ServerState);
+	SomeMessage -> 
             io:format("Unknown message ~p~n", [SomeMessage]),
             loop_dispatch(ServerState)
     end.

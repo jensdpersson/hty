@@ -54,8 +54,9 @@ handle(Htx) ->
 		    case Method of
 			'GET' ->	
 			    case Fspath2:exists() of
-				true -> 			    
-				    Htx:sendfile(Filepath);
+				true -> 	
+                                    Htx1 = Htx:ok(),
+				    Htx1:sendfile(Filepath);
 				false ->
 				    case tip(Fspath1) of
 					nofile -> 

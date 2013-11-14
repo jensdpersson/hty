@@ -5,7 +5,7 @@
 %	 next/0,
 	 status/2, status/0, req_header/1, req_header/2, req_headers/0]).
 
--export([outs/0, sendfile/1, echo/1, clear/0]).
+-export([outs/0, sendfile/1, echo/1, clear/0, prolog/1]).
 -export([rsp_header/2, rsp_headers/0]).
 
 -export([recvdata/1, recvfile/2, recvform/2, 
@@ -313,6 +313,10 @@ sendfile(Filename) ->
     hty_tx:new(Tx1#tx{outs=[{file, Filename}|Tx1#tx.outs]}).
 
 echo(IOList) -> hty_tx:new(Tx#tx{outs=[{data, IOList}|Tx#tx.outs]}).
+
+prolog(IOList) -> 
+    Outs1 = lists:reverse(lists:reverse(IOList) ++ lists:reverse(Tx#tx.outs)),
+    hty_tx:new(Tx#tx{outs=Outs1}).
 
 clear() ->
     hty_tx:new(Tx#tx{outs=[]}).

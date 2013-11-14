@@ -18,10 +18,9 @@
 match(Fspath, Rules) ->
 	case lists:reverse(Fspath:parts()) of
 		["xslpi", Xslpath|_] ->
-			Subs = lists:flatmap(fun({ok, {resource, R}, _, _}) -> [R];
-												  (_) -> [] end,
-											 Fspath:walk(Rules)),
-			{claim, {resource, hty_xslpi_resource:new(Xslpath, Subs)}};
+			Subs = Fspath:subs(Rules),
+                        Xslpaths = parse(Xslpath),
+			{claim, {resource, hty_xslpi_resource:new(Xslpaths, Subs)}};
 		_ ->
 			next
 	end.
@@ -30,4 +29,14 @@ match(Fspath, Rules) ->
 %%
 %% Local Functions
 %%
+-spec parse(string()) -> [{string(),string()}|string()].
+parse(S) ->
+    lists:flatmap(fun("") -> [];
+                     (Str) -> 
+                        case string:tokens(Str, "=") of
+                            [Key] -> [{Key, "any"}];
+                            [Key, Value] -> [{Key, Value}]
+                        end
+              end, string:tokens(S, ",")).
 
+    

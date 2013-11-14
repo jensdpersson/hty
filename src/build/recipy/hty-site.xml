@@ -11,7 +11,8 @@
                 <e:edoc/>
             </folder>
             <folder name="test-results">
-                 <e:eunit-reports ebin="target/ebin"/>
+                <artifact name="xsl" project="resultface"/>
+                <e:eunit-reports xslpi="resultface.xsl" ebin="target/ebin"/>
             </folder>
             <artifact project="verdict" name="xslt"/>
             <artifact project="prosith" name="pkg"/>

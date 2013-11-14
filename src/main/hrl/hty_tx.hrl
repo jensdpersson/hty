@@ -13,7 +13,7 @@
 	  outs=[],
 	  principal= <<"guest">>,
 	  realm=hty_empty_realm,
-	  attributes={},
+	  attributes=[],
 	  queryparams=[],
 	  socketreader=no,
 	  ndc=[],
