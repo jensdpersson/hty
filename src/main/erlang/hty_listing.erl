@@ -10,16 +10,19 @@
 %%
 %% Exported Functions
 %%
--export([list/2]).
+-export([list/2, list/3]).
 
 %%
 %% API Functions
 %%
 
 list(Htx, Fspath) ->
+	list(Htx, Fspath, []).
+
+list(Htx, Fspath, Attrs) ->
 	Htx1 = Htx:rsp_header("Content-Type", "application/xml"),
 	SpafEvts = [{pop, <<"dir">>}],
-	SpafEvts1 = add_files(Fspath:list(), SpafEvts),
+	SpafEvts1 = add_files(Fspath:list(), SpafEvts, Attrs),
 	SpafEvts2 = [{push, <<"dir">>}|SpafEvts1],
 	{Htx2, _} = lists:foldl(
 								fun(Evt, {Htxn, Qn}) ->
@@ -35,11 +38,19 @@ list(Htx, Fspath) ->
 %%
 %% Local Functions
 %%
-add_files([In|Ins], Outs) ->
-	Outs1 = [{push, <<"file">>},
-					 {text, list_to_binary(In:basename())},
-					 {pop, <<"file">>}| Outs],
-	add_files(Ins, Outs1);
-add_files([], Outs) ->
+add_files([In|Ins], Outs, Attrs) ->
+	Outs1 = [{text, list_to_binary(In:basename())},
+			 {pop, <<"file">>}|Outs],
+	Outs2 = lists:foldl(fun(Attr, Acc) -> add_attribute(In, Attr) ++ Acc end, Outs1, Attrs), 
+	Outs3 = [{push, <<"file">>}|Outs2],
+	add_files(Ins, Outs3, Attrs);
+add_files([], Outs, _) ->
 	Outs.	
+
+add_attribute(Fspath, last_modified) ->
+	Datetime = filelib:last_modified(Fspath:filepath()),
+	[{kv, <<"@t">>, list_to_binary(hty_log:iso8601(Datetime))}];
+add_attribute(_, _) ->
+	[].
+
 

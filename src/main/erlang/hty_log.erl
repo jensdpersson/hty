@@ -1,16 +1,10 @@
 -module(hty_log).
 
--export([tstamp/0, today/0, log/1]).
+-export([tstamp/0, today/0, iso8601/1, log/1]).
 
 %doc Format a timestamp
 tstamp() ->
-    {{Y,M,D},{H,Mi,S}} = erlang:localtime(),
-    integer_to_list(Y) ++ "-" ++
-    integer_to_list(M) ++ "-" ++
-    integer_to_list(D) ++ "T" ++
-    integer_to_list(H) ++ ":" ++
-    integer_to_list(Mi) ++ ":" ++
-    integer_to_list(S).
+    iso8601(erlang:localtime()).
 
 today() ->
     {{Y,M,D},_} = erlang:localtime(),
@@ -18,4 +12,19 @@ today() ->
     integer_to_list(M) ++ "-" ++
     integer_to_list(D).
 
+iso8601(DateTime) ->
+	{{Y,M,D},{H,Mi,S}} = DateTime,
+	pad(Y) ++ "-" ++
+    pad(M) ++ "-" ++
+    pad(D) ++ "T" ++
+    pad(H) ++ ":" ++
+    pad(Mi) ++ ":" ++
+    pad(S).
+
 log(Msg) -> io:format("~p~n", [Msg]).
+
+pad(Int) ->
+	case Int > 9 of
+		true -> integer_to_list(Int);
+		false -> "0" ++ integer_to_list(Int)
+	end.

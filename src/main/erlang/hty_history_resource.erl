@@ -14,17 +14,19 @@
 %% API Functions
 %%
 
-handle(Htx) ->
-    Method = Htx:method(),
-    case Htx:path_below() of
+handle(Htx0) ->
+    Method = Htx0:method(),
+    case Htx0:path_below() of
 	[] ->
 	    case Method of
-		'GET' ->							 
-		    hty_listing:list(Htx, Fspath);
+		'GET' ->
+			Htx1 = Htx0:bind("xslpi_choice", "list"),
+		    hty_listing:list(Htx1, Fspath, [last_modified]);
 		'POST' ->
-		    Htx:method_not_allowed(['GET'])
+		    Htx0:method_not_allowed(['GET'])
 	    end;
 	[Segment] ->
+		Htx = Htx0:bind("xslpi_choice", "doc"),
 	    Fspath1 = Fspath:subpath([Segment]),
 	    Rev = Htx:matrix(<<"rev">>),
 	    io:format("Processing ~p", [Segment]),

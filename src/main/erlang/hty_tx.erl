@@ -315,7 +315,7 @@ sendfile(Filename) ->
 echo(IOList) -> hty_tx:new(Tx#tx{outs=[{data, IOList}|Tx#tx.outs]}).
 
 prolog(IOList) -> 
-    Outs1 = lists:reverse(lists:reverse(IOList) ++ lists:reverse(Tx#tx.outs)),
+    Outs1 = lists:reverse([{data, IOList}] ++ lists:reverse(Tx#tx.outs)),
     hty_tx:new(Tx#tx{outs=Outs1}).
 
 clear() ->

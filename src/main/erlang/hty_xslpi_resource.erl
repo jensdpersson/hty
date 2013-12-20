@@ -35,4 +35,6 @@ handle(Htx) ->
 %% Local Functions
 %%
 xslpi(XslURL) -> 
-    [<<"<?xml-stylesheet type=\"text/xsl\" href=\"">>, XslURL, <<".xsl\"?>">>].
+    [<<"<?xml-stylesheet type=\"text/xsl\" href=\"">>, 
+	 hty_percentencoding:decode(list_to_binary(XslURL)),
+	 <<".xsl\"?>">>].
