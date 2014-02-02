@@ -17,8 +17,9 @@
 	 not_found/0, 
 	 method_not_allowed/1,
 	 service_unavailable/0,
-         see_other/0,
+     see_other/0,
 	 see_other/1,
+     not_modified/0,
 	 temporary_redirect/1,
 	 bad_request/0,
 	 created/0,
@@ -55,6 +56,7 @@ mimemap("css") -> "text/css";
 mimemap("javascript") -> "text/javascript";
 mimemap("js") -> "text/javascript";
 mimemap("png") -> "image/png";
+mimemap("jpg") -> "image/jpeg";
 mimemap("xml") -> "text/xml".
 
 protocol(Proto) ->
@@ -135,6 +137,8 @@ see_other() ->
 see_other(URI) ->
 	Htx1 = rsp_header("Location", URI),
 	Htx1:status(303, "See Other").
+not_modified() ->
+	status(304, "Not Modified").
 temporary_redirect(URI) ->
     	Htx1 = rsp_header("Location", URI),
         Htx1:status(307, "Temporary Redirect").

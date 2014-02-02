@@ -48,8 +48,7 @@ add_files([], Outs, _) ->
 	Outs.	
 
 add_attribute(Fspath, last_modified) ->
-	Datetime = filelib:last_modified(Fspath:filepath()),
-	[{kv, <<"@t">>, list_to_binary(hty_log:iso8601(Datetime))}];
+	[{kv, <<"@t">>, list_to_binary(Fspath:last_modified())}];
 add_attribute(_, _) ->
 	[].
 

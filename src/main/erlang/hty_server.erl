@@ -49,25 +49,29 @@ process_key() ->
 
 loop_accept(Listen) ->
 	case gen_tcp:accept(Listen) of
-		{error, Error} -> log(Error);
+		{error, Error} -> 
+			error_logger:format("Accept failed ~p~n", [Error]);
+			%loop_accept()
 		{ok, Socket} ->
-			Handler = 
-				spawn(
-				  fun() -> 
+			Handler = spawn(fun() -> 
 						  receive 
 							  go ->
 								  Htx = hty_parser:parse(Socket),
 								  Htx1 = Resource:handle(Htx),
-									io:format("handle done~n"),
-									%Htx2 = Htx1:flush(),									
+							      io:format("handle done~n"),
+								  %Htx2 = Htx1:flush(),									
 								  hty_parser:respond(Socket, Htx1)
 						  end 
-				  end),
-			ok = gen_tcp:controlling_process(Socket, Handler),
-			Handler ! go,
+				      end),
+			case gen_tcp:controlling_process(Socket, Handler) of
+				ok ->
+					Handler ! go;
+				{error, Error} ->
+					error_logger:format("Controlling process change failed ~p~n", [Error])					
+			end,
 			loop_accept(Listen)
 	end.
 
 
-log(Msg) -> io:format("~p~n", [Msg]).
+%log(Msg) -> io:format("~p~n", [Msg]).
 

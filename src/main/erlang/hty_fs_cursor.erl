@@ -1,6 +1,6 @@
 -module(hty_fs_cursor, [Path]).
 
--export([exists/0, isdir/0, mkdir/0]).
+-export([exists/0, isdir/0, mkdir/0, last_modified/0]).
 -export([match/1, walk/1, walk/2, subs/1, list/0, list/1, parts/0, prefix/0, ext/0, subpath/1]).
 
 -export([filepath/0, basename/0, parent/0]).
@@ -9,6 +9,7 @@
 exists() -> filelib:is_file(Path).
 isdir() -> filelib:is_dir(Path).
 mkdir() -> file:make_dir(Path).
+last_modified() -> hty_log:iso8601(filelib:last_modified(Path)).
 
 match(Rules) -> 
 	    This = this(),	    
