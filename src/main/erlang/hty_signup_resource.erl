@@ -32,7 +32,6 @@ handle(Htx) ->
 %% Local Functions
 %%
 onform(Form, Htx) ->
-	io:format("FORM:~p~n",[Form]),
 	{_, [Nick], _} = lists:keyfind(<<"nick">>, 1, Form),
 	{_, [Pass], _} = lists:keyfind(<<"pass">>, 1, Form),
 	Realm = Htx:realm(),

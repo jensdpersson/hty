@@ -57,8 +57,9 @@ handle(Htx0) ->
 			'GET' ->	
 			    case Fspath2:exists() of
 				true -> 	
-                                    Htx1 = Htx:ok(),
-				    Htx1:sendfile(Filepath);
+                    Htx1 = Htx:ok(),
+					Htx2 = Htx1:rsp_header("Content-Type", "application/xml"),
+				    Htx2:sendfile(Filepath);
 				false ->
 				    case tip(Fspath1) of
 					nofile -> 
