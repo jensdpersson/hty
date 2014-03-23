@@ -1,19 +1,21 @@
 %% @author jens
-%% @doc @todo Add description to hty_aggregate_rule.
+%% @doc @todo Add description to hty_assign_rule.
 
 
--module(hty_aggregate_rule).
+-module(hty_assign_rule).
 
 %% ====================================================================
 %% API functions
 %% ====================================================================
 -export([match/2]).
 
-match(Fspath, Rules) ->
+
+match(Fspath, _Rules) ->
 	case lists:reverse(Fspath:parts()) of
-		["aggregate", RootElm|_] ->
-			Subs = Fspath:subs(Rules),
-			{claim, {resource, hty_aggregate_resource:new(RootElm, Subs)}};
+		["assign", Assignments|_] ->
+			Asses = hty_util:parse_key_value_list(Assignments),
+			Subs = Fspath:subs(),
+			{claim, {resource, hty_assign_resource:new(Asses, Subs)}};
 		_ ->
 			next
 	end.

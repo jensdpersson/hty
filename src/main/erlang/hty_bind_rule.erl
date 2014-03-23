@@ -3,12 +3,18 @@
 -export([match/2]).
 
 match(Fspath, Rules) ->
-	case list:reverse(Fspath:parts()) of
-		["bind", Var|_] ->
-			Bound = Fspath:subpath([""]),
-			Subs = Fspath:subs(Rules),
-			Resource = hty_bind_resource:new({Var,Bound}, Subs),
-			{claim, {resource, Resource}};
+	case lists:reverse(Fspath:parts()) of
+		["bind"|_] ->
+			
+			Contentpath = Fspath:subpath(["content"]),
+			Subs = Contentpath:subs(Rules),
+			
+			Bindings = Fspath:subs([hty_bindas_rule|Rules]),
+			Subs1 = lists:foldl(fun(Item, Acc) -> 
+									Item:next(Acc) 
+							  end, Subs, Bindings),
+			
+			{claim, {resource, Subs1}};
 		_ ->
 			next
 	end.

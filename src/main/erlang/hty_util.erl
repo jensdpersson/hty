@@ -60,6 +60,11 @@ std_rule_match(Ext, Res, Fs, Rs) ->
 			next
 	end.
 
+parse_key_value_list(KeyValueList) ->
+	lists:map(fun(KeyValue) ->
+					  [Key, Value] = string:tokens(KeyValue, "="),
+					  {Key, Value}
+			  end, string:tokens(KeyValueList, ",")).
 
 %%
 %% Local Functions

@@ -1,22 +1,20 @@
 %% @author jens
-%% @doc @todo Add description to hty_aggregate_rule.
+%% @doc @todo Add description to hty_bind_resource.
 
 
--module(hty_aggregate_rule).
+-module(hty_bind_resource, [Key, Value, Next]).
 
 %% ====================================================================
 %% API functions
 %% ====================================================================
--export([match/2]).
+-export([handle/1, next/1]).
 
-match(Fspath, Rules) ->
-	case lists:reverse(Fspath:parts()) of
-		["aggregate", RootElm|_] ->
-			Subs = Fspath:subs(Rules),
-			{claim, {resource, hty_aggregate_resource:new(RootElm, Subs)}};
-		_ ->
-			next
-	end.
+next(NewNext) ->
+	hty_bind_resource:new(Key, Value, NewNext).
+
+handle(Htx) ->
+	Htx1 = Htx:bind(Key, Value),
+	Htx1:dispatch(Next).
 
 %% ====================================================================
 %% Internal functions

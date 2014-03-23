@@ -1,22 +1,20 @@
 %% @author jens
-%% @doc @todo Add description to hty_aggregate_rule.
+%% @doc @todo Add description to hty_assign_resource.
 
 
--module(hty_aggregate_rule).
+-module(hty_assign_resource, [Assignments, Subs]).
 
 %% ====================================================================
 %% API functions
 %% ====================================================================
--export([match/2]).
+-export([handle/1]).
 
-match(Fspath, Rules) ->
-	case lists:reverse(Fspath:parts()) of
-		["aggregate", RootElm|_] ->
-			Subs = Fspath:subs(Rules),
-			{claim, {resource, hty_aggregate_resource:new(RootElm, Subs)}};
-		_ ->
-			next
-	end.
+handle(Htx) ->
+	Htx1 = lists:foldl(fun({Key, Value}, Acc) ->
+						Acc:bind(Key, Value)
+				end, Htx, Assignments),
+	Htx1:dispatch(Subs).
+
 
 %% ====================================================================
 %% Internal functions
