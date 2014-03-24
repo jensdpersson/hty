@@ -327,29 +327,31 @@ clear() ->
 
 outs() -> Tx#tx.outs.
 
+dispatch(Resource) when not is_list(Resource) ->
+	dispatch([Resource]);
 dispatch(Resources) ->
-    This = hty_tx:new(Tx),
-    case hty_util:fold(fun(Resource, Htx) ->
-                               try 
-				   Htx1 = Htx:ndc_push(Resource),
-				   Htx2 = Resource:handle(Htx1),
-				   Htx3 = Htx2:ndc_pop(),
-				   case Htx3:status() of
-				       {404, _} -> 
-					   {next, Htx3};
-				       {405, _} ->
-					   {next, Htx3};
-				       _ ->
-					   {break, Htx3}
-				   end catch 
-					   throw:Error -> 
-					       Htx5 = Htx:ndc_push(Resource),
-					       {break, Htx5:server_error(Error)}
-				       end
-		       end, This, Resources) of
-	{break, Rsp, _} -> Rsp;
-	{nobreak, Rsp} -> Rsp
-    end.
+	This = hty_tx:new(Tx),
+	case hty_util:fold(fun(Resource, Htx) ->
+							   try 
+								   Htx1 = Htx:ndc_push(Resource),
+								   Htx2 = Resource:handle(Htx1),
+								   Htx3 = Htx2:ndc_pop(),
+								   case Htx3:status() of
+									   {404, _} -> 
+										   {next, Htx3};
+									   {405, _} ->
+										   {next, Htx3};
+									   _ ->
+										   {break, Htx3}
+								   end catch 
+										   throw:Error -> 
+											   Htx5 = Htx:ndc_push(Resource),
+											   {break, Htx5:server_error(Error)}
+							   end
+					   end, This, Resources) of
+		{break, Rsp, _} -> Rsp;
+		{nobreak, Rsp} -> Rsp
+	end.
 
 realm() -> Tx#tx.realm.
 realm(Realm) -> hty_tx:new(Tx#tx{realm=Realm}).
