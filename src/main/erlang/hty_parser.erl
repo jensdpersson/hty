@@ -77,7 +77,8 @@ canonical_method(<<"PUT">>) -> 'PUT';
 canonical_method(<<"DELETE">>) -> 'DELETE';
 canonical_method(<<"OPTIONS">>) -> 'OPTIONS';
 canonical_method(<<"HEAD">>) -> 'HEAD';
-canonical_method(Method) when is_binary(Method) -> binary_to_atom(Method).
+canonical_method(Method) when is_binary(Method) -> 
+	list_to_atom(binary_to_list(Method)).
 
 path_parser(Htx, Data) ->
     case token(Data, 32) of
