@@ -14,6 +14,7 @@
 -export([ltrim/1, rewind/2]).
 
 -export([std_rule_match/4]).
+-export([parse_key_value_list/1]).
 
 %%
 %% API Functions
