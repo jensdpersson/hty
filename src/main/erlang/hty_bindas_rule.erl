@@ -11,8 +11,8 @@
 
 
 match(Fspath, Rules) ->
-	case lists:reverse(Fspath:parts()) of
-		["bind-as", Key|_] ->
+	case Fspath:parts() of
+		["bind-as", Key] ->
 			Value = Fspath:subs(Rules),
 			{claim, {resource, hty_bind_resource:new(Key, Value, [])}};
 		_ ->
