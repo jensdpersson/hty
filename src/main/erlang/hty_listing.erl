@@ -20,6 +20,22 @@ list(Htx, Fspath) ->
 	list(Htx, Fspath, []).
 
 list(Htx, Fspath, Attrs) ->
+	case Htx:req_header('Accept') of
+		[<<"text/uri-list">>] ->
+			listUrilist(Htx, Fspath);
+		Other ->
+			io:format("Got non-urilist accept header ~p~n", [Other]),
+			listXml(Htx, Fspath, Attrs)
+	end.
+
+listUrilist(Htx, Fspath) ->
+	Htx1 = lists:foldl(fun(Item, Acc) -> 
+					Acc:echo([Item:basename(), 13, 10])
+				end, Htx, Fspath:list()),
+	Htx2 = Htx1:rsp_header("Content-Type", "text/uri-list"),
+	Htx2:ok().
+ 
+listXml(Htx, Fspath, Attrs) ->
 	Htx1 = Htx:rsp_header("Content-Type", "application/xml"),
 	SpafEvts = [{pop, <<"dir">>}],
 	SpafEvts1 = add_files(Fspath:list(), SpafEvts, Attrs),
