@@ -10,7 +10,7 @@
 %%
 %% Exported Functions
 %%
--export([parse_path/1]).
+-export([parse_path/1, pathzipper/1]).
 -export([matrix/3, matrix/2, pack/1, append/2]).
 
 %%
@@ -113,3 +113,10 @@ parse_query(Params, Input, Segs) ->
 		<<>> ->
 			{Segs, lists:reverse(Params1)}
 	end.
+
+pathzipper(Segments) ->
+	{[], lists:map(fun(Seg) when is_binary(Seg) ->
+						   binary_to_list(Seg); 
+					  ({Name, Matrix}) ->
+						   {binary_to_list(Name), Matrix}
+				   end, Segments)}.

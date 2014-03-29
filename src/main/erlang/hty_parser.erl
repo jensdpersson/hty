@@ -84,12 +84,7 @@ path_parser(Htx, Data) ->
     case token(Data, 32) of
 	{token, Path, Rest} ->
 	    {Segments, Query} = hty_uri:parse_path(Path),
-	    Segments1 = lists:map(fun(Seg) when is_binary(Seg) ->
-					  binary_to_list(Seg); 
-				     ({Name, Matrix}) ->
-					  {binary_to_list(Name), Matrix}
-				  end, Segments),
-	    Pathzipper = {[], Segments1},
+	    Pathzipper = hty_uri:pathzipper(Segments),
 	    Htx1 = Htx:path(Pathzipper),
 	    {Htx1:queryparams(Query),
 	     Rest, fun protocol_parser/2};

@@ -1,12 +1,12 @@
 -module(hty_tx, [Tx]).
 
 -export([protocol/1, method/0, method/1, 
-	 consume/1, consume/0, path/0,  path/1, path_below/0, path_below/1, matrix/1,
+	 consume/1, consume/0, path/0,  path/1, path_above/0, path_below/0, path_below/1, matrix/1,
 %	 next/0,
 	 status/2, status/0, req_header/1, req_header/2, req_headers/0]).
 
--export([outs/0, sendfile/1, echo/1, clear/0, prolog/1]).
--export([rsp_header/2, rsp_headers/0]).
+-export([outs/0, sendfile/1, echo/1, clear/0, prolog/1, copy/1]).
+-export([rsp_header/1, rsp_header/2, rsp_headers/0, rsp_entity/0]).
 
 -export([recvdata/1, recvfile/2, recvform/2, 
 	 buffer/1, unread/0, unread/1, flush/0]).
@@ -45,10 +45,6 @@
 
 -type htx() :: {hty_tx, any()}.
 
-%log(Category, Severity, Message) ->
-%    LogEntry = {Category, Severity, hty_log:tstamp(), Message},
- %   hty_tx:new(Tx#tx{log=[LogEntry|Tx#tx.log]}).
-
 mimemap("ogg") -> "audio/ogg";
 mimemap("html") -> "text/html";
 mimemap("xsl") -> "text/xsl";
@@ -57,7 +53,8 @@ mimemap("javascript") -> "text/javascript";
 mimemap("js") -> "text/javascript";
 mimemap("png") -> "image/png";
 mimemap("jpg") -> "image/jpeg";
-mimemap("xml") -> "text/xml".
+mimemap("xml") -> "text/xml";
+mimemap("ico") -> "image/vnd.microsoft.icon".
 
 protocol(Proto) ->
 	hty_tx:new(Tx#tx{proto=Proto}).
@@ -75,6 +72,10 @@ path() ->
 path_below() -> 
     {_Above, Below} = Tx#tx.path, 
     lists:map(fun({Seg, _Matrix}) -> Seg; (Seg) -> Seg end, Below).
+
+path_above() -> 
+    {Above, _Below} = Tx#tx.path, 
+    lists:map(fun({Seg, _Matrix}) -> Seg; (Seg) -> Seg end, Above).
 
 matrix(Key) ->
     hty_uri:matrix(Tx#tx.path, Key).
@@ -220,11 +221,31 @@ pump(SocketReader, Htx) ->
 			pump(SocketReader1, Htx2)
 	end.
 
+rsp_header(Name) -> 
+	case lists:keyfind(Name, 1, Tx#tx.rsph) of
+		false ->
+			no;
+		{Name, Value} ->
+			{ok, Value}
+	end.
+
 rsp_header(Name, Value) -> hty_tx:new(Tx#tx{rsph=[{Name,Value}|Tx#tx.rsph]}).
 
 rsp_headers() -> Tx#tx.rsph.
 
-
+rsp_entity() ->
+	lists:foldl(fun({data, Data}, Acc) ->
+						DataBin = list_to_binary(Data),
+					  <<DataBin/binary, Acc/binary>>;
+				 ({file, File}, Acc) ->
+					  case file:read_file(File) of
+						  {ok, Binary} ->
+							  <<Binary/binary, Acc/binary>>;
+						  {error, Reason} ->
+							  io:format("Failed (~p) reading file [~p] ~n", [Reason, File]),
+							  ""
+					  end
+			  end, <<"">>, outs()).
 
 recvdata(OnRecvData) -> hty_tx:new(Tx#tx{ondata=OnRecvData}).
 
@@ -318,6 +339,9 @@ sendfile(Filename) ->
 
 echo(IOList) -> hty_tx:new(Tx#tx{outs=[{data, IOList}|Tx#tx.outs]}).
 
+copy(Htx) ->
+	hty_tx:new(Tx#tx{outs=(Htx:outs() ++ Tx#tx.outs)}).
+	
 prolog(IOList) -> 
     Outs1 = lists:reverse([{data, IOList}] ++ lists:reverse(Tx#tx.outs)),
     hty_tx:new(Tx#tx{outs=Outs1}).

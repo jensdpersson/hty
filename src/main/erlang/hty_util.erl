@@ -11,7 +11,7 @@
 %% Exported Functions
 %%
 -export([fold/3,find/2]).
--export([ltrim/1, rewind/2]).
+-export([ltrim/1, rewind/2, fast_forward/2]).
 
 -export([std_rule_match/4]).
 -export([parse_key_value_list/1]).
@@ -37,6 +37,24 @@ fold(Fun, Acc, [X|Xs]) ->
 rewind([], Bs) -> Bs;
 rewind([A|As], Bs) ->
     rewind(As, [A|Bs]).
+
+fast_forward([], Bs) ->
+	{ok, Bs};
+fast_forward([A|As], [A|Bs]) ->
+	fast_forward(As, Bs);
+fast_forward(_, Bs) ->
+	{ok, Bs}.
+
+%to_binary(MixedList) ->
+%	to_binary_internal(MixedList, <<"">>).
+%to_binary_internal([], Acc) ->
+%	Acc;
+%to_binary_internal([A|As], Acc) when is_binary(A) ->
+%	to_binary_internal(As, <<A/binary, Acc/binary>>);
+%to_binary_internal([A|As], Acc) when is_list(A) ->
+%	to_binary_internal(As, to_binary_internal(A, Acc));
+%to_binary_internal([A|As], Acc) when is_binary(A) ->
+%	to_binary_internal(As, <<A/binary, Acc/binary>>);
 
 ltrim(Binary) when is_binary(Binary) ->
 	case Binary of
