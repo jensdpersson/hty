@@ -2,7 +2,7 @@
 %% @doc @todo Add description to hty_dryad_resource.
 
 
--module(hty_dryad_resource, [Storage, Taxonomy, Roottype]).
+-module(hty_dryad_resource, [StorageKey, TaxonomyKey, RoottypeKey]).
 
 %% ====================================================================
 %% API functions
@@ -10,19 +10,43 @@
 -export([handle/1]).
 
 handle(Htx) ->
-	case locate(Htx:path_below()) of
-		root ->
-			pass;
+	Isdir = Htx:path_final_slash(),
+	case Htx:method() of
+		'GET' -> 
+			case Isdir of
+				true ->
+					listdir(Htx);
+				false ->
+					serve(Htx)
+			end;
+		'POST' ->
+			case Isdir of
+				true ->
+					append(Htx);
+				false ->
+					derive(Htx)
+			end;
 		_ ->
-			no
+			Htx:method_not_allowed(['GET', 'POST'])
 	end.
-	
-%	case  of
-%		[] ->
-%			case Htx:method() of
-%				'GET' ->
-					
-			
+
+% Mapping: 
+% GET $path -> GET $path
+% POST $folder name=$name&type=folder -> PUT $folder/$name.$type/.mkcol.xml 
+% but these are wrapped in Storage and perhaps Taxonomy operations.
+
+%We assume that last segment $name.$ext is a leaf.
+
+%POST på folder ska skapa sub, men vi måste veta typ. 
+%Subfil och subfolder skapas på
+%olika sätt.
+
+%POST på fil uppdaterar innehåll
+%GET på folder listar subs. 
+%Urilist GET på fil listar revisioner?
+%om vi ska hantera revisioner på det sättet?
+
+%Vad ska vara standard för en Storage att hantera GET på en folder?
 
 %% ====================================================================
 %% Internal functions
@@ -47,5 +71,43 @@ handle(Htx) ->
 % Possibly, we could list the contents of a folder inside that index.xml 
 % (for the price of extra storage requests per file addition/removal) and
 % use versioning on the folder content through that.
-locate(_Path) ->
-	notyet.
+
+listdir(Htx) ->
+	Path2 = Htx:path_below() ++ ["master.urilist"],
+	MasterHtx = Storage:get(Path2),
+	case MasterHtx:status() of
+		{200, _} ->
+			(Htx:copy(MasterHtx)):ok();
+		Status -> 
+			io:format("Error fetching ~p from storage~n", [Path2]),
+			Htx:status(Status)
+	end.
+		
+append(Htx) ->
+	% Create file or folder?
+	FormSchema = [{<<"name">>, [], []}, 
+				  {<<"type">>, [], []}, 
+				  {<<"isleaf">>, [], []},],
+	Onform = fun(Form) ->
+					 Name = lists:keyfind(<<"name">>, 1, Form),
+					 Type = lists:keyfind(<<"type">>, 1, Form),
+					 case lists:keyfind(<<"isleaf">>, 1, Form) of 
+						 [<<"true">>] ->
+							 create_doc(Htx, Name, Type);
+						 _ ->
+							 create_col(Htx, Name, Type)
+					 end
+			 end,
+	Htx:recvform(FormSchema, Onform).
+	
+	% Get zero-value for type from taxo
+	% or empty urilist. PUT on Storage.
+create_doc(Htx, Name, Type) ->
+	Zero = zero(Type),
+	case Zero:status() of
+		{200, _} ->
+			Put
+	Path2 = Htx:path_below() ++ ["master.urilist"],
+	Store = Htx:bound(StorageKey),
+	Store:put(Path2, ),
+

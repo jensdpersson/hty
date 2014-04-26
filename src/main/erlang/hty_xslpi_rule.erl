@@ -34,7 +34,7 @@ parse(S) ->
     lists:flatmap(fun("") -> [];
                      (Str) -> 
                         case string:tokens(Str, "=") of
-                            [Key] -> [{Key, "any"}];
+                            [Value] -> [{"any", Value}];
                             [Key, Value] -> [{Key, Value}]
                         end
               end, string:tokens(S, ",")).

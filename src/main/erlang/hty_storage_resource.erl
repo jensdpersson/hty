@@ -8,7 +8,7 @@
 %%
 %% Exported Functions
 %%
--export([handle/1]).
+-export([handle/1, exists/1]).
 
 %%
 %% API Functions
@@ -48,7 +48,29 @@ handle(Htx) ->
 					end
 			end
 	end.
+
+exists(PathBelow) ->
+	Htx = ((hty_tx_factory:new()):method('HEAD')):path_below(PathBelow),
+	Htx1 = Htx:dispatch(this()),
+	case Htx1:status() of
+		{200, _} ->
+			true;
+		{204, _} ->
+			true;
+		_ -> false
+	end.
+
+get(PathBelow) ->
+	Htx = ((hty_tx_factory:new()):method('GET')):path_below(PathBelow),
+	Htx:dispatch(this()).
+
+put(PathBelow, Entity, ContentType) ->
+	Htx = ((hty_tx_factory:new()):method('PUT')):path_below(PathBelow),
+	Htx2 = (Htx:buffer(Entity)):req_header('Content-Type', ContentType),
+	Htx2:dispatch(this()).
+
 %%
 %% Local Functions
 %%
-
+this() ->
+	hty_storage_resource:new(Tofs).

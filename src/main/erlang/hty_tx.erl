@@ -194,9 +194,9 @@ unread(Leng) ->
 buffer(Data) ->
 	Buffered = [Data|Tx#tx.buffered],
 	Unread = unread() - case Data of
-												eos -> 0;
-												_ -> size(Data)
-											end,
+							eos -> 0;
+							_ -> size(Data)
+						end,
 	hty_tx:new(Tx#tx{buffered=Buffered, unread=Unread}).
 
 socketreader(SocketReader) ->
@@ -250,27 +250,27 @@ rsp_entity() ->
 recvdata(OnRecvData) -> hty_tx:new(Tx#tx{ondata=OnRecvData}).
 
 recvform(FormSchema, Callback) ->
-    Spafs = [fun hty_formurlencoded_spaf:parse/2,
-	     hty_spaf:binder(FormSchema)],
-    Chain = hty_spaf:chain(Spafs),
-    process_entity(fun(Data, State, Htx) ->
-			   case Chain(Data, State) of
-			       {ok, State1, Out} ->
-				   case Data of
-				       eos ->
-					   case Callback(Out, Htx) of
-					       {ok, Htx1} ->
-						   {ok, State1, Htx1};
-					       {no, Error} ->
-						   {no, Error}
-					   end;
-				       _ ->
-					   {ok, State1, Htx}
-				   end;
-			       {no, Error} ->
-				   {no, Error}										
-			   end
-		   end).
+	Spafs = [fun hty_formurlencoded_spaf:parse/2,
+			 hty_spaf:binder(FormSchema)],
+	Chain = hty_spaf:chain(Spafs),
+	process_entity(fun(Data, State, Htx) ->
+						   case Chain(Data, State) of
+							   {ok, State1, Out} ->
+								   case Data of
+									   eos ->
+										   case Callback(Out, Htx) of
+											   {ok, Htx1} ->
+												   {ok, State1, Htx1};
+											   {no, Error} ->
+												   {no, Error}
+										   end;
+									   _ ->
+										   {ok, State1, Htx}
+								   end;
+							   {no, Error} ->
+								   {no, Error}										
+						   end
+				   end).
 
 recvfile(Spafs, Filepath) -> 
     Filter = hty_spaf:chain(Spafs),
