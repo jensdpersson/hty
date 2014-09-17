@@ -13,7 +13,7 @@ match(Fspath, Rules) ->
 	case lists:reverse(Fspath:parts()) of
 		["aggregate", RootElm|_] ->
 			Subs = Fspath:subs(Rules),
-			{claim, {resource, hty_aggregate_resource:new(RootElm, Subs)}};
+			{claim, {resource, {hty_aggregate_resource, RootElm, Subs}}};
 		_ ->
 			next
 	end.

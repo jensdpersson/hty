@@ -1,1 +1,0 @@
-erl -pz target/ebin -s hty_ctl start $1

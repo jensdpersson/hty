@@ -2,19 +2,24 @@
 %% @doc @todo Add description to hty_bind_resource.
 
 
--module(hty_bind_resource, [Key, Value, Next]).
+-module(hty_bind_resource).
 
 %% ====================================================================
 %% API functions
 %% ====================================================================
--export([handle/1, next/1]).
+-export([new/3, handle/2, next/2]).
 
-next(NewNext) ->
-	hty_bind_resource:new(Key, Value, NewNext).
+-record(hty_bind_resource, {key, value, next}).
 
-handle(Htx) ->
-	Htx1 = Htx:bind(Key, Value),
-	Htx1:dispatch(Next).
+new(Key, Value, Next) ->
+    #hty_bind_resource{key=Key, value=Value, next=Next}.
+
+next(NewNext, This) ->
+	This#hty_bind_resource{next=NewNext}.
+
+handle(Htx, This) ->
+	Htx1 = Htx:bind(This#hty_bind_resource.key, This#hty_bind_resource.value),
+	Htx1:dispatch(This#hty_bind_resource.next).
 
 %% ====================================================================
 %% Internal functions

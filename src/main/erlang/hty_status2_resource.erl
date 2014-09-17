@@ -1,7 +1,7 @@
 %% Author: jens
 %% Created: 1 mar 2013
 %% Description: TODO: Add description to hty_status_resource
--module(hty_status2_resource, [Fspath, Content]).
+-module(hty_status2_resource).
 
 %%
 %% Include files
@@ -10,12 +10,17 @@
 %%
 %% Exported Functions
 %%
--export([handle/1]).
+-export([handle/2, new/2]).
+-record(hty_status2_resource,{fspath, content}).
+
+new(Fspath, Content) ->
+    #hty_status2_resource{fspath=Fspath, content=Content}.
 
 %%
 %% API Functions
 %%
-handle(Htx) ->
+handle(Htx, This) ->
+    {_, Fspath, Content} = This,
     Htx1 = Htx:dispatch([Content]),
     {Status, _} = Htx1:status(),
     IsStatusFileFor = fun(Fs) ->

@@ -38,22 +38,22 @@ respond(Socket, Htx) ->
 send_line(Socket, Line) -> gen_tcp:send(Socket,  Line ++ "\r\n").
 
 parse(Socket) -> 
-	Htx0 = hty_tx_factory:new(),
-	parse_loop(Htx0, <<>>, fun method_parser/2, Socket).
+    Htx0 = hty_tx:new(),
+    parse_loop(Htx0, <<>>, fun method_parser/2, Socket).
 
 parse_loop(Htx, Unparsed, Parser, Socket) ->
-	case Parser(Htx, Unparsed) of
-		{Htx1, Unparsed1, Parser1} -> 
-			parse_loop(Htx1, Unparsed1, Parser1, Socket);
-		more -> 
-			recv(Htx, Unparsed, Parser, Socket);
-		{more, []} -> 
-			recv(Htx, Unparsed, Parser, Socket);
-		{done, Htx1} -> 
-			Htx1:socketreader(hty_socketreader);
-		{error, Error} ->
-			{error, Error}
-	end.
+    case Parser(Htx, Unparsed) of
+	{Htx1, Unparsed1, Parser1} -> 
+	    parse_loop(Htx1, Unparsed1, Parser1, Socket);
+	more -> 
+	    recv(Htx, Unparsed, Parser, Socket);
+	{more, []} -> 
+	    recv(Htx, Unparsed, Parser, Socket);
+	{done, Htx1} -> 
+	    Htx1:socketreader(hty_socketreader);
+	{error, Error} ->
+	    {error, Error}
+    end.
 
 recv(Htx, Unparsed, Parser, Socket) ->
     receive

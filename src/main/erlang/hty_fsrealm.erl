@@ -1,7 +1,7 @@
 %% Author: jens
 %% Created: 27 feb 2013
 %% Description: TODO: Add description to hty_fsrealm
--module(hty_fsrealm, [Realmname, Fspath]).
+-module(hty_fsrealm).
 
 %%
 %% Include files
@@ -10,16 +10,23 @@
 %%
 %% Exported Functions
 %%
--export([name/0, signup/2, auth/2]).
+-export([new/2, name/1, signup/3, auth/3]).
+
+-record(hty_fsrealm, {realmname, fspath}).
+
 
 %%
 %% API Functions
 %%
-name() -> Realmname.
 
--spec signup(string(), string()) -> 
+new(Realmname, Fspath) -> #hty_fsrealm{realmname=Realmname, fspath=Fspath}.
+
+name(This) -> This#hty_fsrealm.realmname.
+
+-spec signup(string(), string(), any()) -> 
 				ok | {no, badnick} | {no, exists} | {no, createerror}.
-signup(Nick, Pass) ->
+signup(Nick, Pass, This) ->
+    Fspath = This#hty_fsrealm.fspath,
     case validate(Nick) of
 	no ->
 	    {no, badnick};
@@ -34,7 +41,7 @@ signup(Nick, Pass) ->
 			    {no, createerror};
 			ok ->
 			    Secretfile = Userdir:subpath(["secret"]),
-			    Secret = crypto:md5(Pass),
+			    Secret = crypto:hash(md5, Pass),
 			    case file:write_file(Secretfile:filepath(), [Secret, 10]) of
 				{error, _Error} ->
 						%TODO log inconsistent user
@@ -46,13 +53,14 @@ signup(Nick, Pass) ->
 	    end
     end.
 
-auth(Nick, Pass) ->
+auth(Nick, Pass, This) ->
+    Fspath = This#hty_fsrealm.fspath,
     case validate(Nick) of 
 	ok ->
 	    Secretfile = Fspath:subpath(["data", binary_to_list(Nick), "secret"]),
 	    case file:read_file(Secretfile:filepath()) of
 		{ok, Binary} -> 
-		    Md5 = crypto:md5(Pass),
+		    Md5 = crypto:hash(md5, Pass),
 		    case <<Md5/binary, 10>> of
 			Binary ->
 			    {ok, {Nick, [Nick]}};

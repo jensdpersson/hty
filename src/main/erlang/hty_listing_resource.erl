@@ -1,7 +1,7 @@
 %% Author: jens
 %% Created: 23 mar 2013
 %% Description: TODO: Add description to hty_listing_resource
--module(hty_listing_resource, [Filename, Fspath]).
+-module(hty_listing_resource).
 
 %%
 %% Include files
@@ -10,34 +10,40 @@
 %%
 %% Exported Functions
 %%
--export([handle/1]).
+-export([handle/2, new/2]).
 -import(hty_listing, [list/2]).
-
+-record(hty_listing_resource, {filename, fspath}).
 %%
 %% API Functions
 %%
-handle(Htx) ->
-	case Htx:path_below() of
-		[] ->
-			list_on_get(Htx);
-		[Filename] ->
-			list_on_get(Htx);
-		_ ->
-			io:format("Declining INDEX on ~p~n", [Htx:path_below()]),
-			Htx:not_found()
-	end.	
+
+new(Filename, Fspath) ->
+    #hty_listing_resource{filename=Filename, fspath=Fspath}.
+
+handle(Htx, This) ->
+    Filename = filename(This),
+    case Htx:path_below() of
+	[] ->
+	    list_on_get(Htx, This);
+	[Filename] ->
+	    list_on_get(Htx, This);
+	_ ->
+	    Htx:not_found()
+    end.	
 
 %%
 %% Local Functions
 %%
-list_on_get(Htx) ->
-	case Htx:method() of
-		'GET' ->
-			list(Htx, Fspath);	
-		_ ->
-			Htx:method_not_allowed(['GET'])
-	end.
+list_on_get(Htx, This) ->
+    case Htx:method() of
+	'GET' ->
+	    list(Htx, This#hty_listing_resource.fspath);	
+	_ ->
+	    Htx:method_not_allowed(['GET'])
+    end.
 
+filename(This) ->
+    This#hty_listing_resource.filename.
 	
 
 	

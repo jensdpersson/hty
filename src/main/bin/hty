@@ -1,5 +1,5 @@
 #!/usr/bin/env escript
-%%! -detached
+%! -detached
 
 main(["start"]) -> start();
 main(["stop"]) -> stop();

@@ -2,33 +2,40 @@
 %% @doc @todo Add description to hty_dryad_resource.
 
 
--module(hty_dryad_resource, [StorageKey, TaxonomyKey, RoottypeKey]).
+-module(hty_dryad_resource).
 
 %% ====================================================================
 %% API functions
 %% ====================================================================
--export([handle/1]).
+-export([handle/2]).
 
-handle(Htx) ->
-	Isdir = Htx:path_final_slash(),
-	case Htx:method() of
-		'GET' -> 
-			case Isdir of
-				true ->
-					listdir(Htx);
-				false ->
-					serve(Htx)
-			end;
-		'POST' ->
-			case Isdir of
-				true ->
-					append(Htx);
-				false ->
-					derive(Htx)
-			end;
-		_ ->
-			Htx:method_not_allowed(['GET', 'POST'])
-	end.
+handle(Htx, This) ->
+    {_, StorageKey, TaxonomyKey, RoottypeKey} = This,
+    Isdir = Htx:path_final_slash(),
+    case Htx:method() of
+	'GET' -> 
+	    case Isdir of
+		true ->
+		    listdir(Htx);
+		false ->
+		    serve(Htx)
+	    end;
+	'POST' ->
+	    case Isdir of
+		true ->
+		    append(Htx);
+		false ->
+		    derive(Htx)
+	    end;
+	_ ->
+	    Htx:method_not_allowed(['GET', 'POST'])
+    end.
+derive(no) ->
+    no.
+append(no) ->
+    no.
+serve(no) ->
+    no.
 
 % Mapping: 
 % GET $path -> GET $path
@@ -73,41 +80,41 @@ handle(Htx) ->
 % use versioning on the folder content through that.
 
 listdir(Htx) ->
-	Path2 = Htx:path_below() ++ ["master.urilist"],
-	MasterHtx = Storage:get(Path2),
-	case MasterHtx:status() of
-		{200, _} ->
-			(Htx:copy(MasterHtx)):ok();
-		Status -> 
-			io:format("Error fetching ~p from storage~n", [Path2]),
-			Htx:status(Status)
-	end.
-		
-append(Htx) ->
-	% Create file or folder?
-	FormSchema = [{<<"name">>, [], []}, 
-				  {<<"type">>, [], []}, 
-				  {<<"isleaf">>, [], []},],
-	Onform = fun(Form) ->
-					 Name = lists:keyfind(<<"name">>, 1, Form),
-					 Type = lists:keyfind(<<"type">>, 1, Form),
-					 case lists:keyfind(<<"isleaf">>, 1, Form) of 
-						 [<<"true">>] ->
-							 create_doc(Htx, Name, Type);
-						 _ ->
-							 create_col(Htx, Name, Type)
-					 end
-			 end,
-	Htx:recvform(FormSchema, Onform).
-	
-	% Get zero-value for type from taxo
-	% or empty urilist. PUT on Storage.
-create_doc(Htx, Name, Type) ->
-	Zero = zero(Type),
-	case Zero:status() of
-		{200, _} ->
-			Put
-	Path2 = Htx:path_below() ++ ["master.urilist"],
-	Store = Htx:bound(StorageKey),
-	Store:put(Path2, ),
+    Path2 = Htx:path_below() ++ ["master.urilist"],
+    MasterHtx = Storage:get(Path2),
+    case MasterHtx:status() of
+	{200, _} ->
+	    (Htx:copy(MasterHtx)):ok();
+	Status -> 
+	    io:format("Error fetching ~p from storage~n", [Path2]),
+	    Htx:status(Status)
+    end.
 
+append(Htx) ->
+						% Create file or folder?
+    FormSchema = [{<<"name">>, [], []}, 
+		  {<<"type">>, [], []}, 
+		  {<<"isleaf">>, [], []}],
+    Onform = fun(Form) ->
+		     Name = lists:keyfind(<<"name">>, 1, Form),
+		     Type = lists:keyfind(<<"type">>, 1, Form),
+		     case lists:keyfind(<<"isleaf">>, 1, Form) of 
+			 [<<"true">>] ->
+			     create_doc(Htx, Name, Type);
+			 _ ->
+			     create_col(Htx, Name, Type)
+		     end
+	     end,
+    Htx:recvform(FormSchema, Onform).
+
+						% Get zero-value for type from taxo
+						% or empty urilist. PUT on Storage.
+create_doc(Htx, Name, Type) ->
+    Zero = zero(Type),
+    case Zero:status() of
+	{200, _} ->
+	    Path2 = Htx:path_below() ++ ["master.urilist"],
+	    Store = Htx:bound(StorageKey),
+	    Store:put(Path2)
+    end.
+	    

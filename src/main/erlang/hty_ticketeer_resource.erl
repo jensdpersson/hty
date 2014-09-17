@@ -1,8 +1,14 @@
--module(hty_ticketeer_resource, [Logfolder]).
+-module(hty_ticketeer_resource).
 
--export([handle/1]).
+-export([handle/2, new/1]).
 
-handle(Htx) ->
+-record(hty_ticketeer_resource, {logfolder}).
+
+new(Logfolder) ->
+    #hty_ticketeer_resource{logfolder=Logfolder}.
+
+handle(Htx, This) ->
+    Logfolder = This#hty_ticketeer_resource.logfolder,
     io:format("Enter Ticketeer~n"),
     File = Logfolder:subpath([hty_log:today() ++ ".log"]),
     {ok, Fd} = file:open(File:filepath(), [append, binary]),

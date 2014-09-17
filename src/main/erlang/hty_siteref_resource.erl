@@ -1,8 +1,14 @@
--module(hty_siteref_resource, [Siteid]).
+-module(hty_siteref_resource).
 
--export([handle/1]).
+-export([handle/2, new/1]).
 
-handle(Htx) ->
+-record(hty_siteref_resource, {siteid}).
+
+new(Siteid) ->
+    #hty_siteref_resource{siteid=Siteid}.
+
+handle(Htx, This) ->
+    Siteid = This#hty_siteref_resource.siteid,
     hty_main ! {root, Siteid, self()},
     receive
 		{root, {ok, Root}} ->

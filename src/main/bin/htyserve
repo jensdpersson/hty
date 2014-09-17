@@ -1,0 +1,25 @@
+#!/usr/bin/env escript
+
+print(M) -> io:format(M), io:format("~n").
+
+loop() ->
+    receive
+	stop -> ok
+    after 10000 -> 
+	    loop()
+    end.
+
+
+main([Etc]) -> 
+    code:add_pathz("../hty/target/ebin"),
+    case hty_ctl:start([list_to_atom(Etc)]) of
+	{ok,started} -> 
+	    print(os:getpid()),
+	    loop();
+	{no, Error} -> 
+	    print(Error);
+	{error, Error} ->
+	    print(Error)
+    end.
+
+

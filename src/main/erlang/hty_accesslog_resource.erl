@@ -1,8 +1,9 @@
--module(hty_accesslog_resource, [Format, Logfolder, Subs]).
+-module(hty_accesslog_resource).
 
--export([handle/1]).
+-export([handle/2]).
 
-handle(Htx) ->
+handle(Htx, This) ->
+    {_Mod, _Format, Logfolder, Subs} = This,
     io:format("Enter accesslog"),
     Method = atom_to_list(Htx:method()),
     Path = hty_uri:pack(Htx:path()),

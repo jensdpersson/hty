@@ -1,15 +1,21 @@
--module(hty_site, [Name, Vhosts, Root]).
+-module(hty_site).
 
--export([match/1, name/0, root/0]).
+-record(hty_site, {name, vhosts, root}).
 
--spec match(Host :: atom()) -> {ok, any()} | false.
-match(Host) ->
+-export([new/3, match/2, name/1, root/1]).
+
+new(Name, Vhosts, Root) ->
+    #hty_site{name=Name,vhosts=Vhosts,root=Root}.
+
+-spec match(Host :: atom(), This :: any()) -> {ok, any()} | false.
+match(Host, This) ->
+    Vhosts = This#hty_site.vhosts,
     case lists:member(Host, Vhosts) of
 	true ->
-	    {ok, Root};
+	    {ok, This:root()};
 	false ->
 	    no
     end.
 
-name() -> Name.
-root() -> Root.
+name(This) -> This#hty_site.name.
+root(This) -> This#hty_site.root.

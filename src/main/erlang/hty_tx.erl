@@ -1,278 +1,330 @@
--module(hty_tx, [Tx]).
+-module(hty_tx).
 
--export([protocol/1, method/0, method/1, 
-	 consume/1, consume/0, path/0,  path/1, path_above/0, path_below/0, path_below/1, matrix/1,
-%	 next/0,
-	 status/2, status/0, req_header/1, req_header/2, req_headers/0]).
+-export([protocol/2, 
+	 method/1, 
+	 method/2, 
+	 consume/2,
+	 consume/1,
+	 path/1,
+	 path/2,
+	 path_above/1,
+	 path_below/1,
+	 path_below/2,
+	 matrix/2,
+	 status/3,
+	 status/1,
+	 req_header/2,
+	 req_header/3,
+	 req_headers/1]).
 
--export([outs/0, sendfile/1, echo/1, clear/0, prolog/1, copy/1]).
--export([rsp_header/1, rsp_header/2, rsp_headers/0, rsp_entity/0]).
+-export([outs/1,
+	 sendfile/2,
+	 echo/2,
+	 clear/1,
+	 prolog/2,
+	 copy/2]).
 
--export([recvdata/1, recvfile/2, recvform/2, 
-	 buffer/1, unread/0, unread/1, flush/0]).
+-export([rsp_header/2,
+	 rsp_header/3,
+	 rsp_headers/1,
+	 rsp_entity/1]).
 
--export([process_entity/1]).
+-export([recvdata/2,
+	 recvfile/3,
+	 recvform/3, 
+	 buffer/2,
+	 unread/1,
+	 unread/2,
+	 flush/1]).
 
--export([ok/0,
-	 not_found/0, 
-	 method_not_allowed/1,
-	 service_unavailable/0,
-     see_other/0,
+-export([process_entity/2]).
+
+-export([ok/1,
+	 not_found/1, 
+	 method_not_allowed/2,
+	 service_unavailable/1,
 	 see_other/1,
-     not_modified/0,
-	 temporary_redirect/1,
-	 bad_request/0,
-	 created/0,
-	 conflict/0,
-	 server_error/0,
+	 see_other/2,
+	 not_modified/1,
+	 temporary_redirect/2,
+	 bad_request/1,
+	 created/1,
+	 conflict/1,
 	 server_error/1,
-	 forbidden/0]).
+	 server_error/2,
+	 forbidden/1]).
 
--export([realm/0, realm/1]).
--export([principal/0, principal/1]).
--export([bind/2, bound/1]).
+-export([realm/1,
+	 realm/2]).
+-export([principal/1,
+	 principal/2]).
+-export([bind/3,
+	 bound/2]).
 
--export([queryparams/0, queryparams/1]).
--export([socketreader/1]).
+-export([queryparams/1,
+	 queryparams/2]).
+-export([socketreader/2]).
 
--export([dispatch/1]).
+-export([dispatch/2]).
 
--export([ndc_push/1, ndc_pop/0, ndc_peek/0]).
+-export([ndc_push/2,
+	 ndc_pop/1,
+	 ndc_peek/1]).
 
--export([log/0, log/2, mimemap/1]).
+-export([log/1,
+	 log/3,
+	 mimemap/2]).
 
--include("hty_tx.hrl").
+-export([new/0]).
 
--type htx() :: {hty_tx, any()}.
+-record(hty_tx, {
+	  proto="HTTP/1.1",
+	  method='GET',
+	  path={[], []},
+	  status={200, "OK"},
+	  reqh=[],
+	  buffered=[],
+	  ondata=fun(_Data, _State, Htx) -> {ok, noop_state, Htx} end,
+	  ondata_state=q0,
+	  rsph=[],
+	  outs=[],
+	  principal= <<"guest">>,
+	  realm=hty_empty_realm,
+	  attributes=[],
+	  queryparams=[],
+	  socketreader=no,
+	  ndc=[],
+	  log=[],
+	  unread=0}).
 
-mimemap("ogg") -> "audio/ogg";
-mimemap("html") -> "text/html";
-mimemap("xsl") -> "text/xsl";
-mimemap("css") -> "text/css";
-mimemap("javascript") -> "text/javascript";
-mimemap("js") -> "text/javascript";
-mimemap("png") -> "image/png";
-mimemap("jpg") -> "image/jpeg";
-mimemap("xml") -> "text/xml";
-mimemap("ico") -> "image/vnd.microsoft.icon".
+new() ->
+    #hty_tx{}.
 
-protocol(Proto) ->
-	hty_tx:new(Tx#tx{proto=Proto}).
+mimemap("ogg", _This) -> "audio/ogg";
+mimemap("html", _This) -> "text/html";
+mimemap("xsl", _This) -> "text/xsl";
+mimemap("css", _This) -> "text/css";
+mimemap("javascript", _This) -> "text/javascript";
+mimemap("js", _This) -> "text/javascript";
+mimemap("png", _This) -> "image/png";
+mimemap("jpg", _This) -> "image/jpeg";
+mimemap("xml", _This) -> "text/xml";
+mimemap("ico", _This) -> "image/vnd.microsoft.icon".
 
-method() -> Tx#tx.method.
+protocol(Proto, This) ->
+	This#hty_tx{proto=Proto}.
 
-method(Method) -> hty_tx:new(Tx#tx{method=Method}).
+method(This) -> This#hty_tx.method.
 
-path(PathZipper) -> 
-    hty_tx:new(Tx#tx{path=PathZipper}).
+method(Method, This) -> This#hty_tx{method=Method}.
 
-path() ->
-    Tx#tx.path.
+path(PathZipper, This) -> 
+    This#hty_tx{path=PathZipper}.
 
-path_below() -> 
-    {_Above, Below} = Tx#tx.path, 
+path(This) ->
+    This#hty_tx.path.
+
+path_below(This) -> 
+    {_Above, Below} = This:path(), 
     lists:map(fun({Seg, _Matrix}) -> Seg; (Seg) -> Seg end, Below).
 
-path_above() -> 
-    {Above, _Below} = Tx#tx.path, 
+path_above(This) -> 
+    {Above, _Below} = This:path(), 
     lists:map(fun({Seg, _Matrix}) -> Seg; (Seg) -> Seg end, Above).
 
-matrix(Key) ->
-    hty_uri:matrix(Tx#tx.path, Key).
+matrix(Key, This) ->
+    hty_uri:matrix(This:path(), Key).
 
-path_below(Below) ->
-	{Above, _Below} = Tx#tx.path,
-	hty_tx:new(Tx#tx{path={Above, Below}}).
+path_below(Below, This) ->
+	{Above, _Below} = This:path(),
+	This#hty_tx{path={Above, Below}}.
 
-consume() ->
-	case Tx#tx.path of
-		{Above, [Current|Below]} -> 
-			{Current, hty_tx:new(Tx#tx{path={[Current|Above], Below}})};
-		_ ->
-			no
-	end.
+consume(This) ->
+    case This:path() of
+	{Above, [Current|Below]} -> 
+	    {Current, This#hty_tx{path={[Current|Above], Below}}};
+	_ ->
+	    no
+    end.
 
--spec consume(string()) -> htx() | no.
-consume(Segment) ->
-	case Tx#tx.path of
-		{Above, [Segment|Below]} -> 
-			hty_tx:new(Tx#tx{path={[Segment|Above], Below}});
-		_ ->
-			no
-	end.
+consume(Segment, This) ->
+    case This:path() of
+	{Above, [Segment|Below]} -> 
+	    This#hty_tx{path={[Segment|Above], Below}};
+	_ ->
+	    no
+    end.
 
-bind(Key, Value) ->
-	Attrs = Tx#tx.attributes,
-	hty_tx:new(Tx#tx{attributes=[{Key, Value}|Attrs]}).
+bind(Key, Value, This) ->
+    Attrs = This#hty_tx.attributes,
+    This#hty_tx{attributes=[{Key, Value}|Attrs]}.
 
-bound(Key) ->
-	case lists:keyfind(Key, 1, Tx#tx.attributes) of
-		false ->
-			no;
-		{_, Value} ->
-			{ok, Value}
-	end.
+bound(Key, This) ->
+    case lists:keyfind(Key, 1, This#hty_tx.attributes) of
+	false ->
+	    no;
+	{_, Value} ->
+	    {ok, Value}
+    end.
 			
-queryparams() ->
-	Tx#tx.queryparams.
-queryparams(QueryParams) ->
-	hty_tx:new(Tx#tx{queryparams=QueryParams}).
+queryparams(This) ->
+    This#hty_tx.queryparams.
 
-ok() -> status(200, "OK").
-not_found() -> status(404, "Not Found").
-method_not_allowed(Okmethods) -> 
-    Htx1 = rsp_header("Allow", lists:concat(Okmethods)),
-    Htx1:status(405, "Method Not Allowed").
-service_unavailable() -> status(503, "Temporarily Unavailable").
-server_error() ->
-    status(500, "Internal Server Error").
-server_error(Error) ->
-    This1 = server_error(),
-    hty_tx:new(This1:log("ServerError", Error)).
-bad_request() ->
-	status(400, "Bad Request").
-created() ->
-	status(201, "Created").
-see_other() ->
-        see_other(hty_uri:pack(Tx#tx.path)).
-see_other(URI) ->
-	Htx1 = rsp_header("Location", URI),
-	Htx1:status(303, "See Other").
-not_modified() ->
-	status(304, "Not Modified").
-temporary_redirect(URI) ->
-    	Htx1 = rsp_header("Location", URI),
-        Htx1:status(307, "Temporary Redirect").
-forbidden() ->
-	status(403, "Forbidden").
-conflict() ->
-    status(409, "Conflict").
+queryparams(QueryParams, This) ->
+    This#hty_tx{queryparams=QueryParams}.
 
-status() -> Tx#tx.status.
-status(Code, Message) -> 
-    Tx1 = log("status", Message),
-    hty_tx:new(Tx1#tx{status={Code, Message}}).
+ok(This) -> status(200, "OK", This).
+not_found(This) -> status(404, "Not Found", This).
+method_not_allowed(Okmethods, This) -> 
+    Htx1 = This:rsp_header("Allow", lists:concat(Okmethods)),
+    Htx1:status(405, "Method Not Allowed", This).
+service_unavailable(This) -> status(503, "Temporarily Unavailable", This).
+server_error(This) ->
+    status(500, "Internal Server Error", This).
+server_error(Error, This) ->
+    (server_error(This)):log("ServerError", Error).
+bad_request(This) ->
+    status(400, "Bad Request", This).
+created(This) ->
+    status(201, "Created", This).
+see_other(This) ->
+    see_other(hty_uri:pack(This:path()), This).
+see_other(URI, This) ->
+    Htx1 = rsp_header("Location", URI, This),
+    Htx1:status(303, "See Other").
+not_modified(This) ->
+    status(304, "Not Modified", This).
+temporary_redirect(URI, This) ->
+    Htx1 = rsp_header("Location", URI, This),
+    Htx1:status(307, "Temporary Redirect").
+forbidden(This) ->
+    status(403, "Forbidden", This).
+conflict(This) ->
+    status(409, "Conflict", This).
 
-req_header(Name, Value) -> hty_tx:new(Tx#tx{reqh=[{Name,Value}|Tx#tx.reqh]}).
+status(This) -> This#hty_tx.status.
+status(Code, Message, This) -> 
+    This1 = log("status", Message, This),
+    This1#hty_tx{status={Code, Message}}.
 
-req_header(Name) ->
-	lists:flatmap(fun(Item) -> 
-						 case Item of
-							 {Name, Value} -> [Value];
-							 _ -> []
-						 end
-				 end, Tx#tx.reqh).
+req_header(Name, Value, This) -> This#hty_tx{reqh=[{Name,Value}|This#hty_tx.reqh]}.
 
-req_headers() -> Tx#tx.reqh.
+req_header(Name, This) ->
+    lists:flatmap(fun(Item) -> 
+			  case Item of
+			      {Name, Value} -> [Value];
+			      _ -> []
+			  end
+		  end, This#hty_tx.reqh).
 
-this() ->
-	hty_tx:new(Tx).
+req_headers(This) -> This#hty_tx.reqh.
 
-flush() ->
-	Binlist = lists:reverse(Tx#tx.buffered),
-	Sink = Tx#tx.ondata,
-	Laststate = Tx#tx.ondata_state,
-	F = fun(Data, {State, Htx}) ->
-				case Sink(Data, State, Htx) of
-					{ok, NewState, Htx1} -> {next, {NewState, Htx1}};
-					{no, Error} -> {break, Error}
-				end
-		end, 
-	case hty_util:fold(F, {Laststate, this()}, Binlist) of
-		{break, Error, Remains} ->
-			hty_tx:new(Tx#tx{status=Error, buffered=Remains});
-		{nobreak, {State, Htx2}} ->
-			{hty_tx, Tx1} = Htx2,
-			hty_tx:new(Tx1#tx{buffered=[], ondata_state=State})
-	end.
+flush(This) ->
+    Binlist = lists:reverse(This#hty_tx.buffered),
+    Sink = This#hty_tx.ondata,
+    Laststate = This#hty_tx.ondata_state,
+    F = fun(Data, {State, Htx}) ->
+		case Sink(Data, State, Htx) of
+		    {ok, NewState, Htx1} -> {next, {NewState, Htx1}};
+		    {no, Error} -> {break, Error}
+		end
+	end, 
+    case hty_util:fold(F, {Laststate, This}, Binlist) of
+	{break, Error, Remains} ->
+	    #hty_tx{status=Error, buffered=Remains};
+	{nobreak, {State, Htx2}} ->
+	    {hty_tx, Tx1} = Htx2,
+	    Tx1#hty_tx{buffered=[], ondata_state=State}
+    end.
 
-unread() ->
-	Tx#tx.unread.
-unread(Leng) ->
-	hty_tx:new(Tx#tx{unread=Leng}).
+unread(This) ->
+    This#hty_tx.unread.
+unread(Leng, This) ->
+    This#hty_tx{unread=Leng}.
 	
-buffer(Data) ->
-	Buffered = [Data|Tx#tx.buffered],
-	Unread = unread() - case Data of
-							eos -> 0;
-							_ -> size(Data)
-						end,
-	hty_tx:new(Tx#tx{buffered=Buffered, unread=Unread}).
+buffer(Data, This) ->
+    Buffered = [Data|This#hty_tx.buffered],
+    Unread = This:unread() - case Data of
+			    eos -> 0;
+			    _ -> size(Data)
+			end,
+    This#hty_tx{buffered=Buffered, unread=Unread}.
 
-socketreader(SocketReader) ->
-	hty_tx:new(Tx#tx{socketreader=SocketReader}).
+socketreader(SocketReader, This) ->
+    This#hty_tx{socketreader=SocketReader}.
 
-process_entity(F) ->
-	Htx = recvdata(F),
-	Htx1 = Htx:flush(),
-	SocketReader = Tx#tx.socketreader,
-	pump(SocketReader, Htx1).
+process_entity(F, This) ->
+    Htx = recvdata(F, This),
+    Htx1 = Htx:flush(),
+    SocketReader = Htx1#hty_tx.socketreader,
+    pump(SocketReader, Htx1).
 
 pump(SocketReader, Htx) ->
-	case SocketReader:recv(Htx:unread()) of
-		timeout ->
-			{no, timeout};
-		{done, _Reason} ->
-			Htx1 = Htx:buffer(eos),
-			Htx1:flush();
-		{data, Data, SocketReader1} ->
-			Htx1 = Htx:buffer(Data),
-			Htx2 = Htx1:flush(),
-			pump(SocketReader1, Htx2)
-	end.
+    case SocketReader:recv(Htx:unread()) of
+	timeout ->
+	    {no, timeout};
+	{done, _Reason} ->
+	    Htx1 = Htx:buffer(eos),
+	    Htx1:flush();
+	{data, Data, SocketReader1} ->
+	    Htx1 = Htx:buffer(Data),
+	    Htx2 = Htx1:flush(),
+	    pump(SocketReader1, Htx2)
+    end.
 
-rsp_header(Name) -> 
-	case lists:keyfind(Name, 1, Tx#tx.rsph) of
-		false ->
-			no;
-		{Name, Value} ->
-			{ok, Value}
-	end.
+rsp_header(Name, This) -> 
+    case lists:keyfind(Name, 1, This#hty_tx.rsph) of
+	false ->
+	    no;
+	{Name, Value} ->
+	    {ok, Value}
+    end.
 
-rsp_header(Name, Value) -> hty_tx:new(Tx#tx{rsph=[{Name,Value}|Tx#tx.rsph]}).
+rsp_header(Name, Value, This) ->
+    This#hty_tx{rsph=[{Name,Value}|This#hty_tx.rsph]}.
 
-rsp_headers() -> Tx#tx.rsph.
+rsp_headers(This) -> This#hty_tx.rsph.
 
-rsp_entity() ->
-	lists:foldl(fun({data, Data}, Acc) ->
-						DataBin = list_to_binary(Data),
-					  <<DataBin/binary, Acc/binary>>;
-				 ({file, File}, Acc) ->
-					  case file:read_file(File) of
-						  {ok, Binary} ->
-							  <<Binary/binary, Acc/binary>>;
-						  {error, Reason} ->
-							  io:format("Failed (~p) reading file [~p] ~n", [Reason, File]),
-							  ""
-					  end
-			  end, <<"">>, outs()).
+rsp_entity(This) ->
+    lists:foldl(fun({data, Data}, Acc) ->
+			DataBin = list_to_binary(Data),
+			<<DataBin/binary, Acc/binary>>;
+		   ({file, File}, Acc) ->
+			case file:read_file(File) of
+			    {ok, Binary} ->
+				<<Binary/binary, Acc/binary>>;
+			    {error, Reason} ->
+				io:format("Failed (~p) reading file [~p] ~n", [Reason, File]),
+				""
+			end
+		end, <<"">>, outs(This)).
 
-recvdata(OnRecvData) -> hty_tx:new(Tx#tx{ondata=OnRecvData}).
+recvdata(OnRecvData, This) -> This#hty_tx{ondata=OnRecvData}.
 
-recvform(FormSchema, Callback) ->
-	Spafs = [fun hty_formurlencoded_spaf:parse/2,
-			 hty_spaf:binder(FormSchema)],
-	Chain = hty_spaf:chain(Spafs),
-	process_entity(fun(Data, State, Htx) ->
-						   case Chain(Data, State) of
-							   {ok, State1, Out} ->
-								   case Data of
-									   eos ->
-										   case Callback(Out, Htx) of
-											   {ok, Htx1} ->
-												   {ok, State1, Htx1};
-											   {no, Error} ->
-												   {no, Error}
-										   end;
-									   _ ->
-										   {ok, State1, Htx}
-								   end;
-							   {no, Error} ->
-								   {no, Error}										
-						   end
-				   end).
+recvform(FormSchema, Callback, This) ->
+    Spafs = [fun hty_formurlencoded_spaf:parse/2,
+	     hty_spaf:binder(FormSchema)],
+    Chain = hty_spaf:chain(Spafs),
+    process_entity(fun(Data, State, Htx) ->
+			   case Chain(Data, State) of
+			       {ok, State1, Out} ->
+				   case Data of
+				       eos ->
+					   case Callback(Out, Htx) of
+					       {ok, Htx1} ->
+						   {ok, State1, Htx1};
+					       {no, Error} ->
+						   {no, Error}
+					   end;
+				       _ ->
+					   {ok, State1, Htx}
+				   end;
+			       {no, Error} ->
+				   {no, Error}
+			   end
+		   end, This).
 
-recvfile(Spafs, Filepath) -> 
+recvfile(Spafs, Filepath, This) -> 
     Filter = hty_spaf:chain(Spafs),
     Fwrite = fun(IO, Data, ChainQ) -> 
 		     case Filter(Data, ChainQ) of
@@ -309,76 +361,75 @@ recvfile(Spafs, Filepath) ->
 			       {{error, Reason}, {error, Reason1}} ->
 				   {no, {Reason, Reason1}}
 			   end
-		   end).
+		   end, This).
 
-ndc_push(Frame) ->
-    hty_tx:new(Tx#tx{ndc=[Frame|Tx#tx.ndc]}).
+ndc_push(Frame, This) ->
+    This#hty_tx{ndc=[Frame|This#hty_tx.ndc]}.
 
-ndc_pop() ->
-    [_|Ndc] = Tx#tx.ndc,
-    hty_tx:new(Tx#tx{ndc=Ndc}).
+ndc_pop(This) ->
+    [_|Ndc] = This#hty_tx.ndc,
+    This#hty_tx{ndc=Ndc}.
 
-ndc_peek() ->
-    case Tx#tx.ndc of
+ndc_peek(This) ->
+    case This#hty_tx.ndc of
         [Top|_] -> Top;
         [] -> {'/'}
     end.
 
-log() ->
-    Tx#tx.log.
+log(This) ->
+    This#hty_tx.log.
 
-log(Event, Data) ->
-    Log = log(),
-    Context = ndc_peek(),
+log(Event, Data, This) ->
+    Log = log(This),
+    Context = ndc_peek(This),
     Category = atom_to_list(element(1, Context)),
-    Tx#tx{log=[{Category,hty_log:tstamp(),Event,Data}|Log]}.
+    This#hty_tx{log=[{Category,hty_log:tstamp(),Event,Data}|Log]}.
 
-sendfile(Filename) ->
-    Tx1 = log("sendfile", Filename),
-    hty_tx:new(Tx1#tx{outs=[{file, Filename}|Tx1#tx.outs]}).
+sendfile(Filename, This) ->
+    This1 = log("sendfile", Filename, This),
+    This1#hty_tx{outs=[{file, Filename}|This#hty_tx.outs]}.
 
-echo(IOList) -> hty_tx:new(Tx#tx{outs=[{data, IOList}|Tx#tx.outs]}).
+echo(IOList, This) -> This#hty_tx{outs=[{data, IOList}|This#hty_tx.outs]}.
 
-copy(Htx) ->
-	hty_tx:new(Tx#tx{outs=(Htx:outs() ++ Tx#tx.outs)}).
+copy(Htx, This) ->
+    This#hty_tx{outs=(Htx:outs() ++ This#hty_tx.outs)}.
 	
-prolog(IOList) -> 
-    Outs1 = lists:reverse([{data, IOList}] ++ lists:reverse(Tx#tx.outs)),
-    hty_tx:new(Tx#tx{outs=Outs1}).
+prolog(IOList, This) -> 
+    Outs1 = lists:reverse([{data, IOList}] ++ lists:reverse(This#hty_tx.outs)),
+    This#hty_tx{outs=Outs1}.
 
-clear() ->
-    hty_tx:new(Tx#tx{outs=[]}).
+clear(This) ->
+    This#hty_tx{outs=[]}.
 
-outs() -> Tx#tx.outs.
+outs(This) -> This#hty_tx.outs.
 
-dispatch(Resource) when not is_list(Resource) ->
-	dispatch([Resource]);
-dispatch(Resources) ->
-	This = hty_tx:new(Tx),
-	case hty_util:fold(fun(Resource, Htx) ->
-							   try 
-								   Htx1 = Htx:ndc_push(Resource),
-								   Htx2 = Resource:handle(Htx1),
-								   Htx3 = Htx2:ndc_pop(),
-								   case Htx3:status() of
-									   {404, _} -> 
-										   {next, Htx3};
-									   {405, _} ->
-										   {next, Htx3};
-									   _ ->
-										   {break, Htx3}
-								   end catch 
-										   throw:Error -> 
-											   Htx5 = Htx:ndc_push(Resource),
-											   {break, Htx5:server_error(Error)}
-							   end
-					   end, This, Resources) of
-		{break, Rsp, _} -> Rsp;
-		{nobreak, Rsp} -> Rsp
-	end.
+dispatch(Resource, This) when not is_list(Resource) ->
+    dispatch([Resource], This);
+dispatch(Resources, This) ->
+    case hty_util:fold(fun(Resource, Htx) ->
+			       try 
+				   Htx1 = Htx:ndc_push(Resource),
+				   Htx2 = Resource:handle(Htx1),
+				   Htx3 = Htx2:ndc_pop(),
+				   case Htx3:status() of
+				       {404, _} -> 
+					   {next, Htx3};
+				       {405, _} ->
+					   {next, Htx3};
+				       _ ->
+					   {break, Htx3}
+				   end catch 
+					   throw:Error -> 
+					       Htx5 = Htx:ndc_push(Resource),
+					       {break, Htx5:server_error(Error)}
+				       end
+		       end, This, Resources) of
+	{break, Rsp, _} -> Rsp;
+	{nobreak, Rsp} -> Rsp
+    end.
 
-realm() -> Tx#tx.realm.
-realm(Realm) -> hty_tx:new(Tx#tx{realm=Realm}).
+realm(This) -> This#hty_tx.realm.
+realm(Realm, This) -> This#hty_tx{realm=Realm}.
 
-principal() -> Tx#tx.principal.
-principal(Principal) -> hty_tx:new(Tx#tx{principal=Principal}).
+principal(This) -> This#hty_tx.principal.
+principal(Principal, This) -> This#hty_tx{principal=Principal}.

@@ -12,20 +12,18 @@
 %%
 %% Exported Functions
 %%
--export([new/0, get/1, listdir/0]).
+-export([get/1, listdir/0]).
 
 %%
 %% API Functions
 %%
-new() -> 
-	hty_tx:new(#tx{}).
 
 get(Uri) ->
 	{Segs, Query} = hty_uri:parse_path(Uri),
-	(((new()):path(hty_uri:pathzipper(Segs))):queryparams(Query)):method('GET').
+	(((hty_tx:new()):path(hty_uri:pathzipper(Segs))):queryparams(Query)):method('GET').
 
 listdir() ->
-	((new()):method('GET')):req_header('Accept', <<"text/uri-list">>).
+	((hty_tx:new()):method('GET')):req_header('Accept', <<"text/uri-list">>).
 
 %%
 %% Local Functions

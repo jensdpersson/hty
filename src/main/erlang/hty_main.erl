@@ -31,7 +31,7 @@ reload(Fscursor) ->
     io:format("Before recv"),
     receive 
 	{ok, Status} -> {ok, Status};
-	{no, _Reason} -> no
+	{no, Reason} -> {error, Reason}
     after
 	60000 -> timeout
     end.
@@ -48,8 +48,13 @@ loop_supervise() ->
     register(?MODULE, Dispatcher),
     receive
         {'EXIT', _FromPid, Reason} ->
-            io:format("Restarting due to ~p ~n", [Reason]),
-            loop_supervise()
+	    case Reason of
+		normal ->
+		    io:format("Normal EXIT trapped, stopping~n");
+		_ ->
+		    io:format("Restarting due to ~p ~n", [Reason]),
+		    loop_supervise()
+	    end
     end,
     ok.
 
@@ -67,14 +72,14 @@ status() ->
 	     
 
 loop_dispatch(ServerState) ->
-    io:format("LoopDispatch~n"),
+    %io:format("LoopDispatch~n"),
     receive
      	{status, ReplyTo} ->
 	    	ReplyTo ! {status, ServerState}, 
 	    	loop_dispatch(ServerState);
 	{stop, ReplyTo} -> 
-		ReplyTo ! {stopping}, 
-		init:stop();
+		ReplyTo ! stopping;
+	%	init:stop();
 	{reload, Listens, Sites, ReplyTo} ->
 		ServerState1 = reload_servers(ServerState, Listens),
 		ServerState2 = reload_sites(ServerState1, Sites),

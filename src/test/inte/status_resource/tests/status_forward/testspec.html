@@ -1,0 +1,17 @@
+<testspec>
+  <synopsis>
+    Get a static file through a status resource forward
+  </synopsis>
+  <transaction>
+    <request>
+      <url>http://localhost:1028/missing_file.html</url>
+    </request>
+    <response>
+      <status>200</status>
+      <header name="content-type">text/html</header>
+      <body>
+	<exact file="facit.html"/>
+      </body>
+    </response>
+  </transaction>
+</testspec>
