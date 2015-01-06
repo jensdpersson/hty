@@ -7,3 +7,5 @@ om det inte vore för att de typiskt är paramoduler.
 Om man slutar stödja att resursklasser kan vara paramoduler kan vi införa
 ett behaviour med funktioner som doc() eller så för att få en html-vy genererad
 med dokumentation.
+
+Paramoduler är ändå borta nu.
