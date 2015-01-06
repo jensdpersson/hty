@@ -12,7 +12,7 @@
 %%
 %% Exported Functions
 %%
--export([get/1, listdir/0]).
+-export([get/1, listdir/0, post/3]).
 
 %%
 %% API Functions
@@ -25,7 +25,13 @@ get(Uri) ->
 listdir() ->
 	((hty_tx:new()):method('GET')):req_header('Accept', <<"text/uri-list">>).
 
+post(Uri, Body, Mime) ->
+	Htx = hty_tx_factory:get(Uri),
+	Htx1 = Htx:method('POST'),
+	Htx2 = Htx1:echo(Body),
+	Htx3 = Htx2:req_header('Content-Type', Mime),
+	Htx3.
+
 %%
 %% Local Functions
 %%
-
