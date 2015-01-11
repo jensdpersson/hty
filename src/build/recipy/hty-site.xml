@@ -1,11 +1,8 @@
 <recipe xmlns="http://recipy.hoverview.org/default"
         xmlns:e="http://recipy.hoverview.org/erlang">
     <folder name="target">
-        <folder name="ebin">
-	      <artifact name="beams"/>
-	      
-	    </folder>
-        <folder name="site">
+        <artifact name="ebin"/>
+	      <folder name="site">
             <copies of="src/site"/>
             <folder name="edoc">
                 <e:edoc/>

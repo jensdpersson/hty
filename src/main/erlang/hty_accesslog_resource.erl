@@ -1,6 +1,11 @@
 -module(hty_accesslog_resource).
 
--export([handle/2]).
+-export([new/3, handle/2]).
+
+-record(hty_accesslog_resource, {format, folder, subs}).
+
+new(Format, Folder, Subs) ->
+  #hty_accesslog_resource{format=Format, folder=Folder, subs=Subs}.
 
 handle(Htx, This) ->
     {_Mod, _Format, Logfolder, Subs} = This,
@@ -22,5 +27,3 @@ handle(Htx, This) ->
 	    io:format("Failed writing log, ~p~n", [Reason])
     end,
     Htx1.
-    
-    

@@ -22,14 +22,14 @@ handle(Htx, This) ->
 	        Now = hty_date:now(),
           Folder = This#hty_timeseries_resource.folder,
           Folder1 = year(Now, Folder),
-          
+          not_implemented
     end.
 
 year(Date, Folder) ->
   Year = Folder:subpath([Date:year()]),
   case Year:exists() of
     false ->
-      Year:mkdir()
+      Year:mkdir();
     true ->
       ok
   end,
@@ -39,7 +39,7 @@ month(Date, Folder) ->
   Month = Folder:subpath([Date:month()]),
   case Month:exists() of
     false ->
-      Month:mkdir()
+      Month:mkdir();
     true ->
       ok
   end,
@@ -49,7 +49,7 @@ day(Date, Folder) ->
   Day = Folder:subpath([Date:day()]),
   case Day:exists() of
     false ->
-      Day:mkdir()
+      Day:mkdir();
     true ->
       ok
   end,

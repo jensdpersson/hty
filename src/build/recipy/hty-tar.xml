@@ -3,8 +3,6 @@
     <folder name="bin">
       <copies of="src/main/bin/hty"/>
     </folder>
-    <folder name="ebin">
-      <artifact name="beams"/>
-    </folder>
+    <artifact name="ebin"/>
   </folder>
 </tarball>

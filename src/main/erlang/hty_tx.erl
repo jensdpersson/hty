@@ -1,8 +1,10 @@
 -module(hty_tx).
 
--export([protocol/2, 
-	 method/1, 
-	 method/2, 
+
+
+-export([protocol/2,
+	 method/1,
+	 method/2,
 	 consume/2,
 	 consume/1,
 	 path/1,
@@ -31,7 +33,7 @@
 
 -export([recvdata/2,
 	 recvfile/3,
-	 recvform/3, 
+	 recvform/3,
 	 buffer/2,
 	 unread/1,
 	 unread/2,
@@ -40,7 +42,7 @@
 -export([process_entity/2]).
 
 -export([ok/1,
-	 not_found/1, 
+	 not_found/1,
 	 method_not_allowed/2,
 	 service_unavailable/1,
 	 see_other/1,
@@ -97,6 +99,9 @@
 	  log=[],
 	  unread=0}).
 
+-type htx() :: {hty_tx, #hty_tx{}}.
+-export_type([htx/0]).
+
 new() ->
     #hty_tx{}.
 
@@ -118,18 +123,18 @@ method(This) -> This#hty_tx.method.
 
 method(Method, This) -> This#hty_tx{method=Method}.
 
-path(PathZipper, This) -> 
+path(PathZipper, This) ->
     This#hty_tx{path=PathZipper}.
 
 path(This) ->
     This#hty_tx.path.
 
-path_below(This) -> 
-    {_Above, Below} = This:path(), 
+path_below(This) ->
+    {_Above, Below} = This:path(),
     lists:map(fun({Seg, _Matrix}) -> Seg; (Seg) -> Seg end, Below).
 
-path_above(This) -> 
-    {Above, _Below} = This:path(), 
+path_above(This) ->
+    {Above, _Below} = This:path(),
     lists:map(fun({Seg, _Matrix}) -> Seg; (Seg) -> Seg end, Above).
 
 matrix(Key, This) ->
@@ -141,7 +146,7 @@ path_below(Below, This) ->
 
 consume(This) ->
     case This:path() of
-	{Above, [Current|Below]} -> 
+	{Above, [Current|Below]} ->
 	    {Current, This#hty_tx{path={[Current|Above], Below}}};
 	_ ->
 	    no
@@ -149,7 +154,7 @@ consume(This) ->
 
 consume(Segment, This) ->
     case This:path() of
-	{Above, [Segment|Below]} -> 
+	{Above, [Segment|Below]} ->
 	    This#hty_tx{path={[Segment|Above], Below}};
 	_ ->
 	    no
@@ -166,7 +171,7 @@ bound(Key, This) ->
 	{_, Value} ->
 	    {ok, Value}
     end.
-			
+
 queryparams(This) ->
     This#hty_tx.queryparams.
 
@@ -175,7 +180,7 @@ queryparams(QueryParams, This) ->
 
 ok(This) -> status(200, "OK", This).
 not_found(This) -> status(404, "Not Found", This).
-method_not_allowed(Okmethods, This) -> 
+method_not_allowed(Okmethods, This) ->
     Htx1 = This:rsp_header("Allow", lists:concat(Okmethods)),
     Htx1:status(405, "Method Not Allowed", This).
 service_unavailable(This) -> status(503, "Temporarily Unavailable", This).
@@ -203,14 +208,14 @@ conflict(This) ->
     status(409, "Conflict", This).
 
 status(This) -> This#hty_tx.status.
-status(Code, Message, This) -> 
+status(Code, Message, This) ->
     This1 = log("status", Message, This),
     This1#hty_tx{status={Code, Message}}.
 
 req_header(Name, Value, This) -> This#hty_tx{reqh=[{Name,Value}|This#hty_tx.reqh]}.
 
 req_header(Name, This) ->
-    lists:flatmap(fun(Item) -> 
+    lists:flatmap(fun(Item) ->
 			  case Item of
 			      {Name, Value} -> [Value];
 			      _ -> []
@@ -228,7 +233,7 @@ flush(This) ->
 		    {ok, NewState, Htx1} -> {next, {NewState, Htx1}};
 		    {no, Error} -> {break, Error}
 		end
-	end, 
+	end,
     case hty_util:fold(F, {Laststate, This}, Binlist) of
 	{break, Error, Remains} ->
 	    #hty_tx{status=Error, buffered=Remains};
@@ -241,7 +246,7 @@ unread(This) ->
     This#hty_tx.unread.
 unread(Leng, This) ->
     This#hty_tx{unread=Leng}.
-	
+
 buffer(Data, This) ->
     Buffered = [Data|This#hty_tx.buffered],
     Unread = This:unread() - case Data of
@@ -272,7 +277,7 @@ pump(SocketReader, Htx) ->
 	    pump(SocketReader1, Htx2)
     end.
 
-rsp_header(Name, This) -> 
+rsp_header(Name, This) ->
     case lists:keyfind(Name, 1, This#hty_tx.rsph) of
 	false ->
 	    no;
@@ -324,9 +329,9 @@ recvform(FormSchema, Callback, This) ->
 			   end
 		   end, This).
 
-recvfile(Spafs, Filepath, This) -> 
+recvfile(Spafs, Filepath, This) ->
     Filter = hty_spaf:chain(Spafs),
-    Fwrite = fun(IO, Data, ChainQ) -> 
+    Fwrite = fun(IO, Data, ChainQ) ->
 		     case Filter(Data, ChainQ) of
 			 {ok, ChainQ1, Data1} ->
 			     case file:write(IO, Data1) of
@@ -338,7 +343,7 @@ recvfile(Spafs, Filepath, This) ->
 	     end,
     process_entity(fun(Data, State, Htx) ->
 			   {Fd, WriteRes} = case State of
-						q0 -> 
+						q0 ->
 						    Opts = [raw, write, delayed_write],
 						    case file:open(Filepath, Opts) of
 							{ok, IODevice} -> {IODevice, Fwrite(IODevice, Data, q0)};
@@ -347,7 +352,7 @@ recvfile(Spafs, Filepath, This) ->
 						{IOFile, Q} -> {IOFile, Fwrite(IOFile, Data, Q)}
 					    end,
 			   CloseRes = case Data of
-					  eos -> 
+					  eos ->
 					      case Fd of
 						  nofilehandle -> {no, nofilehandle};
 						  File -> file:close(File)
@@ -393,8 +398,8 @@ echo(IOList, This) -> This#hty_tx{outs=[{data, IOList}|This#hty_tx.outs]}.
 
 copy(Htx, This) ->
     This#hty_tx{outs=(Htx:outs() ++ This#hty_tx.outs)}.
-	
-prolog(IOList, This) -> 
+
+prolog(IOList, This) ->
     Outs1 = lists:reverse([{data, IOList}] ++ lists:reverse(This#hty_tx.outs)),
     This#hty_tx{outs=Outs1}.
 
@@ -407,19 +412,19 @@ dispatch(Resource, This) when not is_list(Resource) ->
     dispatch([Resource], This);
 dispatch(Resources, This) ->
     case hty_util:fold(fun(Resource, Htx) ->
-			       try 
+			       try
 				   Htx1 = Htx:ndc_push(Resource),
 				   Htx2 = Resource:handle(Htx1),
 				   Htx3 = Htx2:ndc_pop(),
 				   case Htx3:status() of
-				       {404, _} -> 
+				       {404, _} ->
 					   {next, Htx3};
 				       {405, _} ->
 					   {next, Htx3};
 				       _ ->
 					   {break, Htx3}
-				   end catch 
-					   throw:Error -> 
+				   end catch
+					   throw:Error ->
 					       Htx5 = Htx:ndc_push(Resource),
 					       {break, Htx5:server_error(Error)}
 				       end

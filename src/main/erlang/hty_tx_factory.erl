@@ -7,7 +7,7 @@
 %% Include files
 %%
 
--include("hty_tx.hrl").
+%-include("hty_tx.hrl").
 
 %%
 %% Exported Functions
