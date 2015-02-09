@@ -9,7 +9,7 @@
 -export([exists/1, isdir/1, mkdir/1, last_modified/1]).
 -export([match/2, walk/2, walk/3, subs/2, subs/3, list/1, list/2, parts/1, prefix/1, ext/1, subpath/2]).
 
--export([send/1, recv/2, load/1, save/2]).
+-export([send/2, recv/3, load/1, save/2, append/2]).
 
 -export([basename/1, parent/1]).
 
@@ -108,13 +108,20 @@ parent(This) ->
 	P = filename:dirname(Path),
 	hty_fs_cursor:new(P).
 
-%filepath(This) -> path(This).
+save(Data, This) ->
+  (fs(This)):save(path(This), Data).
 
-save() -> notyet.
-load(This) -> notyet.
-send() -> notyet.
-recv() -> notyet.
-append() -> notyet.
+load(This) ->
+  (fs(This)):load(path(This)).
+
+send(Htx, This) ->
+  (fs(This)):send(path(This), Htx).
+
+recv(Spafs, Htx, This) ->
+  (fs(This)):recv(path(This), Spafs, Htx).
+
+append(Data, This) ->
+  (fs(This)):append(path(This), Data).
 
 basename(This) -> filename:basename(path(This)).
 

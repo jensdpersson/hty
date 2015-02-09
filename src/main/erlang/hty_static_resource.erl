@@ -34,7 +34,7 @@ new(Fspath) ->
                 true ->
                   F=fun(W) ->
                     Fspath2 = Fspath1:subpath([W]),
-                    io:format("Does ~p exist?~n", [Fspath2:filepath()]),
+                    %io:format("Does ~p exist?~n", [Fspath2:filepath()]),
                     case Fspath2:exists() of
                       true -> [Fspath2];
                       false -> []
@@ -79,6 +79,6 @@ serve(Htx0, Fs) ->
         Htx = Htx01:rsp_header("Cache-Control", "public"),
         Mime = Htx:mimemap(Fs:ext()),
         Htx2 = Htx:rsp_header('Content-Type', Mime),
-        Htx3 = Htx2:sendfile(Fs:filepath()),
+        Htx3 = Fs:send(Htx2),
         Htx3:ok()
       end.

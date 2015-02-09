@@ -25,29 +25,27 @@ handle(Htx, This) ->
     case Htx:path_below() of
 	[] ->
 	    case Htx:method() of
-		'GET' ->							 
+		'GET' ->
 		    Htx:dispatch([Index]);
 		'POST' ->
 		    Htx:method_not_allowed(['GET'])
 	    end;
 	Segments ->
 	    Fspath1 = Fspath:subpath(Segments),
-	    Filepath = Fspath1:filepath(),
 	    case Htx:method() of
-		'GET' ->	
+		'GET' ->
 		    case Fspath1:exists() of
-			true -> 
-			    Htx:sendfile(Filepath);
+			true ->
+        Fspath1:send(Htx);
 			false ->
 			    Htx:not_found()
 		    end;
 		'POST' ->
-		    Htx1 = Htx:recvfile([fun hty_formtree_spaf:parse/2,
-					 fun hty_xml_spaf:format/2], Filepath),
+		    Htx1 = Fspath1:recv([fun hty_formtree_spaf:parse/2,
+					 fun hty_xml_spaf:format/2], Htx),
 		    Htx1:see_other()
 	    end
     end.
 %%
 %% Local Functions
 %%
-

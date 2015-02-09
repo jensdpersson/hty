@@ -42,7 +42,7 @@ handle(Htx0, This) ->
 		    case tip(Fspath1) of
 			nofile ->
 			    case Method of
-				'GET' -> 
+				'GET' ->
 				    Htx:not_found();
 				'POST' ->
 				    Fspath1:mkdir(),
@@ -58,21 +58,20 @@ handle(Htx0, This) ->
 		_ ->
 		    io:format(";rev=~p~n", [Rev]),
 		    Fspath2 = Fspath1:subpath([binary_to_list(Rev) ++ ".data"]),
-		    Filepath = Fspath2:filepath(),
 		    case Method of
-			'GET' ->	
+			'GET' ->
 			    case Fspath2:exists() of
-				true -> 	
+				true ->
 				    Htx1 = Htx:ok(),
 				    Htx2 = Htx1:rsp_header("Content-Type", "application/xml"),
-				    Htx2:sendfile(Filepath);
+				    Fspath2:recv(Htx2);
 				false ->
 				    case tip(Fspath1) of
-					nofile -> 
+					nofile ->
 					    Htx:not_found();
-					notip -> 
+					notip ->
 					    Htx:not_found();
-					noread -> 
+					noread ->
 					    Htx:server_error("FailedReadingTip");
 					Tip ->
 					    redirect(Htx, Tip)
@@ -118,14 +117,14 @@ redirect(Htx, Tip) ->
 save(Htx, Tip, Fs, DiskFormat) ->
     Spaf = spaf(Htx:req_header('Content-Type'), DiskFormat),
     Datafile = Fs:subpath([Tip ++ ".data"]),
-    Htx1 = Htx:recvfile(Spaf, Datafile:filepath()),
+    Htx1 = Datafile:recv(Spaf, Htx),
     Tipfile = Fs:subpath(["tip"]),
-    case file:write_file(Tipfile:filepath(), Tip) of
-	{error, Error} ->
-	    Htx1:server_error(Error);
-	ok ->
-	    Location = hty_uri:matrix(Htx1:path(), <<"rev">>, Tip),
-	    Htx1:see_other(hty_uri:pack(Location))
+    case Tipfile:save(Tip) of
+	     {error, Error} ->
+	        Htx1:server_error(Error);
+	     ok ->
+	        Location = hty_uri:matrix(Htx1:path(), <<"rev">>, Tip),
+	        Htx1:see_other(hty_uri:pack(Location))
     end.
 
 tip(Fs) ->
@@ -135,19 +134,20 @@ tip(Fs) ->
 	true ->
 	    Fs1 = Fs:subpath(["tip"]),
 	    case Fs1:exists() of
-		false -> 
+		false ->
 		    notip;
 		true ->
-		    case file:read_file(Fs1:filepath()) of 
-			{ok, Content} ->
-			    Content;
-			{error, _Error} ->
-			    noread
+		    case Fs1:load() of
+			       {ok, Content} ->
+			            Content;
+			       {error, _Error} ->
+			            noread
 		    end
 	    end
     end.
 
 
-spaf([<<"application/x-www-form-urlencoded">>], "xml") -> [fun hty_formtree_spaf:parse/2, fun hty_xml_spaf:format/2];
+spaf([<<"application/x-www-form-urlencoded">>], "xml") ->
+    [fun hty_formtree_spaf:parse/2, fun hty_xml_spaf:format/2];
 spaf(Mime, Diskf) ->
     io:format("Unregged mime/diskformat combo [~p/~p]~n", [Mime, Diskf]).

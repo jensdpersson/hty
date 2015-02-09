@@ -24,25 +24,24 @@ handle(Htx, This) ->
     case Fspath:is_dir() of
 	true ->
 	    case Htx:method() of
-		'GET' ->							 
+		'GET' ->
 		    hty_listing:list(Htx, Fspath);
 		_ ->
 		    Htx:method_not_allowed(['GET'])
 	    end;
 	false ->
-	    Filepath = Fspath:filepath(),
 	    Exists = Fspath:exists(),
 	    case Htx:method() of
 		'GET' ->
 		    case Exists of
 			true ->
-			    Htx:sendfile(Filepath);
+        Fspath:send(Htx);
 			false ->
 			    Htx:not_found()
 		    end;
 		'PUT' ->
-		    Htx1 = Htx:recvfile([], Filepath),
-		    case Htx1:status() of 
+		    Htx1 = Fspath:recv([], Htx),
+		    case Htx1:status() of
 			{200, _} ->
 			    case Exists of
 				true ->

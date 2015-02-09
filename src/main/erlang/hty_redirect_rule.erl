@@ -35,7 +35,7 @@ match(Fspath, _Rules) ->
 %%
 
 create(Fs) ->
-    case file:read_file(Fs:filepath()) of
+    case Fs:load() of
 	{ok, Content} ->
 	    case hty_slots:parse(Content) of
 		{no, Error} ->

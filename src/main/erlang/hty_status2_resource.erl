@@ -44,7 +44,7 @@ handle(Htx, This) ->
 	[Statusfile] ->
 	    Htx2 = Htx1:ok(),
 	    %Htx3 = Htx2:clear(),
-	    Htx2:sendfile(Statusfile:filepath());
+      Statusfile:send(Htx2);
 	[] -> Htx1
     end.
 
@@ -52,4 +52,3 @@ handle(Htx, This) ->
 %%
 %% Local Functions
 %%
-

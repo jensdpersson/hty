@@ -23,7 +23,7 @@ new(Realmname, Fspath) -> #hty_fsrealm{realmname=Realmname, fspath=Fspath}.
 
 name(This) -> This#hty_fsrealm.realmname.
 
--spec signup(string(), string(), any()) -> 
+-spec signup(string(), string(), any()) ->
 				ok | {no, badnick} | {no, exists} | {no, createerror}.
 signup(Nick, Pass, This) ->
     Fspath = This#hty_fsrealm.fspath,
@@ -42,12 +42,11 @@ signup(Nick, Pass, This) ->
 			ok ->
 			    Secretfile = Userdir:subpath(["secret"]),
 			    Secret = crypto:hash(md5, Pass),
-			    case file:write_file(Secretfile:filepath(), [Secret, 10]) of
-				{error, _Error} ->
-						%TODO log inconsistent user
-				    {no, createerror};
-				ok ->
-				    ok
+			    case Secretfile:save([Secret, 10]) of
+						{error, _Error} ->
+							{no, createerror};
+						ok ->
+				    	ok
 			    end
 		    end
 	    end
@@ -55,16 +54,16 @@ signup(Nick, Pass, This) ->
 
 auth(Nick, Pass, This) ->
     Fspath = This#hty_fsrealm.fspath,
-    case validate(Nick) of 
+    case validate(Nick) of
 	ok ->
 	    Secretfile = Fspath:subpath(["data", binary_to_list(Nick), "secret"]),
-	    case file:read_file(Secretfile:filepath()) of
-		{ok, Binary} -> 
+	    case Secretfile:load() of
+		{ok, Binary} ->
 		    Md5 = crypto:hash(md5, Pass),
 		    case <<Md5/binary, 10>> of
-			Binary ->
-			    {ok, {Nick, [Nick]}};
-			_ ->
+			     Binary ->
+			       {ok, {Nick, [Nick]}};
+			      _ ->
 			    no
 		    end;
 		{error, _Error} ->
@@ -79,7 +78,7 @@ auth(Nick, Pass, This) ->
 %%
 validate(Nick) when is_binary(Nick) ->
 	validate(binary_to_list(Nick));
-validate([]) -> 
+validate([]) ->
 	no;
 validate([N|ICK]) ->
 	case ($a =< N) and ($z >= N) of
@@ -92,7 +91,7 @@ validate([N|ICK]) ->
 validate2([]) ->
 	ok;
 validate2([X|Xs]) ->
-	case (($a =< X) and ($z >= X)) or 
+	case (($a =< X) and ($z >= X)) or
         (($0 =< X) and ($9 >= X)) of
 		true ->
 			validate2(Xs);

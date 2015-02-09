@@ -12,9 +12,9 @@ reload(Fscursor) ->
 	    ],
     Cfg = Fscursor:walk(Rules),
     io:format("Reloading configuration ~p~n", [Cfg]),
-    Sort = fun(Item, {Ls, Ss, Is}) -> 
-		   case Item of 
-		       {ok, Cmd, _Path, _Rule} -> 
+    Sort = fun(Item, {Ls, Ss, Is}) ->
+		   case Item of
+		       {ok, Cmd, _Path, _Rule} ->
 			   case Cmd of
 			       {listen, _Proto, _Port, _Root} = L ->
 				   {[L|Ls], Ss, Is};
@@ -29,7 +29,7 @@ reload(Fscursor) ->
     {Listens, Sites, _Ignored} = lists:foldl(Sort, A0, Cfg),
     ?MODULE ! {reload, Listens, Sites, self()},
     io:format("Before recv"),
-    receive 
+    receive
 	{ok, Status} -> {ok, Status};
 	{no, Reason} -> {error, Reason}
     after
@@ -43,7 +43,7 @@ start() ->
 loop_supervise() ->
     process_flag(trap_exit, true),
     Dispatcher = spawn_link(fun() ->
-                    loop_dispatch(hty_state:new([],[])) 
+                    loop_dispatch(hty_state:new([],[]))
                  end),
     register(?MODULE, Dispatcher),
     receive
@@ -61,23 +61,23 @@ loop_supervise() ->
 status() ->
     ?MODULE ! {status, self()},
     receive
-	{status, Status} -> 
+	{status, Status} ->
 	    Status;
-	Other -> 
+	Other ->
 	    io:format("Bad status ~p~n",[Other])
-    after 
+    after
 	10000 -> io:format("timeout")
     end.
-		
-	     
+
+
 
 loop_dispatch(ServerState) ->
     %io:format("LoopDispatch~n"),
     receive
      	{status, ReplyTo} ->
-	    	ReplyTo ! {status, ServerState}, 
+	    	ReplyTo ! {status, ServerState},
 	    	loop_dispatch(ServerState);
-	{stop, ReplyTo} -> 
+	{stop, ReplyTo} ->
 		ReplyTo ! stopping;
 	%	init:stop();
 	{reload, Listens, Sites, ReplyTo} ->
@@ -86,11 +86,11 @@ loop_dispatch(ServerState) ->
                 ReplyTo ! {ok, started},
 	    	loop_dispatch(ServerState2);
 	{root, SiteID, ReplyTo} ->
-	    	ReplyTo ! {root, hty_util:find(fun(S) -> 
-                                             S:match(SiteID) 
+	    	ReplyTo ! {root, hty_util:find(fun(S) ->
+                                             S:match(SiteID)
                                            end, ServerState:sites())},
 		loop_dispatch(ServerState);
-	SomeMessage -> 
+	SomeMessage ->
             io:format("Unknown message ~p~n", [SomeMessage]),
             loop_dispatch(ServerState)
     end.
@@ -102,39 +102,39 @@ reload_servers(ServerState, Listens) ->
     Cmp = fun(Server, Listen) ->
 		  Port = Server:port(),
 		  Proto = Server:protocol(),
-		  case Listen of 
+		  case Listen of
 		      {listen, Proto, Port} -> true;
 		      _ -> false
 		  end
 	  end,
-    Ctor = fun(Listen) -> 
+    Ctor = fun(Listen) ->
 		   Ip = {0,0,0,0},
-		   {listen, _Proto, Port, Root} = Listen,
-		   Server = hty_server:new(Ip, Port, Root),
+		   {listen, Proto, Port, Root} = Listen,
+		   Server = hty_server:new(Proto, Ip, Port, Root),
 		   Server:start(),
 		   Server
 	   end,
     Cull = fun(Server) -> Server:stop() end,
     Vector = hty_vector:new(Cmp, Cull, Ctor),
     Servers1 = Vector:update(Servers, Listens),
-    
+
     ServerState:servers(Servers1).
 
-reload_sites(ServerState, Sitespecs) -> 
+reload_sites(ServerState, Sitespecs) ->
     Sites = ServerState:sites(),
     Cmp = fun(Site, Spec) ->
 		  Name = Site:name(),
-		  case Spec of 
+		  case Spec of
 		      {site, Name, _Root} -> true;
 		      _ -> false
 		  end
 	  end,
-    Ctor = fun(Sitespec) -> 
+    Ctor = fun(Sitespec) ->
 		   {site, Name, Root} = Sitespec,
 		   hty_site:new(Name, [Name], Root)
 	   end,
     Cull = fun(_Site) -> ok end,
     Vector = hty_vector:new(Cmp, Cull, Ctor),
     Sites1 = Vector:update(Sites, Sitespecs),
-    
+
     ServerState:sites(Sites1).

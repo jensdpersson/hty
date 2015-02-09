@@ -21,7 +21,7 @@ match(Fspath, Rules) ->
 	    Statusmap = lists:flatmap(fun(File) ->
 					      Prefix = File:prefix(),
 					      case (catch list_to_integer(Prefix)) of
-						  {'EXIT', _} -> 
+						  {'EXIT', _} ->
 						      [];
 						  Integer ->
 						      case File:match(Rules) of
@@ -34,7 +34,13 @@ match(Fspath, Rules) ->
 				      end,
 				      Fspath:list()),
 	    io:format("Status map ~p~n", [Statusmap]),
-	    [{ok, {resource, Content}, _, _}] = Fspath:walk(Rules, fun(Fs) -> case Fs:prefix() of "content" -> true; _ -> false end end),
+      F = fun(Fs) ->
+            case Fs:prefix() of
+              "content" -> true;
+              _ -> false
+            end
+      end,
+	    [{ok, {resource, Content}, _, _}] = Fspath:walk(Rules, F),
 	    {claim, {resource, hty_status_resource:new(Content, Statusmap)}};
 	_ -> next
     end.
@@ -42,4 +48,3 @@ match(Fspath, Rules) ->
 %%
 %% Local Functions
 %%
-

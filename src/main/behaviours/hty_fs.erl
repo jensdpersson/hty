@@ -4,7 +4,7 @@
 
 -callback list(Path::string()) -> Subs :: [string()].
 
--callback date(Path::string()) -> file:datetime().
+-callback last_modified(Path::string()) -> file:datetime().
 
 -callback send(Path::string(), hty_tx:htx()) -> hty_tx:htx().
 
@@ -16,6 +16,11 @@
 
 -callback has_subs(Path::string()) -> boolean().
 
--callback make_dir(Path::string()) -> boolean().
+-callback mkdir(Path::string()) -> boolean().
 
--callback append(Path::string(), Data::binary()) -> boolean().
+-callback append(Path::string(), Data::binary()) -> ok | {error, Error::any()}.
+
+-callback load(Path::string()) -> {ok, Content::binary()} | {error, Error::any()}.
+
+-callback save(Path::string(),
+               Data::binary()) -> ok | {error, Error::any()}.
