@@ -21,11 +21,13 @@ match(Fspath, Rules) ->
 	["gate"|Rest] ->
 	    Subs = Fspath:subs(Rules),
 	    case Rest of
-		[] -> 
+		[] ->
 		    Lookup = fun segment_lookup/1,
-		    {claim, {resource, hty_gate_resource:new(Lookup, Subs)}};
-		_ ->
-		    {block, "unsupported"}
+        {claim, {resource, hty_gate_resource:new(Lookup, Subs)}};
+		[Role|_] ->
+		    %{block, "unsupported"}
+        Lookup = fun(_) -> Role end,
+        {claim, {resource, hty_gate_resource:new(Lookup, Subs)}}
 	    end;
 	_ ->
 	    next

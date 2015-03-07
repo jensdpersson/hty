@@ -8,17 +8,16 @@ match(Fspath, Rules) ->
 			io:format("BindClaim~n"),
 			Contentpath = Fspath:subpath(["content"]),
 			Subs = Contentpath:subs(Rules),
-			
-			Filter = fun(Fspath1) -> 
-							 %Fspath1 = hty_fs_cursor:new(File),
+
+			Filter = fun(Fspath1) ->
 							 Fspath1:basename() /= "content"
 					 end,
-			
+
 			Bindings = Fspath:subs([hty_bindas_rule|Rules], Filter),
-			Subs1 = lists:foldl(fun(Item, Acc) -> 
-									Item:next(Acc) 
+			Subs1 = lists:foldl(fun(Item, Acc) ->
+									Item:next(Acc)
 							  end, Subs, Bindings),
-			
+
 			{claim, {resource, Subs1}};
 		_ ->
 			next

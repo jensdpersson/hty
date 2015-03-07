@@ -22,11 +22,11 @@ new(Subs) ->
 
 handle(Htx, This) ->
     case Htx:req_header('Authorization') of
-	[] -> 
+	[] ->
 	    challenge(Htx);
-	[<<"Basic ", Auth/binary>>] -> 
+	[<<"Basic ", Auth/binary>>] ->
 	    check(Htx, Auth, This);
-	_ -> 
+	_ ->
 	    challenge(Htx)
     end.
 
@@ -41,14 +41,12 @@ challenge(Htx) ->
 
 check(Htx, Auth, This) ->
     String = base64:mime_decode(Auth),
-    {Username, <<$:, Password/binary>>} = hty_util:until(String, $:),
+    {Username, <<$:, Password/binary>>} = hty_scan:until(String, $:),
     Realm = Htx:realm(),
     case Realm:auth(Username, Password) of
-	{ok, Principal} -> 
+	{ok, Principal} ->
 	    Htx1 = Htx:principal(Principal),
 	    Htx1:dispatch(This#hty_basicauth_resource.subs);
-	no -> 
+	no ->
 	    challenge(Htx)
     end.
-													
-													
