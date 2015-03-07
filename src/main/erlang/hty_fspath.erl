@@ -7,7 +7,7 @@
 -export([new/1, new/2]).
 
 -export([exists/1, isdir/1, mkdir/1, last_modified/1]).
--export([match/2, walk/2, walk/3, subs/2, subs/3, list/1, list/2, parts/1, prefix/1, ext/1, subpath/2]).
+-export([list/1, list/2, parts/1, prefix/1, ext/1, subpath/2]).
 
 -export([send/2, recv/3, load/1, save/2, append/2]).
 
@@ -38,23 +38,7 @@ last_modified(This) ->
   Fs = fs(This),
   hty_log:iso8601(Fs:last_modified(path(This))).
 
-match(Rules, This) ->
-    match(Rules, Rules, This).
 
-match([], Allrules, This) ->
-    {no, orphan, path(This), Allrules};
-match([Rule|Rules], Allrules, This) ->
-    Path = path(This),
-    case Rule:match(This, Allrules) of
-	{claim, Response} ->
-	    {ok, Response, Path, Rule};
-	block ->
-	    {no, blocked, Path, Rule};
-	{block, Why} ->
-	    {no, {blocked, Why}, Path, Rule};
-	next ->
-	    match(Rules, Allrules, This)
-    end.
 
 list(This) ->
     Path = path(This),
@@ -68,25 +52,7 @@ list(This) ->
 list(Filter, This) ->
     lists:filter(Filter, list(This)).
 
-walk(Rules, This) ->
-	walk(Rules, none, This).
 
-walk(Rules, Filter, This) ->
-    List = case Filter of
-	       none -> list(This);
-	       Filter1 -> list(Filter1, This)
-	   end,
-    lists:map(fun(Fscursor) ->
-		      Fscursor:match(Rules)
-	      end, List).
-
-subs(Rules, This) ->
-    subs(Rules, none, This).
-subs(Rules, Filter, This) ->
-    lists:flatmap(fun({ok, {resource, R}, _, _}) -> [R];
-		     (Other) ->
-			  io:format("subs:~p~n", [Other]), []
-		  end, walk(Rules, Filter, This)).
 
 
 fs(This) ->

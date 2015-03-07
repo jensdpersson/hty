@@ -5,12 +5,14 @@
 -export([reload/1, status/0]).
 
 %External API
-reload(Fscursor) ->
+reload(Fspath) ->
     Rules = [
 	     hty_listen_rule,
 	     hty_site_rule
 	    ],
-    Cfg = Fscursor:walk(Rules),
+    Transforms = [],
+    Walker = hty_walker:new(Fspath, Rules, Transforms),
+    Cfg = Walker:walk(),
     io:format("Reloading configuration ~p~n", [Cfg]),
     Sort = fun(Item, {Ls, Ss, Is}) ->
 		   case Item of
