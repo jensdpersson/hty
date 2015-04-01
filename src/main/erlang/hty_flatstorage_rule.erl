@@ -10,13 +10,13 @@
 %%
 %% Exported Functions
 %%
--export([match/2]).
+-export([match/1]).
 
 %%
 %% API Functions
 %%
-match(Fspath, _) ->
-	%Fspath = Walker:fspath(),
+match(Walker) ->
+	Fspath = Walker:fspath(),
 	case lists:reverse(Fspath:parts()) of
 		["flat"|_] ->
 			Tofs = fun(Uripath) ->

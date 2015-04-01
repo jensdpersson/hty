@@ -10,17 +10,16 @@
 %%
 %% Exported Functions
 %%
--export([match/2]).
+-export([match/1]).
 
 %%
 %% API Functions
 %%
-match(Fspath, Rules) ->
+match(Walker) ->
+	Fspath = Walker:fspath(),
 	case lists:reverse(Fspath:parts()) of
 		["basicauth"|_] ->
-			Subs = lists:flatmap(fun({ok, {resource, R}, _, _}) -> [R];
-														 (_) -> []
-													 end, Fspath:walk(Rules)),
+			Subs = Walker:subs(),
 			{claim, {resource, hty_basicauth_resource:new(Subs)}};
 		_ ->
 			next
@@ -30,4 +29,3 @@ match(Fspath, Rules) ->
 %%
 %% Local Functions
 %%
-

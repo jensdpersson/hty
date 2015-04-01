@@ -387,6 +387,7 @@ log(This) ->
 log(Event, Data, This) ->
     Log = log(This),
     Context = ndc_peek(This),
+		io:format("APA ~p", [Context]),
     Category = atom_to_list(element(1, Context)),
     This#hty_tx{log=[{Category,hty_log:tstamp(),Event,Data}|Log]}.
 
@@ -429,8 +430,10 @@ dispatch(Resources, This) ->
 					           Htx5 = Htx:ndc_push(Resource),
 					           {break, Htx5:server_error(Error)};
 							   error:Error ->
-								     Htx5 = Htx:ndc_push(Resource),
-								     {break, Htx5:server_error(Error)}
+										 Trace = erlang:get_stacktrace(),
+										 io:format("Dispatch caught ~p ~p~n", [Error, Trace]),
+								     %Htx5 = Htx:ndc_push(Resource),
+								     {break, Htx:server_error(atom_to_list(Error))}
 				     end
 		    end,
 		case hty_util:fold(F, This, Resources) of

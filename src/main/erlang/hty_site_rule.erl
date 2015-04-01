@@ -1,11 +1,12 @@
 -module(hty_site_rule).
 
--export([match/2]).
+-export([match/1]).
 
-match(Fspath, _) ->
+match(Walker) ->
+  Fspath = Walker:fspath(),
     case Fspath:parts() of
-	[Site, "site"] -> 
-	    Subs = Fspath:subs([hty_rules_rule]),
+	[Site, "site"] ->
+	    Subs = (Walker:rules([hty_rules_rule])):subs(),
 	    {claim, {site, Site, hty_union_resource:new(Subs)}};
 	_ -> next
-    end. 
+    end.

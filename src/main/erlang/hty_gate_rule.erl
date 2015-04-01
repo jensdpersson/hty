@@ -10,16 +10,17 @@
 %%
 %% Exported Functions
 %%
--export([match/2]).
+-export([match/1]).
 
 %%
 %% API Functions
 %%
 
-match(Fspath, Rules) ->
+match(Walker) ->
+  Fspath = Walker:fspath(),
     case lists:reverse(Fspath:parts()) of
 	["gate"|Rest] ->
-	    Subs = Fspath:subs(Rules),
+	    Subs = Walker:subs(),
 	    case Rest of
 		[] ->
 		    Lookup = fun segment_lookup/1,

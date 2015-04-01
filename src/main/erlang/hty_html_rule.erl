@@ -10,12 +10,13 @@
 %%
 %% Exported Functions
 %%
--export([match/2]).
+-export([match/1]).
 
 %%
 %% API Functions
 %%
-match(Fspath, _Rules) ->
+match(Walker) ->
+  Fspath = Walker:fspath(),
     case Fspath:ext() of
 	"html" ->
 	    {claim, {resource, hty_sendfile_resource:new("text/html", Fspath)}};
@@ -27,4 +28,3 @@ match(Fspath, _Rules) ->
 %%
 %% Local Functions
 %%
-

@@ -9,7 +9,7 @@
 -export([exists/1, isdir/1, mkdir/1, last_modified/1]).
 -export([list/1, list/2, parts/1, prefix/1, ext/1, subpath/2]).
 
--export([send/2, recv/3, load/1, save/2, append/2]).
+-export([send/2, recv/3, load/1, save/2, append/2, path/1]).
 
 -export([basename/1, parent/1]).
 

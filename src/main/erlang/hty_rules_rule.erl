@@ -10,18 +10,19 @@
 %%
 %% Exported Functions
 %%
--export([match/2]).
+-export([match/1]).
 
 %%
 %% API Functions
 %%
 
-match(Fspath, Allrules) ->
+match(Walker) ->
+  Fspath = Walker:fspath(),
     case lists:reverse(Fspath:parts()) of
 	["rules", Rules|_] ->
-	    case change_rules(Rules, Allrules) of
+	    case change_rules(Rules, Walker:rules()) of
 		{ok, Rules2} ->
-		    Subs = Fspath:subs(Rules2),
+		    Subs = (Walker:rules(Rules2)):subs(),
 		    {claim, {resource, hty_union_resource:new(Subs)}};
 		{no, _} ->
 		    {block, badrules}
@@ -44,4 +45,3 @@ change_rules(Prefix, Rules0) ->
 %%
 %% Local Functions
 %%
-

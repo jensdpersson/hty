@@ -10,16 +10,17 @@
 %%
 %% Exported Functions
 %%
--export([match/2]).
+-export([match/1]).
 %%
 %% API Functions
 %%
-match(Fspath, Rules) ->
+match(Walker) ->
+	Fspath = Walker:fspath(),
 	case lists:reverse(Fspath:parts()) of
 		["realm", Module|_] ->
 			Subs = lists:flatmap(fun({ok, {resource, R}, _, _}) -> [R];
 														 (_) -> []
-													 end, Fspath:walk(Rules)),
+													 end, Walker:walk()),
 			{claim, {resource, hty_realm_resource:new(list_to_atom(Module), Subs)}};
 		_ ->
 			next
@@ -29,4 +30,3 @@ match(Fspath, Rules) ->
 %%
 %% Local Functions
 %%
-

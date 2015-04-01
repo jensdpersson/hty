@@ -14,7 +14,7 @@ handle(Htx, This) ->
         [Filename|_] ->
             case Htx:method() of
                 'GET' ->
-                    ascend(Htx, Below, This#hty_override_resource.folder);
+                    ascend(Htx, Below, This);
                  _ ->
                     Htx:method_not_allowed(['GET'])
             end;
@@ -33,7 +33,7 @@ ascend(Htx, Path, This) ->
 	false ->
 	    case lists:reverse(Path) of
 		[] -> Htx:not_found();
-		[_|Ps] ->    
+		[_|Ps] ->
 		    ascend(Htx, lists:reverse(Ps), This)
 	    end
-    end. 
+    end.

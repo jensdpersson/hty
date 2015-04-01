@@ -22,6 +22,7 @@ new(Content, Statusmap) ->
 handle(Htx, This) ->
     Htx1 = Htx:dispatch([This#hty_status_resource.content]),
     {Status, _} = Htx1:status(),
+    io:format("Status ~p in ~p~n", [Status, This#hty_status_resource.statusmap]),
     case lists:keyfind(Status, 1, This#hty_status_resource.statusmap) of
 	false ->
 	    Htx1;
@@ -32,4 +33,3 @@ handle(Htx, This) ->
 %%
 %% Local Functions
 %%
-

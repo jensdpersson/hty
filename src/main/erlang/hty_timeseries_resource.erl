@@ -10,7 +10,7 @@ new(Folder) ->
 handle(Htx, This) ->
     case Htx:method() of
 	     'GET' ->
-	        Filter = case Htx:path_below() of
+	        _Filter = case Htx:path_below() of
             [From, To] ->
               {hty_date:parse(From), hty_date:parse(To)};
             [From] ->
@@ -21,7 +21,7 @@ handle(Htx, This) ->
 	     'POST'->
 	        Now = hty_date:now(),
           Folder = This#hty_timeseries_resource.folder,
-          Folder1 = year(Now, Folder),
+          _Folder1 = year(Now, Folder),
           not_implemented
     end.
 

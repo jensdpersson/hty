@@ -10,15 +10,16 @@
 %%
 %% Exported Functions
 %%
--export([match/2]).
+-export([match/1]).
 
 %%
 %% API Functions
 %%
-match(Fspath, _Rules) ->
+match(Walker) ->
+	Fspath = Walker:fspath(),
 	case Fspath:ext() of
-		"dispatch" -> 
-			Subs = Fspath:subs(),
+		"dispatch" ->
+			Subs = Walker:subs(),
 			{claim, {resource, hty_union_resource:new(Subs)}};
 		_ ->
 			next
@@ -28,4 +29,3 @@ match(Fspath, _Rules) ->
 %%
 %% Local Functions
 %%
-

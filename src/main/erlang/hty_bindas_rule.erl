@@ -7,13 +7,14 @@
 %% ====================================================================
 %% API functions
 %% ====================================================================
--export([match/2]).
+-export([match/1]).
 
 
-match(Fspath, Rules) ->
+match(Walker) ->
+	Fspath = Walker:fspath(),
 	case Fspath:parts() of
 		["bind-as", Key] ->
-			Value = Fspath:subs(Rules),
+			Value = Walker:subs(),
 			{claim, {resource, hty_bind_resource:new(Key, Value, [])}};
 		_ ->
 			next
@@ -22,5 +23,3 @@ match(Fspath, Rules) ->
 %% ====================================================================
 %% Internal functions
 %% ====================================================================
-
-

@@ -13,7 +13,7 @@
 -export([fold/3,find/2]).
 -export([ltrim/1, rewind/2, fast_forward/2]).
 
--export([std_rule_match/4]).
+-export([std_rule_match/3]).
 -export([parse_key_value_list/1]).
 
 %%
@@ -66,14 +66,15 @@ ltrim(Binary) when is_binary(Binary) ->
 			ltrim(Rest);
 		<<$\r, Rest/binary>> ->
 			ltrim(Rest);
-		Other -> 
+		Other ->
 			Other
 	end.
 
-std_rule_match(Ext, Res, Fs, Rs) ->
+std_rule_match(Ext, Res, Walker) ->
+	Fs = Walker:fspath(),
 	case lists:reverse(Fs:parts()) of
 		[Ext, Param | _] ->
-			Subs = Fs:subs(Rs),
+			Subs = Walker:subs(),
 			{claim, {resource, Res:new(Param, Subs)}};
 		_ ->
 			next
@@ -88,4 +89,3 @@ parse_key_value_list(KeyValueList) ->
 %%
 %% Local Functions
 %%
-

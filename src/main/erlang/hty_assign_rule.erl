@@ -7,14 +7,15 @@
 %% ====================================================================
 %% API functions
 %% ====================================================================
--export([match/2]).
+-export([match/1]).
 
 
-match(Fspath, _Rules) ->
+match(Walker) ->
+	Fspath = Walker:fspath(),
 	case lists:reverse(Fspath:parts()) of
 		["assign", Assignments|_] ->
 			Asses = hty_util:parse_key_value_list(Assignments),
-			Subs = Fspath:subs(),
+			Subs = Walker:subs(),
 			{claim, {resource, hty_assign_resource:new(Asses, Subs)}};
 		_ ->
 			next
@@ -23,5 +24,3 @@ match(Fspath, _Rules) ->
 %% ====================================================================
 %% Internal functions
 %% ====================================================================
-
-

@@ -11,7 +11,7 @@
 %%
 %% Exported Functions
 %%
--export([match/2]).
+-export([match/1]).
 
 
 %%
@@ -20,7 +20,8 @@
 
 
 
-match(Fspath, _Rules) ->
+match(Walker) ->
+  Fspath = Walker:fspath(),
     case Fspath:ext() of
 	"static" ->
 	    {claim, {resource, hty_static_resource:new(Fspath)}};

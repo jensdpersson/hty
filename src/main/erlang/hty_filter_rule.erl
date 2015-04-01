@@ -10,15 +10,16 @@
 %%
 %% Exported Functions
 %%
--export([match/2]).
+-export([match/1]).
 
 %%
 %% API Functions
 %%
-match(Fspath, Rules) ->
+match(Walker) ->
+	Fspath = Walker:fspath(),
 	case Fspath:ext() of
 		"filter" ->
-			Walked = Fspath:walk(Rules, fun(X) -> "content" /= hd(X:parts()) end),
+			Walked = Walker:walk(fun(X) -> "content" /= hd(X:parts()) end),
 			Filters = lists:flatmap(
 						  fun(Item) ->
 								  case Item of
@@ -28,8 +29,8 @@ match(Fspath, Rules) ->
 										  []
 								  end
 						  end, Walked),
-			case Fspath:walk(Rules, fun(X) -> "content" == hd(X:parts()) end) of
-				[{ok,{resource, Resource},_,_}] -> 
+			case Walker:walk(fun(X) -> "content" == hd(X:parts()) end) of
+				[{ok,{resource, Resource},_,_}] ->
 					io:format("Resource:~p~n", [Resource]),
 					Rv = hty_filter_resource:new(Filters, Resource),
 					{claim, {resource, Rv}};
@@ -37,7 +38,7 @@ match(Fspath, Rules) ->
 					block;
 				_ ->
 					block
-			end;	
+			end;
 		_ ->
 			next
 	end.
@@ -46,4 +47,3 @@ match(Fspath, Rules) ->
 %%
 %% Local Functions
 %%
-

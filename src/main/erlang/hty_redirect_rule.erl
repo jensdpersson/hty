@@ -10,13 +10,14 @@
 %%
 %% Exported Functions
 %%
--export([match/2]).
+-export([match/1]).
 
 %%
 %% API Functions
 %%
 
-match(Fspath, _Rules) ->
+match(Walker) ->
+	Fspath = Walker:fspath(),
 	case Fspath:ext() of
 		"redirect" ->
 			case create(Fspath) of

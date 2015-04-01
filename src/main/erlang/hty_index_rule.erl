@@ -10,27 +10,27 @@
 %%
 %% Exported Functions
 %%
--export([match/2]).
+-export([match/1]).
 
 %%
 %% API Functions
 %%
-match(Fspath, Rules) ->
+match(Walker) ->
+	Fspath = Walker:fspath(),
 	case Fspath:prefix() of
 		"index" ->
-			Rules1 = Rules -- [?MODULE],
-			case Fspath:match(Rules1) of
+			Walker2 = Walker:rules(Walker:rules() -- [?MODULE]),
+			case Walker2:match() of
 				{ok, {resource, Resource}, _, _} ->
 					Rv = hty_index_resource:new(Fspath, Resource),
 					{claim, {resource, Rv}};
 				{no, Reason, _, _} ->
 					{block, Reason}
 			end;
-		_ -> 
+		_ ->
 			next
 	end.
 
 %%
 %% Local Functions
 %%
-

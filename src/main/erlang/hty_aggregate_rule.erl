@@ -7,12 +7,13 @@
 %% ====================================================================
 %% API functions
 %% ====================================================================
--export([match/2]).
+-export([match/1]).
 
-match(Fspath, Rules) ->
+match(Walker) ->
+	Fspath = Walker:fspath(),
 	case lists:reverse(Fspath:parts()) of
 		["aggregate", RootElm|_] ->
-			Subs = Fspath:subs(Rules),
+			Subs = Walker:subs(),
 			{claim, {resource, {hty_aggregate_resource, RootElm, Subs}}};
 		_ ->
 			next
@@ -21,5 +22,3 @@ match(Fspath, Rules) ->
 %% ====================================================================
 %% Internal functions
 %% ====================================================================
-
-

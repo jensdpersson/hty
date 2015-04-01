@@ -7,9 +7,10 @@
 %% ====================================================================
 %% API functions
 %% ====================================================================
--export([match/2]).
+-export([match/1]).
 
-match(Fspath, _Rules) ->
+match(Walker) ->
+	Fspath = Walker:fspath(),
 	case lists:reverse(Fspath:parts()) of
 		["bound", Key|_] ->
 			{claim, {resource, hty_bound_resource:new(Key)}};
@@ -19,5 +20,3 @@ match(Fspath, _Rules) ->
 %% ====================================================================
 %% Internal functions
 %% ====================================================================
-
-

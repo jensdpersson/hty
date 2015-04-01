@@ -1,6 +1,6 @@
 %% Author: jens
 %% Created: 18 dec 2012
-%% Description: TODO: Add description to hty_public_resource
+%% Description:
 -module(hty_sendfile_resource).
 
 %%
@@ -31,8 +31,8 @@ handle(Htx, This) ->
 		%_ ->
 		%    Htx:not_found()
 	    %end;
-	_Method -> 
-	    Htx:method_not_allowed(['GET']) %parametern är för att skriva en korrekt Allow-header
+	_Method ->
+	    Htx:method_not_allowed(['GET']) 
     end.
 
 %%

@@ -10,32 +10,32 @@
 %%
 %% Exported Functions
 %%
--export([match/2]).
+-export([match/1]).
 
 %%
 %% API Functions
 %%
-match(Fspath, Rules) ->
+match(Walker) ->
+  Fspath = Walker:fspath(),
     case Fspath:ext() of
 	"status" ->
 	    Content = fun(Fspath1) ->
 			      case Fspath1:parts() of
-				  ["content"|_] -> 
+				  ["content"|_] ->
 				      true;
 				  _ -> false
 			      end
 		      end,
-	    case Fspath:walk(Rules, Content) of
+	    case Walker:walk(Content) of
 		[{ok, {resource, Subresource}, _, _}] ->
 		    Resource = hty_status_resource:new(Fspath, Subresource),
 		    {claim, {resource, Resource}};
 		Que ->
 		    {block, {badwalk, Que}}
-	    end;		
+	    end;
 	_ -> next
     end.
 
 %%
 %% Local Functions
 %%
-

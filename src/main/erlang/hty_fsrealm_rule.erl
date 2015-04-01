@@ -10,15 +10,16 @@
 %%
 %% Exported Functions
 %%
--export([match/2]).
+-export([match/1]).
 
 %%
 %% API Functions
 %%
-match(Fspath, Rules) ->
+match(Walker) ->
+  Fspath = Walker:fspath(),
     case lists:reverse(Fspath:parts()) of
 	["fsrealm", Name | _] ->
-	    Subs = Fspath:subs(Rules),
+	    Subs = Walker:subs(),
 	    Realm = hty_fsrealm:new(Name, Fspath),
 	    Res = hty_realm_resource:new(Realm, Subs),
 	    {claim, {resource, Res}};
@@ -30,4 +31,3 @@ match(Fspath, Rules) ->
 %%
 %% Local Functions
 %%
-

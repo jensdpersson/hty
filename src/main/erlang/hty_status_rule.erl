@@ -10,12 +10,13 @@
 %%
 %% Exported Functions
 %%
--export([match/2]).
+-export([match/1]).
 
 %%
 %% API Functions
 %%
-match(Fspath, Rules) ->
+match(Walker) ->
+  Fspath = Walker:fspath(),
     case Fspath:ext() of
 	"status" ->
 	    Statusmap = lists:flatmap(fun(File) ->
@@ -24,7 +25,7 @@ match(Fspath, Rules) ->
 						  {'EXIT', _} ->
 						      [];
 						  Integer ->
-						      case File:match(Rules) of
+						      case (Walker:fspath(File)):match() of
 							  {ok, {resource, Resource},_,_} ->
 							      [{Integer, Resource}];
 							  {no, _, _, _} ->
@@ -40,7 +41,7 @@ match(Fspath, Rules) ->
               _ -> false
             end
       end,
-	    [{ok, {resource, Content}, _, _}] = Fspath:walk(Rules, F),
+	    [{ok, {resource, Content}, _, _}] = Walker:walk(F),
 	    {claim, {resource, hty_status_resource:new(Content, Statusmap)}};
 	_ -> next
     end.

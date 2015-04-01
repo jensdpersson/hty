@@ -10,15 +10,16 @@
 %%
 %% Exported Functions
 %%
--export([match/2]).
+-export([match/1]).
 
 %%
 %% API Functions
 %%
-match(Fspath, Rules) ->
+match(Walker) ->
+	Fspath = Walker:fspath(),
 	case Fspath:ext() of
 		"union" ->
-			{claim, {resource, assemble(Fspath, Rules)}};
+			{claim, {resource, assemble(Walker)}};
 		_ ->
 			next
 	end.
@@ -27,8 +28,9 @@ match(Fspath, Rules) ->
 %%
 %% Local Functions
 %%
-assemble(Fspath, Rules) ->
-	Subs = Fspath:walk(Rules),
+assemble(Walker) ->
+	
+	Subs = Walker:walk(),
 	%A list of {ok, Res, Path, Rule}|{no, Reason...}
     %Sort the OKs after prefix Number segment.
 	%create a union resource instance

@@ -16,12 +16,12 @@
 %% API Functions
 %%
 empty_chain_test() ->
-	Dut = hty_filter_resource:new([], hty_echo_resource),
+	Dut = hty_filter_resource:new(hty_echo_resource, []),
 	Htx = mockhtx,
 	Htx = Dut:handle(Htx).
 
 noop_filter_test() ->
-	Dut = hty_filter_resource:new([hty_noop_filter], hty_echo_resource),
+	Dut = hty_filter_resource:new(hty_echo_resource, [hty_noop_filter]),
 	Htx = mockhtx,
 	Htx = Dut:handle(Htx).
 
@@ -29,4 +29,3 @@ noop_filter_test() ->
 %%
 %% Local Functions
 %%
-

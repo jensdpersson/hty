@@ -22,11 +22,10 @@ decode_test() ->
 
 decode2_test() ->
 	Input = <<"LIM%5Br%e4ksm%f6rg%e5s/%5DBOLLHAV">>,
-	Facit = <<"LIM[räksmörgås/]BOLLHAV">>,
+	Facit = <<"LIM[rÃ¤ksmÃ¶rgÃ¥s/]BOLLHAV">>,
 	Facit = hty_percentencoding:decode(Input).
 
 
 %%
 %% Local Functions
 %%
-

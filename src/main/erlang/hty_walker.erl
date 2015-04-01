@@ -15,11 +15,17 @@
 
 -record(hty_walker, {fspath, rules=[], transforms=[]}).
 
--export([new/3, rules/1, rules/2, transforms/1, transforms/2]).
--export([match/2, walk/1, walk/2, subs/2, subs/3]).
+-export([new/3, fspath/1,fspath/2, rules/1, rules/2, transforms/1, transforms/2]).
+-export([match/1, walk/1, walk/2, subs/1, subs/2]).
 
 new(Fspath, Rules, Transforms) ->
   #hty_walker{fspath=Fspath, rules=Rules, transforms=Transforms}.
+
+fspath(This) ->
+  This#hty_walker.fspath.
+
+fspath(Fspath, This) ->
+  This#hty_walker{fspath=Fspath}.
 
 rules(This) ->
   This#hty_walker.rules.
@@ -35,13 +41,13 @@ transforms(Transforms, This) ->
 
 match(This) ->
   Rules = This:rules(),
-  rec_match(Rules, Rules, This).
+  rec_match(Rules, This).
 
-rec_match([], Allrules, This) ->
-  {no, orphan, path(This), Allrules};
-rec_match([Rule|Rules], Allrules, This) ->
+rec_match([], This) ->
+  {no, orphan, path(This), This:rules()};
+rec_match([Rule|Rules], This) ->
       Path = path(This),
-      case Rule:match(This, Allrules) of
+      case Rule:match(This) of
     {claim, Response} ->
         {ok, Response, Path, Rule};
     block ->
@@ -49,9 +55,11 @@ rec_match([Rule|Rules], Allrules, This) ->
     {block, Why} ->
         {no, {blocked, Why}, Path, Rule};
     next ->
-        match(Rules, Allrules, This)
+        rec_match(Rules, This)
       end.
 
+path(This) ->
+  (This#hty_walker.fspath):path().
 
 walk(This) ->
     walk(none, This).
@@ -62,8 +70,8 @@ walk(Filter, This) ->
            none -> Fspath:list();
            Filter1 -> Fspath:list(Filter1)
     end,
-    lists:map(fun(Fspath) ->
-            (hty_walker:fspath(Fspath)):match()
+    lists:map(fun(Fspath2) ->
+            (This:fspath(Fspath2)):match()
           end, List).
 
 subs(This) ->

@@ -10,13 +10,13 @@
 %%
 %% Exported Functions
 %%
--export([match/2]).
+-export([match/1]).
 
 %%
 %% API Functions
 %%
-match(Fspath, Rules) ->
-	hty_util:std_rule_match("shift", hty_shift_resource, Fspath, Rules).
+match(Walker) ->
+	hty_util:std_rule_match("shift", hty_shift_resource, Walker).
 
 
 %%

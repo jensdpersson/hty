@@ -10,12 +10,13 @@
 %%
 %% Exported Functions
 %%
--export([match/2]).
+-export([match/1]).
 
 %%
 %% API Functions
 %%
-match(Fspath, _Rules) ->
+match(Walker) ->
+  Fspath = Walker:fspath(),
     case Fspath:parts() of
 	[Siteref, "siteref"] ->
 	    {claim, {resource, hty_siteref_resource:new(Siteref)}};
@@ -26,4 +27,3 @@ match(Fspath, _Rules) ->
 %%
 %% Local Functions
 %%
-

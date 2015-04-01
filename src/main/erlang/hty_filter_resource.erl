@@ -20,14 +20,14 @@ new(Resource, Filters) ->
     #hty_filter_resource{resource=Resource,filters=Filters}.
 
 handle(Htx, This) ->
-    F = fun(Module, Next) -> 
-		Module:new(Next)
-	end, 
-    Chain = lists:foldl(F, This#hty_filter_resource.resource, This#hty_filter_resource.filters),
+    F = fun(Module, Next) ->
+		    Module:new(Next)
+	  end,
+    Chain = lists:foldl(F,
+                  This#hty_filter_resource.resource,
+                  This#hty_filter_resource.filters),
     Chain:handle(Htx).
 
 %%
 %% Local Functions
 %%
-
-

@@ -1,13 +1,13 @@
 -module(hty_forceget_rule).
 
--export([match/2]).
+-export([match/1]).
 
-match(Fspath, Rules) ->
+match(Walker) ->
+  Fspath = Walker:fspath(),
     case Fspath:ext() of
 	"forceget" ->
-	    Subs = Fspath:subs(Rules),
+	    Subs = Walker:subs(),
 	    {claim, {resource, hty_forceget_resource:new(Subs)}};
 	_ ->
 	    next
     end.
-    

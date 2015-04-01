@@ -10,12 +10,13 @@
 %%
 %% Exported Functions
 %%
--export([match/2]).
+-export([match/1]).
 
 %%
 %% API Functions
 %%
-match(Fspath, _Rules) ->
+match(Walker) ->
+	Fspath = Walker:fspath(),
 	case Fspath:ext() of
 		"listing" ->
 			Basename = Fspath:basename(),
@@ -28,4 +29,3 @@ match(Fspath, _Rules) ->
 %%
 %% Local Functions
 %%
-

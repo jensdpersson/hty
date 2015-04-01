@@ -19,10 +19,8 @@ binder_noschema_test() ->
 	Schema = free,
 	Dut = hty_spaf:binder(Schema),
 	%lists:foldl(Dut, [kv...kv...kv..eos])
-	%kolla slutvärdet så alla fält är med.
 	fail_with = Dut.
 
 %%
 %% Local Functions
 %%
-
