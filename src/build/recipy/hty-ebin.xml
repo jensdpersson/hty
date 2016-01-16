@@ -1,13 +1,4 @@
 <folder name="ebin" xmlns="http://recipy.hoverview.org/default"
                     xmlns:e="http://recipy.hoverview.org/erlang">
-  <e:beamfiles src="src/main/behaviours/*"/>
-  <e:beamfiles>
-    <e:includes>
-      <copies of="src/main/hrl/*"/>
-    </e:includes>
-    <e:codepathprefix>
-      <e:beamfiles src="src/main/behaviours/*"/>
-    </e:codepathprefix>
-    <e:flags>+debug_info</e:flags>
-  </e:beamfiles>
+  <artifact name="beamfiles"/>
 </folder>

@@ -19,59 +19,59 @@ new(Fspath, DiskFormat) ->
     #hty_history_resource{fspath=Fspath, diskformat=DiskFormat}.
 
 handle(Htx0, This) ->
-    Method = Htx0:method(),
-    Fspath = This#hty_history_resource.fspath,
-    DiskFormat = This#hty_history_resource.diskformat,
-    case Htx0:path_below() of
-	[] ->
+  Method = Htx0:method(),
+  Fspath = This#hty_history_resource.fspath,
+  DiskFormat = This#hty_history_resource.diskformat,
+  case Htx0:path_below() of
+	  [] ->
 	    case Method of
-		'GET' ->
-		    Htx1 = Htx0:bind("xslpi_choice", "list"),
-		    hty_listing:list(Htx1, Fspath, [last_modified]);
-		'POST' ->
-		    Htx0:method_not_allowed(['GET'])
-	    end;
-	[Segment] ->
-	    Htx = Htx0:bind("xslpi_choice", "doc"),
+		    'GET' ->
+		      Htx1 = Htx0:bind("xslpi_choice", "list"),
+		      hty_listing:list(Htx1, Fspath, [last_modified]);
+		    'POST' ->
+		      Htx0:method_not_allowed(['GET'])
+      end;
+	  [Segment] ->
+      Htx = Htx0:bind("xslpi_choice", "doc"),
 	    Fspath1 = Fspath:subpath([Segment]),
 	    Rev = Htx:matrix(<<"rev">>),
 	    io:format("Processing ~p", [Segment]),
 	    case Rev of
-		no ->
-		    io:format("~n"),
-		    case tip(Fspath1) of
-			nofile ->
-			    case Method of
-				'GET' ->
-				    Htx:not_found();
-				'POST' ->
-				    Fspath1:mkdir(),
-				    save(Htx, "0", Fspath1, DiskFormat)
-			    end;
-			notip ->
-			    redirect(Htx, "0");
-			noread ->
-			    Htx:server_error("FailedReadingTip");
-			Tip ->
+		    no ->
+		      io:format("~n"),
+		      case tip(Fspath1) of
+			      nofile ->
+			        case Method of
+				        'GET' ->
+				          Htx:not_found();
+				        'POST' ->
+				          Fspath1:mkdir(),
+				          save(Htx, "0", Fspath1, DiskFormat)
+			        end;
+			      notip ->
+			        redirect(Htx, "0");
+			      noread ->
+			        Htx:server_error("FailedReadingTip");
+			  Tip ->
 			    redirect(Htx, Tip)
-		    end;
+		  end;
 		_ ->
-		    io:format(";rev=~p~n", [Rev]),
-		    Fspath2 = Fspath1:subpath([binary_to_list(Rev) ++ ".data"]),
-		    case Method of
-			'GET' ->
+		  io:format(";rev=~p~n", [Rev]),
+		  Fspath2 = Fspath1:subpath([binary_to_list(Rev) ++ ".data"]),
+		  case Method of
+			  'GET' ->
 			    case Fspath2:exists() of
-				true ->
-				    Htx1 = Htx:ok(),
-				    Htx2 = Htx1:rsp_header("Content-Type", "application/xml"),
-				    Fspath2:recv(Htx2);
-				false ->
-				    case tip(Fspath1) of
-					nofile ->
+				    true ->
+				      Htx1 = Htx:ok(),
+				      Htx2 = Htx1:rsp_header("Content-Type", "application/xml"),
+				      Fspath2:recv(Htx2);
+				    false ->
+				      case tip(Fspath1) of
+					  nofile ->
 					    Htx:not_found();
-					notip ->
+					  notip ->
 					    Htx:not_found();
-					noread ->
+					  noread ->
 					    Htx:server_error("FailedReadingTip");
 					Tip ->
 					    redirect(Htx, Tip)

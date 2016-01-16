@@ -1,18 +1,48 @@
 % @doc Entry point and central hub for the Haughty web server.
 -module(hty_main).
 
+-export([main/1]).
 -export([start/0]).
 -export([reload/1, status/0]).
 
-%External API
+loop_cli() ->
+    receive
+	     stop -> ok
+    after 10000 ->
+	    loop_cli()
+    end.
+
+print(M) -> io:format(M), io:format("~n").
+
+main(Argv) ->
+  case hty_ctl:start(Argv) of
+	   {ok,started} ->
+        print(os:getpid()),
+	      loop_cli();
+	   {no, Error} ->
+	      print(Error);
+	   {error, Error} ->
+	      print(Error)
+  end.
+
+
 reload(Fspath) ->
-    Rules = [
-	     hty_listen_rule,
-	     hty_site_rule
-	    ],
-    Transforms = [],
-    Walker = hty_walker:new(Fspath, Rules, Transforms),
-    Cfg = Walker:walk(),
+  Rules = [
+     hty_listen_rule,
+     hty_site_rule
+    ],
+  Transforms = [],
+  Walker = hty_walker:new(Fspath, Rules, Transforms),
+  Cfg = Walker:walk(),
+  reconfigure(Cfg).
+
+
+mount(Fspath) ->
+  Parent = hty_root_directive:new(),
+  reconfigure(hty_mounter:mount(Parent, Fspath)).
+
+reconfigure(Cfg) ->
+
     io:format("Reloading configuration ~p~n", [Cfg]),
     Sort = fun(Item, {Ls, Ss, Is}) ->
 		   case Item of
