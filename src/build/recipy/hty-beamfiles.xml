@@ -1,7 +1,7 @@
 <recipe xmlns="http://recipy.hoverview.org/default"
                     xmlns:e="http://recipy.hoverview.org/erlang">
   <e:beamfiles src="src/main/behaviours/*"/>
-  <e:beamfiles>
+  <e:beamfiles src="src/main/erlang">
     <e:includes>
       <copies of="src/main/hrl/*"/>
     </e:includes>

@@ -42,7 +42,6 @@ mount(Fspath) ->
   reconfigure(hty_mounter:mount(Parent, Fspath)).
 
 reconfigure(Cfg) ->
-
     io:format("Reloading configuration ~p~n", [Cfg]),
     Sort = fun(Item, {Ls, Ss, Is}) ->
 		   case Item of
