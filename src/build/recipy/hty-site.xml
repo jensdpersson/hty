@@ -2,7 +2,7 @@
         xmlns:e="http://recipy.hoverview.org/erlang">
     <folder name="target">
         <artifact name="ebin"/>
-	      <folder name="site">
+        <folder name="site">
             <copies of="src/site"/>
             <folder name="edoc">
                 <e:edoc/>
@@ -10,6 +10,7 @@
             <folder name="test-results">
                 <artifact name="xsl" project="resultface"/>
                 <e:eunit-reports xslpi="resultface.xsl" ebin="target/ebin"/>
+                <index-xml xslpi="resultface-list.xsl" exclude=".*\.xsl"/>
             </folder>
             <artifact project="verdict" name="xslt"/>
             <artifact project="prosith" name="pkg"/>

@@ -13,12 +13,11 @@
 %%
 %% Exported Functions
 %%
--export([handle/2, new/1]).
+-export([handle/2, new/1, mount/1]).
 
 
-%%
-%% API Functions
-%%
+mount(Fspath) -> {ok, new(Fspath)}.
+
 new(Fspath) ->
   #hty_static_resource{fspath=Fspath}.
 

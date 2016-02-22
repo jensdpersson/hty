@@ -43,11 +43,15 @@ last_modified(This) ->
 list(This) ->
     Path = path(This),
     Fs = fs(This),
-    {ok, Names} = Fs:list(Path),
-    lists:map(fun(Name) ->
+    case Fs:list(Path) of
+      {ok, Names} ->
+        lists:map(fun(Name) ->
 		      Path2 = filename:join([Path,Name]),
 		      hty_fspath:new(Path2)
-	      end, Names).
+	      end, Names);
+      {error, enoent} ->
+        {error, {enoent, Path}}
+    end.
 
 list(Filter, This) ->
     lists:filter(Filter, list(This)).

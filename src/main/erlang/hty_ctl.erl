@@ -19,7 +19,7 @@ start([Path]) ->
 stop() ->
     hty_main ! {stop, self()},
     receive
-	stopping -> stopping
+	stopping -> ok
     after
 	10000 -> timeout
     end.

@@ -6,17 +6,17 @@
 
 new(Fspath) ->
   #hty_appendtree_resource{fspath=Fspath}.
-  
-handle(Htx, This) ->
-  case Htx:method() of 
+
+handle(Htx, _This) ->
+  case Htx:method() of
     'GET' -> serve(Htx);
     'POST' -> save(Htx);
     _ -> Htx:method_not_allowed(['GET', 'POST'])
   end.
-  
-  
-serve(Htx) ->
+
+
+serve(_Htx) ->
   notyet.
-  
-save(Htx) ->
+
+save(_Htx) ->
   notyet.

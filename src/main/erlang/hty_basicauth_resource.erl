@@ -4,10 +4,6 @@
 -module(hty_basicauth_resource).
 
 %%
-%% Include files
-%%
-
-%%
 %% Exported Functions
 %%
 -export([handle/2, new/1]).
@@ -18,18 +14,17 @@
 %% API Functions
 %%
 new(Subs) ->
-    #hty_basicauth_resource{subs=Subs}.
+  #hty_basicauth_resource{subs=Subs}.
 
 handle(Htx, This) ->
-    case Htx:req_header('Authorization') of
-	[] ->
-	    challenge(Htx);
-	[<<"Basic ", Auth/binary>>] ->
-	    check(Htx, Auth, This);
-	_ ->
-	    challenge(Htx)
-    end.
-
+  case Htx:req_header('Authorization') of
+    [] ->
+      challenge(Htx);
+    [<<"Basic ", Auth/binary>>] ->
+      check(Htx, Auth, This);
+    _ ->
+      challenge(Htx)
+  end.
 
 %%
 %% Local Functions

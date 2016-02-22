@@ -2,6 +2,6 @@
 <project-site title="Haughty HTTP Server" xmlns="http://prosith.hoverview.org">
     <section title="Documentation" href="about.html"/>
     <section title="EDoc" href="edoc/index.html"/>
-    <section title="Unit test results" href="test-results"/>
+    <section title="Unit test results" href="test-results/index.xml"/>
     <section title="Downloads" href="downloads"/>
 </project-site>

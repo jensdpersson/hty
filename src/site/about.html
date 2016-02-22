@@ -10,6 +10,31 @@
       A light weight scalable http server.
     </div>
     <div>
+    <div>
+      Loading model.
+      hty_main is invoked with a path parameter.
+      this folder is taken to be the root.
+      All content of the root is mapped as "servers".
+
+      Then they are started, they can also be stopped.
+
+      Some of these will be
+
+      hty_http_server:
+      walks all content and mounts it as "resources", dispatches http events
+
+      hty_site_server:
+      Will register a name in an actor to recv requests from siteref resources
+
+      hty_fswatch_server:
+      not sure.
+      dispatch requests of some sort based on changed files.
+
+      hty_cron_server: prolly the same
+
+      hty_code_server: adds its folder to code path and registers its prefix.
+
+    </div>
     <table>
     	<caption>Resource classes</caption>
     	<tr>
@@ -20,7 +45,7 @@
     		<td><a name="static">static</a></td>
     		<td>Issues a sendfile, using mime mapping in Htx if
                     a corresponding file exists on disk</td>
-    		
+
     	</tr>
     	</table>
     	</div>
