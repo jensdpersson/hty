@@ -28,7 +28,8 @@ mount2([Prefix|Prefixes], Suffix, Fails) ->
   end.
 
 walk(Fspath, Type) ->
-  walk2(Fspath:list(), Type, []).
+  Files = sort(Fspath:list()),
+  walk2(Files, Type, []).
 
 walk2([], _, Mounts) -> {ok, Mounts};
 walk2([Fspath|Fspaths], Type, Mounts) ->
@@ -45,3 +46,5 @@ walk2([Fspath|Fspaths], Type, Mounts) ->
 %    false ->
 %      dict:store(Key, [Value], Dict)
 %  end.
+
+sort(List) -> List.

@@ -56,6 +56,8 @@
 	 server_error/2,
 	 forbidden/1]).
 
+-export([commit/1, committed/1]).
+
 -export([realm/1,
 	 realm/2]).
 -export([principal/1,
@@ -97,7 +99,8 @@
 	  socketreader=no,
 	  ndc=[],
 	  log=[],
-	  unread=0}).
+	  unread=0,
+	  committed=false}).
 
 -type htx() :: {hty_tx, #hty_tx{}}.
 -export_type([htx/0]).
@@ -412,37 +415,35 @@ outs(This) -> This#hty_tx.outs.
 dispatch(Resource, This) when not is_list(Resource) ->
     dispatch([Resource], This);
 dispatch(Resources, This) ->
-		F = fun(Resource, Htx) ->
-			       try
-				   		  Htx1 = Htx:ndc_push(Resource),
-				        Htx2 = Resource:handle(Htx1),
-				        Htx3 = Htx2:ndc_pop(),
-				        case Htx3:status() of
-				           {404, _} ->
-					             {next, Htx3};
-				           {405, _} ->
-					             {next, Htx3};
-				                  _ ->
-					             {break, Htx3}
-				        end
-						 catch
-					       throw:Error ->
-					           Htx5 = Htx:ndc_push(Resource),
-					           {break, Htx5:server_error(Error)};
-							   error:Error ->
-										 Trace = erlang:get_stacktrace(),
-										 io:format("Dispatch caught ~p ~p~n", [Error, Trace]),
-								     %Htx5 = Htx:ndc_push(Resource),
-								     {break, Htx:server_error(atom_to_list(Error))}
-				     end
-		    end,
-		case hty_util:fold(F, This, Resources) of
-			{break, Rsp, _} -> Rsp;
-			{nobreak, Rsp} -> Rsp
-    end.
+  F = fun(Resource, Htx) ->
+    try
+      Htx1 = Htx:ndc_push(Resource),
+      Htx2 = Resource:handle(Htx1),
+      Htx3 = Htx2:ndc_pop(),
+      case Htx3:committed() of
+        false -> {next, Htx3};
+        true ->	{break, Htx3}
+      end
+    catch
+      throw:Error ->
+        Htx5 = Htx:ndc_push(Resource),
+        {break, Htx5:server_error(Error)};
+      error:Error ->
+        Trace = erlang:get_stacktrace(),
+        io:format("Dispatch caught ~p ~p~n", [Error, Trace]),
+        {break, Htx:server_error(atom_to_list(Error))}
+    end
+  end,
+  case hty_util:fold(F, This, Resources) of
+    {break, Rsp, _} -> Rsp;
+    {nobreak, Rsp} -> Rsp
+  end.
 
 realm(This) -> This#hty_tx.realm.
 realm(Realm, This) -> This#hty_tx{realm=Realm}.
 
 principal(This) -> This#hty_tx.principal.
 principal(Principal, This) -> This#hty_tx{principal=Principal}.
+
+commit(This) -> This#hty_tx{committed=true}.
+committed(This) -> This#hty_tx.committed.
