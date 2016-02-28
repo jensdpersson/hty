@@ -48,3 +48,16 @@ walk2([Fspath|Fspaths], Type, Mounts) ->
 %  end.
 
 sort(List) -> List.
+
+%assemble(FspathList) ->
+%	Cmp = fun compare/2,
+%	lists:sort(Cmp, FspathList).
+
+%extract_position(X1) ->
+%    [X2|_] = X1:parts(),
+%    list_to_integer(X2).
+
+%compare(A, B) ->
+%	A1 = extract_position(A),
+%	B1 = extract_position(B),
+%	A1 < B1.

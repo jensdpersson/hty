@@ -3,8 +3,11 @@
 -export([mount/1]).
 
 mount(Fspath) ->
-  case lists:reverse(Fspath:parts()) of
-    ["cond", Expression] ->
-      Conds = parse(Expression);
-    ["cond"] ->
-      Conds = ??
+  notyet.
+  %case lists:reverse(Fspath:parts()) of
+  %  ["cond", Expression] ->
+  %    Conds = 'parse(Expression);
+  %  ["cond"] ->
+  %    Conds = no
+  %e%nd,
+  %apa = lim.

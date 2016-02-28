@@ -8,7 +8,7 @@ do_test_() ->
   Tests = case file:list_dir(Basedir) of
     {ok, Fixtures} ->
       lists:map(fun(Fixture) ->
-        Etcdir = filename:join(["src", "test", "inte", Fixture, "cfg"]),
+        Etcdir = filename:join(["src", "test", "inte", Fixture, "fixture"]),
         Setup = fun() ->
           {ok, _} = hty_main:main(["-f", Etcdir])
         end,
