@@ -2,26 +2,20 @@
 -module(hty_storage_resource).
 -record(hty_storage_resource, {tofs}).
 
-%%
-%% Include files
-%%
-
-%%
-%% Exported Functions
-%%
 -export([handle/2, new/1, exists/2, get/2, put/4]).
+-export([mount/1]).
 
-%%
-%% API Functions
-%%
+mount(Fspath) ->
+  {ok, [Storage]} = hty_mounter:walk(Fspath, "storage"),
+  #hty_storage_resource{tofs=notyet}.
 
 new(Tofs) ->
-    #hty_storage_resource{tofs=Tofs}.
+  #hty_storage_resource{tofs=Tofs}.
 
 handle(Htx, This) ->
-    Tofs = This#hty_storage_resource.tofs,
-    Fspath = Tofs(Htx:path_below()),
-    case Fspath:is_dir() of
+  Tofs = This#hty_storage_resource.tofs,
+  Fspath = Tofs(Htx:path_below()),
+  case Fspath:is_dir() of
 	true ->
 	    case Htx:method() of
 		'GET' ->
@@ -72,7 +66,3 @@ put(PathBelow, Entity, ContentType, This) ->
     Htx = ((hty_tx_factory:new()):method('PUT')):path_below(PathBelow),
     Htx2 = (Htx:buffer(Entity)):req_header('Content-Type', ContentType),
     Htx2:dispatch(This).
-
-%%
-%% Local Functions
-%%
