@@ -1,8 +1,11 @@
 -module(hty_appendtree_resource).
 
--export([new/1, handle/2]).
+-export([new/1, handle/2, mount/1]).
 
 -record(hty_appendtree_resource, {fspath}).
+
+mount(Fspath) ->
+  {ok, new(Fspath)}.
 
 new(Fspath) ->
   #hty_appendtree_resource{fspath=Fspath}.

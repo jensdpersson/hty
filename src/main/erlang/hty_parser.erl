@@ -15,41 +15,41 @@ pack_header(HeaderName, HeaderValue) -> HeaderName ++ ": " ++ HeaderValue.
 respond(Socket, Htx) ->
     send_line(Socket, "HTTP/1.1 " ++ pack_status(Htx:status())),
     send_line(Socket, "Server: haughty 0.4"),
-    lists:foreach(fun({HName, HValue}) -> 
-			  send_line(Socket, pack_header(HName, HValue)) 
-		  end, Htx:rsp_headers()),
+    lists:foreach(fun({HName, HValue}) ->
+      send_line(Socket, pack_header(HName, HValue))
+    end, Htx:rsp_headers()),
     send_line(Socket, ""),
     lists:foreach(fun(Out) ->
-			  case Out of
-			      {file, Filepath} ->
-				  io:format("sendfile('~p')~n",[Filepath]),
-				  case file:sendfile(Filepath, Socket) of
-				      {ok, _BytesSent} ->
-					  io:format("Sendfile ok~n");
-				      {error, Reason} ->
-					  io:format("Sendfile fails with ~p~n", [Reason])	
-				  end;
-			      {data, IOList} ->
-				  io:format("data('~p')~n", [IOList]),
-				  gen_tcp:send(Socket, IOList)
-			  end
-		  end, lists:reverse(Htx:outs())).
+      case Out of
+        {file, Filepath} ->
+          io:format("sendfile('~p')~n",[Filepath]),
+          case file:sendfile(Filepath, Socket) of
+            {ok, _BytesSent} ->
+              io:format("Sendfile ok~n");
+            {error, Reason} ->
+              io:format("Sendfile fails with ~p~n", [Reason])
+          end;
+        {data, IOList} ->
+          io:format("data('~p')~n", [IOList]),
+          gen_tcp:send(Socket, IOList)
+      end
+    end, lists:reverse(Htx:outs())).
 
 send_line(Socket, Line) -> gen_tcp:send(Socket,  Line ++ "\r\n").
 
-parse(Socket) -> 
+parse(Socket) ->
     Htx0 = hty_tx:new(),
     parse_loop(Htx0, <<>>, fun method_parser/2, Socket).
 
 parse_loop(Htx, Unparsed, Parser, Socket) ->
     case Parser(Htx, Unparsed) of
-	{Htx1, Unparsed1, Parser1} -> 
+	{Htx1, Unparsed1, Parser1} ->
 	    parse_loop(Htx1, Unparsed1, Parser1, Socket);
-	more -> 
+	more ->
 	    recv(Htx, Unparsed, Parser, Socket);
-	{more, []} -> 
+	{more, []} ->
 	    recv(Htx, Unparsed, Parser, Socket);
-	{done, Htx1} -> 
+	{done, Htx1} ->
 	    Htx1:socketreader(hty_socketreader);
 	{error, Error} ->
 	    {error, Error}
@@ -64,9 +64,9 @@ recv(Htx, Unparsed, Parser, Socket) ->
        {tcp_closed, _} -> Htx
     end.
 
-method_parser(Htx, Data) -> 
+method_parser(Htx, Data) ->
     case token(Data, 32) of
-        {token, Method, Rest} -> 
+        {token, Method, Rest} ->
 					{Htx:method(canonical_method(Method)),Rest,fun path_parser/2};
         {more, _Token} -> more
     end.
@@ -77,7 +77,7 @@ canonical_method(<<"PUT">>) -> 'PUT';
 canonical_method(<<"DELETE">>) -> 'DELETE';
 canonical_method(<<"OPTIONS">>) -> 'OPTIONS';
 canonical_method(<<"HEAD">>) -> 'HEAD';
-canonical_method(Method) when is_binary(Method) -> 
+canonical_method(Method) when is_binary(Method) ->
 	list_to_atom(binary_to_list(Method)).
 
 path_parser(Htx, Data) ->
@@ -88,15 +88,15 @@ path_parser(Htx, Data) ->
 	    Htx1 = Htx:path(Pathzipper),
 	    {Htx1:queryparams(Query),
 	     Rest, fun protocol_parser/2};
-	{more, _Token} -> 
+	{more, _Token} ->
 	    more
     end.
 
 protocol_parser(Req, Data) ->
     case line(Data) of
-        {token, Protocol, Rest} -> 
+        {token, Protocol, Rest} ->
 	    {Req:protocol(Protocol),Rest,fun header_parser/2};
-        {more, _Token} -> 
+        {more, _Token} ->
 	    more
     end.
 
@@ -108,9 +108,9 @@ header_parser(Htx, Data) ->
     case token(Data, $:) of
         {token, Name, Data1} ->
             case line(Data1) of
-							{token, Value, Data2} -> 
+							{token, Value, Data2} ->
 								{
-								 Htx:req_header(list_to_atom(binary_to_list(Name)), 
+								 Htx:req_header(list_to_atom(binary_to_list(Name)),
 																hty_util:ltrim(Value)),
 								 Data2,
 								 fun header_parser/2};
@@ -127,14 +127,14 @@ body_parser(Htx, Data) ->
 get_content_length(Htx) ->
 	case Htx:req_header('Content-Length') of
 		[] -> -1;
-		[ContentLength] -> 
+		[ContentLength] ->
 				{Len, []} = string:to_integer(binary_to_list(ContentLength)),
 				io:format("Conlen [~p]~n",[ContentLength]),
 				Len
-				%{Htx, 
-				 %Data, 
-				 %fun (Htx1, Data1) -> 
-				%			assemble_body(Htx1, Data1, Len) 
+				%{Htx,
+				 %Data,
+				 %fun (Htx1, Data1) ->
+				%			assemble_body(Htx1, Data1, Len)
 				% end
 				%}
 	end.
@@ -149,13 +149,13 @@ get_content_length(Htx) ->
 %			 <<>>,
 %			 fun (Htx1, Data1) ->
 %						io:format("Len [~p]~n", [Len]),
-%						assemble_body(Htx1, Data1, Len - size(Data)) 
+%						assemble_body(Htx1, Data1, Len - size(Data))
 %			end}
 %	end.
 
 %Helpers
 token(Data, Delim) ->
-	{Token, Rest} = hty_scan:until(Data, Delim), 
+	{Token, Rest} = hty_scan:until(Data, Delim),
 	case Rest of
 		<<Delim:8/integer, Rest1/binary>> ->
 			{token, Token, Rest1};
@@ -163,9 +163,9 @@ token(Data, Delim) ->
 			{more, Token}
 	end.
 
-line(Data) -> 
+line(Data) ->
 	{Line, Rest} = hty_scan:until_either(Data, 13, 10),
-	case Rest of 
+	case Rest of
 		<<13, 10, R2/binary>> ->
 			{token, Line, R2};
 		<<13, R2/binary>> ->
@@ -186,8 +186,3 @@ line(Data) ->
 %line(Token, [10|Input]) -> {token, lists:reverse(Token), Input};
 %line(Token, [Char|Input]) -> line([Char|Token], Input);
 %line(Token, []) -> {more, Token, []}.
-
-
-
-
-

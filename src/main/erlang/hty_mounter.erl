@@ -29,9 +29,10 @@ mount2([Prefix|Prefixes], Suffix, Fails) ->
 
 walk(Fspath, Type) ->
   Files = sort(Fspath:list()),
+  io:format("Walking ~p~n", [Files]),
   walk2(Files, Type, []).
 
-walk2([], _, Mounts) -> {ok, Mounts};
+walk2([], _, Mounts) -> {ok, lists:reverse(Mounts)};
 walk2([Fspath|Fspaths], Type, Mounts) ->
   case mount(Fspath, Type) of
     {ok, Mount} ->
@@ -47,7 +48,7 @@ walk2([Fspath|Fspaths], Type, Mounts) ->
 %      dict:store(Key, [Value], Dict)
 %  end.
 
-sort(List) -> List.
+sort(List) -> lists:sort(List).
 
 %assemble(FspathList) ->
 %	Cmp = fun compare/2,

@@ -39,7 +39,7 @@ new(Fspath) ->
                       false -> []
                     end
                   end,
-                  L = ["index.html", "index.xml"],
+                  L = ["index.html", "index.xml", "index.txt"],
                   case lists:flatmap(F, L) of
                     [Welcome|_] ->
                       serve(Htx, Welcome);

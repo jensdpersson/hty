@@ -10,7 +10,7 @@ do_test_() ->
       lists:map(fun(Fixture) ->
         Etcdir = filename:join(["src", "test", "inte", Fixture, "fixture"]),
         Setup = fun() ->
-          {ok, _} = hty_main:main(["-f", Etcdir])
+          {ok, _} = hty_main:start([Etcdir])
         end,
         Teardown = fun(_) ->
           ok = hty_main:stop()

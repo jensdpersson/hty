@@ -2,7 +2,7 @@
 -module(hty_main).
 
 -export([main/1]).
--export([start/0, stop/0]).
+-export([start/1, stop/0]).
 -export([status/0]).
 
 %loop_cli() ->
@@ -14,21 +14,16 @@
 
 %print(M) -> io:format(M), io:format("~n").
 
-main([_, Path]) ->
-  case start() of
-    ok -> mount(Path);
-    Other -> {error, Other}
+main([Path]) ->
+  case start(Path) of
+    {error, Error} ->
+      io:format("Failed starting hty ~p~n", [Error]),
+      {error, Error};
+    Pid ->
+      receive
+        stop -> ok
+      end
   end.
-
-%reload(Fspath) ->
-%  Rules = [
-%     hty_listen_rule,
-%     hty_site_rule
-%    ],
-%  Transforms = [],
-%  Walker = hty_walker:new(Fspath, Rules, Transforms),
-%  Cfg = Walker:walk(),
-%  reconfigure(Cfg).
 
 mount(Path) ->
   Fspath = hty_fspath:new(Path),
@@ -39,7 +34,7 @@ mount(Path) ->
           {error, Error};
         {ok, Servers} ->
           ?MODULE ! {reload, Servers, self()},
-          io:format("Reloading cfg"),
+          io:format("Reloading cfg ~p~n", [Servers]),
           receive
             {ok, Status} ->
               {ok, Status};
@@ -53,35 +48,13 @@ mount(Path) ->
       {error, enoent, Path}
   end.
 
-%reconfigure(Cfg) ->
-%    io:format("Reloading configuration ~p~n", [Cfg]),
-%    Sort = fun(Item, {Ls, Ss, Is}) ->
-%		   case Item of
-%		       {ok, Cmd, _Path, _Rule} ->
-%			   case Cmd of
-%			       {listen, _Proto, _Port, _Root} = L ->
-%				   {[L|Ls], Ss, Is};
-%			       {site, _Name, _Root} = S ->
-%				   {Ls, [S|Ss], Is}
-%			   end;
-%		       {no, _Reason, _Path, _Ruleinfo} = I ->
-%			   {Ls, Ss, [I|Is]}
-%		   end
-%	   end,
-%    A0 = {[],[],[]},
-%    {Listens, Sites, _Ignored} = lists:foldl(Sort, A0, Cfg),
-%    ?MODULE ! {reload, Listens, Sites, self()},
-%    io:format("Before recv"),
-%    receive
-%	{ok, Status} -> {ok, Status};
-%	{no, Reason} -> {error, Reason}
-%    after
-%	60000 -> timeout
-%    end.
-
-start() ->
-  spawn(fun loop_supervise/0),
-  ok.
+start(Path) ->
+  case spawn(fun loop_supervise/0) of
+    Pidko when is_pid(Pidko) ->
+      mount(Path);
+    Other ->
+      {error, Other}
+  end.
 
 stop() ->
   ?MODULE ! {stop, self()},
@@ -105,6 +78,7 @@ status() ->
   end.
 
 loop_supervise() ->
+  io:format("hty supervisor starting up~n"),
   process_flag(trap_exit, true),
   Dispatcher = spawn_link(fun() ->
     loop_dispatch([])
@@ -120,6 +94,7 @@ loop_supervise() ->
           loop_supervise()
       end
   end,
+  io:format("hty supervisor closing down~n"),
   ok.
 
 loop_dispatch(Servers) ->

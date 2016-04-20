@@ -117,7 +117,9 @@ mimemap("js", _This) -> "text/javascript";
 mimemap("png", _This) -> "image/png";
 mimemap("jpg", _This) -> "image/jpeg";
 mimemap("xml", _This) -> "text/xml";
-mimemap("ico", _This) -> "image/vnd.microsoft.icon".
+mimemap("ico", _This) -> "image/vnd.microsoft.icon";
+mimemap("txt", _This) -> "text/plain";
+mimemap(_, _) -> "application/octetstream".
 
 protocol(Proto, This) ->
 	This#hty_tx{proto=Proto}.
@@ -418,6 +420,7 @@ dispatch(Resources, This) ->
   F = fun(Resource, Htx) ->
     try
       Htx1 = Htx:ndc_push(Resource),
+			io:format("dispatching to ~p~n", [Resource]),
       Htx2 = Resource:handle(Htx1),
       Htx3 = Htx2:ndc_pop(),
       case Htx3:committed() of
