@@ -1,12 +1,12 @@
 <directive name="catch" type="resource-class">
-  <param name="status">The status code to match.</param>
+  <param pos="1">The status code to match.</param>
   <content type="resource-class">
     Contents dispatched to if the status code matches.
   </content>
   <desc>
     Matches the status code of the transaction with the statuscode parameter.
     If they match, the transaction dispatches to the subcontent.
-    Otherwise, the transactions is returned as is. 
+    Otherwise, the transactions is returned as is.
   </desc>
   <status code="ANY">
     If the status matches the status of the transaction,

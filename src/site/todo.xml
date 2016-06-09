@@ -12,39 +12,49 @@
         </todo>
         <todo>
             The Fspath and Rules params should probably merge into
-            a Walker param. From this you can access the Fspath and 
+            a Walker param. From this you can access the Fspath and
             add rules.
-        </todo>  
+            <done/>
+        </todo>
         <todo>
             Perhaps the rule system needs a rethinking. Adding the rules in
-            the folder tree and then the resources under it feels double. 
+            the folder tree and then the resources under it feels double.
             One could add rules in a file instead, but the double specification
             would remain. One could skip the rules and map folder names onto
-            resource classes strictly. Perhaps the signature for a resource 
+            resource classes strictly. Perhaps the signature for a resource
             class ctor would be Resource:new(Walker) or Resource:new(Fspath).
-            Not really, one needs to run code in the walk step, Erl doesnt do 
+            Not really, one needs to run code in the walk step, Erl doesnt do
             that in ctors. Which subfolders to walk and which subfolders to just
-            keep depends on the resource class. 
+            keep depends on the resource class.
             So, in some way this needs to be communicated if the walker is going
             to do this. Would it be enough having functions exposed on the resource
             class module? The framework could look at all subs, and map them onto
-            functions. Or, one could standardize the ctor param like above, and 
+            functions. Or, one could standardize the ctor param like above, and
             keep an init function in the resource class. This could return info on
-            what subfolders to pursue. 
+            what subfolders to pursue.
             But, in essence, this is just pushing the rule function into the
             resource class. Perhaps the way to do it would be to keep the rules
-            and resource classes separate but change how rules are found. 
+            and resource classes separate but change how rules are found.
             If the rule to apply would be mapped from the folder name then
             this would also be faster in a situation with many rules active.
             How would the rule mapping work?
             The ext on the folder should probably select a set of modules with
             a set of prefixes, hty_ from start and Custom1_ etc, by conf.
-            If any of these exists they are asked or so. Then, the rest of 
+            If any of these exists they are asked or so. Then, the rest of
             the folder name as well as the folder contents are fed to the rule.
-            Hmm. This is actually like today, the Fspath param is just that. 
-            But the contract would change, returning a claim would not be needed 
-            as much as just returning the resource class module. 
+            Hmm. This is actually like today, the Fspath param is just that.
+            But the contract would change, returning a claim would not be needed
+            as much as just returning the resource class module.
             Starting to feel this change does nothing.
+            <done>
+              hty_mounter now constructs the name of the handler module from
+              the folder name. The module can then create whatever handler it
+              wishes on new/1.
+            </done>
         </todo>
-    </todo>    
+    </todo>
+    <todo>
+      Resource classes. Each one needs an integ test case
+      <todo>accesslog - </todo>
+    </todo>
 </todo>

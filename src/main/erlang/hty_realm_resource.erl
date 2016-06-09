@@ -11,20 +11,15 @@
 %%
 %% Exported Functions
 %%
--export([handle/2, new/2]).
+-export([mount/1, handle/2, new/1]).
 
-%%
-%% API Functions
-%%
-new(Realm, Subs) ->
-    #hty_realm_resource{realm=Realm,subs=Subs}.
+mount(Fspath) ->
+  {ok, [Realm]} = hty_mounter:walk(Fspath, "realm"),
+  {ok, new(Realm)}.
+
+new(Realm) ->
+    #hty_realm_resource{realm=Realm}.
 
 handle(Htx, This) ->
     Htx1 = Htx:realm(This#hty_realm_resource.realm),
-    Htx1:dispatch(This#hty_realm_resource.subs).
-
-
-%%
-%% Local Functions
-%%
-
+    Htx1.

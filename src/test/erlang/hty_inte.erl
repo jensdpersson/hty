@@ -16,8 +16,8 @@ run(Testdir, Test) ->
       Method = case select("method", Request, Doc) of
         [] ->
           get;
-        Elm ->
-         text(Elm)
+        [Elm] ->
+          text(Elm)
       end,
 
       UrlOrError = case select("url", Request, Doc) of
@@ -28,9 +28,9 @@ run(Testdir, Test) ->
       end,
 
       Headers = lists:map(fun(HeaderElm) ->
-          Attr = select("@name", HeaderElm, Doc),
-          notsupportedyet = HeaderElm,
-          {}
+          Name = select("@name", HeaderElm, Doc),
+          Value = text(HeaderElm),
+          {Name, Value}
         end,
         select("header", Request, Doc)
       ),

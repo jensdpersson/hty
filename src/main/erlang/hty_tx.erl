@@ -102,9 +102,10 @@
 	  unread=0,
 	  committed=false}).
 
--type htx() :: {hty_tx, #hty_tx{}}.
+-type htx() :: #hty_tx{}.
 -export_type([htx/0]).
 
+-spec new() -> htx().
 new() ->
     #hty_tx{}.
 
@@ -183,11 +184,17 @@ queryparams(This) ->
 queryparams(QueryParams, This) ->
     This#hty_tx{queryparams=QueryParams}.
 
+-spec ok(htx()) -> htx().
 ok(This) -> status(200, "OK", This).
+
+-spec not_found(htx()) -> htx().
 not_found(This) -> status(404, "Not Found", This).
+
+-spec method_not_allowed(list(string()), htx()) -> htx().
 method_not_allowed(Okmethods, This) ->
     Htx1 = This:rsp_header("Allow", lists:concat(Okmethods)),
     Htx1:status(405, "Method Not Allowed", This).
+
 service_unavailable(This) -> status(503, "Temporarily Unavailable", This).
 server_error(This) ->
     status(500, "Internal Server Error", This).
@@ -209,10 +216,15 @@ temporary_redirect(URI, This) ->
     Htx1:status(307, "Temporary Redirect").
 forbidden(This) ->
     status(403, "Forbidden", This).
+
+-spec conflict(htx()) -> htx().
 conflict(This) ->
     status(409, "Conflict", This).
 
+-spec status(htx()) -> {integer(), string()}.
 status(This) -> This#hty_tx.status.
+
+-spec status(Code::integer(), Message::string(), htx()) -> htx().
 status(Code, Message, This) ->
     This1 = log("status", Message, This),
     This1#hty_tx{status={Code, Message}}.
@@ -230,22 +242,23 @@ req_header(Name, This) ->
 req_headers(This) -> This#hty_tx.reqh.
 
 flush(This) ->
-    Binlist = lists:reverse(This#hty_tx.buffered),
-    Sink = This#hty_tx.ondata,
-    Laststate = This#hty_tx.ondata_state,
-    F = fun(Data, {State, Htx}) ->
-		case Sink(Data, State, Htx) of
-		    {ok, NewState, Htx1} -> {next, {NewState, Htx1}};
-		    {no, Error} -> {break, Error}
-		end
-	end,
-    case hty_util:fold(F, {Laststate, This}, Binlist) of
-	{break, Error, Remains} ->
-	    #hty_tx{status=Error, buffered=Remains};
-	{nobreak, {State, Htx2}} ->
-	    {hty_tx, Tx1} = Htx2,
-	    Tx1#hty_tx{buffered=[], ondata_state=State}
-    end.
+  Binlist = lists:reverse(This#hty_tx.buffered),
+  Sink = This#hty_tx.ondata,
+  Laststate = This#hty_tx.ondata_state,
+  F = fun(Data, {State, Htx}) ->
+    case Sink(Data, State, Htx) of
+      {ok, NewState, Htx1} -> {next, {NewState, Htx1}};
+      {no, Error} -> {break, Error}
+    end
+  end,
+  case hty_util:fold(F, {Laststate, This}, Binlist) of
+    {break, Error, Remains} ->
+      #hty_tx{status=Error, buffered=Remains};
+    {nobreak, {State, Htx2}} ->
+      %{hty_tx, Tx1} = Htx2,
+			Tx1 = Htx2,
+      Tx1#hty_tx{buffered=[], ondata_state=State}
+  end.
 
 unread(This) ->
     This#hty_tx.unread.
@@ -270,17 +283,17 @@ process_entity(F, This) ->
     pump(SocketReader, Htx1).
 
 pump(SocketReader, Htx) ->
-    case SocketReader:recv(Htx:unread()) of
-	timeout ->
-	    {no, timeout};
-	{done, _Reason} ->
-	    Htx1 = Htx:buffer(eos),
-	    Htx1:flush();
-	{data, Data, SocketReader1} ->
-	    Htx1 = Htx:buffer(Data),
-	    Htx2 = Htx1:flush(),
-	    pump(SocketReader1, Htx2)
-    end.
+  case SocketReader:recv(Htx:unread()) of
+    timeout ->
+      {no, timeout};
+    {done, _Reason} ->
+      Htx1 = Htx:buffer(eos),
+      Htx1:flush();
+    {data, Data, SocketReader1} ->
+      Htx1 = Htx:buffer(Data),
+      Htx2 = Htx1:flush(),
+      pump(SocketReader1, Htx2)
+  end.
 
 rsp_header(Name, This) ->
     case lists:keyfind(Name, 1, This#hty_tx.rsph) of
@@ -334,44 +347,51 @@ recvform(FormSchema, Callback, This) ->
 			   end
 		   end, This).
 
+-spec recvfile(Spafs::list(), Filepath::string(), htx()) -> htx().
 recvfile(Spafs, Filepath, This) ->
-    Filter = hty_spaf:chain(Spafs),
-    Fwrite = fun(IO, Data, ChainQ) ->
-		     case Filter(Data, ChainQ) of
-			 {ok, ChainQ1, Data1} ->
-			     case file:write(IO, Data1) of
-				 ok -> {ok, {IO, ChainQ1}};
-				 {error, Error} -> {no, Error}
-			     end;
-			 {no, Error} -> {no, Error}
-		     end
-	     end,
-    process_entity(fun(Data, State, Htx) ->
-			   {Fd, WriteRes} = case State of
-						q0 ->
-						    Opts = [raw, write, delayed_write],
-						    case file:open(Filepath, Opts) of
-							{ok, IODevice} -> {IODevice, Fwrite(IODevice, Data, q0)};
-							{error, E} -> {nofilehandle, {no, E}}
-						    end;
-						{IOFile, Q} -> {IOFile, Fwrite(IOFile, Data, Q)}
-					    end,
-			   CloseRes = case Data of
-					  eos ->
-					      case Fd of
-						  nofilehandle -> {no, nofilehandle};
-						  File -> file:close(File)
-					      end;
-					  _ -> ok
-				      end,
-			   case {WriteRes, CloseRes} of
-			       {{ok, {IO, Q1}}, ok} -> {ok, {IO, Q1}, Htx};
-			       {{ok, _}, {error, Reason}} -> {no, Reason};
-			       {{error, Reason}, ok} -> {no, Reason};
-			       {{error, Reason}, {error, Reason1}} ->
-				   {no, {Reason, Reason1}}
-			   end
-		   end, This).
+  Filter = hty_spaf:chain(Spafs),
+  Fwrite = fun(IO, Data, ChainQ) ->
+    case Filter(Data, ChainQ) of
+      {ok, ChainQ1, Data1} ->
+				io:format("Data1 is ~p~n", [Data1]),
+        case Data1 of
+          [eos] -> {ok, {IO, ChainQ1}};
+          _ ->
+            case file:write(IO, Data1) of
+              ok -> {ok, {IO, ChainQ1}};
+              {error, Error} -> {no, Error}
+            end
+        end;
+      {no, Error} -> {no, Error}
+    end
+  end,
+  process_entity(fun(Data, State, Htx) ->
+    {Fd, WriteRes} = case State of
+      q0 ->
+        Opts = [raw, write, delayed_write],
+        case file:open(Filepath, Opts) of
+          {ok, IODevice} -> {IODevice, Fwrite(IODevice, Data, q0)};
+          {error, E} -> {nofilehandle, {no, E}}
+        end;
+      {IOFile, Q} -> {IOFile, Fwrite(IOFile, Data, Q)}
+    end,
+    CloseRes = case Data of
+      eos ->
+        case Fd of
+          nofilehandle -> {no, nofilehandle};
+          File -> file:close(File)
+        end;
+      _ -> ok
+    end,
+    case {WriteRes, CloseRes} of
+      {{ok, {IO, Q1}}, ok} -> {ok, {IO, Q1}, Htx};
+      {{ok, _}, {error, Reason}} -> {no, Reason};
+      {{no, Reason}, _} -> {no, Reason}%;
+      %{{error, Reason}, ok} -> {no, Reason};
+      %{{error, Reason}, {error, Reason1}} ->
+      %  {no, {Reason, Reason1}}
+    end
+  end, This).
 
 ndc_push(Frame, This) ->
     This#hty_tx{ndc=[Frame|This#hty_tx.ndc]}.
@@ -386,6 +406,7 @@ ndc_peek(This) ->
         [] -> {'/'}
     end.
 
+-spec log(htx()) -> list().
 log(This) ->
     This#hty_tx.log.
 
@@ -396,10 +417,12 @@ log(Event, Data, This) ->
     Category = atom_to_list(element(1, Context)),
     This#hty_tx{log=[{Category,hty_log:tstamp(),Event,Data}|Log]}.
 
+-spec sendfile(Filename::string(), htx()) -> htx().
 sendfile(Filename, This) ->
     This1 = log("sendfile", Filename, This),
     This1#hty_tx{outs=[{file, Filename}|This#hty_tx.outs]}.
 
+-spec echo(IOList::iolist(), htx()) -> htx().
 echo(IOList, This) -> This#hty_tx{outs=[{data, IOList}|This#hty_tx.outs]}.
 
 copy(Htx, This) ->
@@ -409,11 +432,13 @@ prolog(IOList, This) ->
     Outs1 = lists:reverse([{data, IOList}] ++ lists:reverse(This#hty_tx.outs)),
     This#hty_tx{outs=Outs1}.
 
+-spec clear(htx()) -> htx().
 clear(This) ->
     This#hty_tx{outs=[]}.
 
 outs(This) -> This#hty_tx.outs.
 
+-spec dispatch(Resource::tuple() | [Resource::tuple()], htx()) -> htx().
 dispatch(Resource, This) when not is_list(Resource) ->
     dispatch([Resource], This);
 dispatch(Resources, This) ->
@@ -448,5 +473,8 @@ realm(Realm, This) -> This#hty_tx{realm=Realm}.
 principal(This) -> This#hty_tx.principal.
 principal(Principal, This) -> This#hty_tx{principal=Principal}.
 
+-spec commit(htx()) -> htx().
 commit(This) -> This#hty_tx{committed=true}.
+
+-spec committed(htx()) -> true | false.
 committed(This) -> This#hty_tx.committed.

@@ -6,7 +6,7 @@
 %% Exported Functions
 %%
 -export([parse/2]).
--import(hty_util, [until/2]).
+-import(hty_scan, [until/2]).
 -import(hty_percentencoding, [decode/1]).
 %%
 %% API Functions
@@ -30,7 +30,7 @@ parse(Data, {Expect, Stack}) ->
 						{_S, _O1} ->
 							{no, {badeos, stacknotempty}}
 					end
-			end;	
+			end;
 		_ ->
 			case p(Data, Expect, Stack, []) of
 				{no, Reason} ->
@@ -39,7 +39,7 @@ parse(Data, {Expect, Stack}) ->
 					{ok, State, lists:reverse(Outs)}
 			end
 	end.
-	
+
 %%
 %% Local Functions
 %%
@@ -70,14 +70,7 @@ p(I, E, S, O) ->
 			end
 	end.
 
--spec make_out(binary(), binary(), list()) -> 
+-spec make_out(binary(), binary(), list()) ->
 				{no, any()} | {list(), any()}.
-make_out(Key, Value, Stack) -> 
+make_out(Key, Value, Stack) ->
 	{Stack, {kv, decode(Key), decode(Value)}}.
-
-
-			
-
-
-
-				

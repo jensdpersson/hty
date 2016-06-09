@@ -1,4 +1,4 @@
-%% Author: jens       
+%% Author: jens
 %% Created: 14 feb 2013
 %% Description: TODO: Add description to hty_uri
 -module(hty_uri).
@@ -16,7 +16,9 @@
 %%
 %% API Functions
 %%
--spec parse_path(binary()) -> {[Segments::(binary()|{binary, []})], [QueryParams::binary()]}.
+-spec parse_path(binary()) ->
+  {[Segments::(binary()|{binary, []})], [QueryParams::binary()]}.
+
 parse_path(Path) when is_binary(Path) ->
 	parse_path([], Path, false).
 
@@ -42,15 +44,15 @@ matrix({_Above, [Segment|_Below]}, Key) ->
 	_Name ->
 	    no
     end.
-		
+
 append({Above, Below}, Leaf) ->
     Reversed = lists:reverse(Below),
     {Above, lists:reverse([Leaf|Reversed])}.
 
 pack({Above, Below}) ->
     Segs = hty_util:rewind(Above, Below),
-    lists:flatmap(fun({Name, Matrix}) -> 
-		      [$/, Name|lists:map(fun({Key, Value}) -> 
+    lists:flatmap(fun({Name, Matrix}) ->
+		      [$/, Name|lists:map(fun({Key, Value}) ->
 					       [$;, Key, $=, Value]
 				      end, Matrix)];
 		 (Name) ->
@@ -100,7 +102,7 @@ parse_path(Segs, Input, Matrix) ->
 
 parse_query(Params, Input, Segs) ->
 	{Token, Rest} = hty_scan:until(Input, $&),
-	KeyValue = case hty_scan:until(Token, $=) of  
+	KeyValue = case hty_scan:until(Token, $=) of
 							 {Key, <<$=, Value/binary>>} ->
 								 {Key, Value};
 							 Kv ->
@@ -108,7 +110,7 @@ parse_query(Params, Input, Segs) ->
 						 end,
 	Params1 = [KeyValue|Params],
 	case Rest of
-		<<$&, Input1>> ->
+		<<$&, Input1/binary>> ->
 			parse_query(Params1, Input1, Segs);
 		<<>> ->
 			{Segs, lists:reverse(Params1)}
@@ -116,7 +118,7 @@ parse_query(Params, Input, Segs) ->
 
 pathzipper(Segments) ->
 	{[], lists:map(fun(Seg) when is_binary(Seg) ->
-						   binary_to_list(Seg); 
+						   binary_to_list(Seg);
 					  ({Name, Matrix}) ->
 						   {binary_to_list(Name), Matrix}
 				   end, Segments)}.

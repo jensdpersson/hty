@@ -7,6 +7,10 @@ mount(Fspath) ->
       list_to_integer(PortSpec);
     _ -> 80
   end,
-  {ok, Resources} = hty_mounter:walk(Fspath, "resource"),
-  Root = hty_union_resource:new(Resources),
-  {ok, hty_server:new("http", {0,0,0,0}, Port, Root)}.
+  case hty_mounter:walk(Fspath, "resource") of
+    {ok, Resources} ->
+      Root = hty_union_resource:new(Resources),
+      {ok, hty_server:new("http", {0,0,0,0}, Port, Root)};
+    {error, _} = E ->
+      E
+  end.

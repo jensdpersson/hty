@@ -4,7 +4,7 @@
 
 -export([type/1,
          list/1,
-         
+
          send/2,
          recv/3,
          save/2,
@@ -43,13 +43,19 @@ send(Path, Htx) ->
   Htx:sendfile(Path).
 
 recv(Path, Spafs, Htx) ->
-  Htx:recvfile(Path, Spafs).
+  Htx:recvfile(Spafs, Path).
 
 save(Path, Data) ->
   write(Path, Data, [write, binary]).
 
 append(Path, Data) ->
-  write(Path, Data, [append, binary]).
+  case file:open(Path, [append, binary]) of
+    {ok, Fd} ->
+      file:write(Fd, Data),
+      file:close(Fd);
+    {error, Error} ->
+      {error, Error}
+  end.
 
 write(Path, Data, Modes) ->
   case file:open(Path, Modes) of

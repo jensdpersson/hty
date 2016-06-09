@@ -6,13 +6,14 @@
 %%
 %% Exported Functions
 %%
--export([handle/2, new/1]).
+-export([mount/1, handle/2, new/1]).
 
 -record(hty_basicauth_resource, {subs}).
 
-%%
-%% API Functions
-%%
+
+mount(Fspath) ->
+  {ok, new(hty_mounter:walk(Fspath, "resource"))}.
+
 new(Subs) ->
   #hty_basicauth_resource{subs=Subs}.
 

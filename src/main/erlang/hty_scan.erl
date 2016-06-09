@@ -10,6 +10,7 @@
 %%
 %% API Functions
 %%
+-spec until(Data::binary(), Char::integer()) -> {binary(), binary()}.
 until(Data, Char) ->
 	until(0, Data, Char).
 
@@ -54,6 +55,3 @@ until_oneof(Index, B, C1, C2, C3) ->
 		Other when is_binary(Other) ->
 			until_oneof(Index+1, B, C1, C2, C3)
 	end.
-
-
-

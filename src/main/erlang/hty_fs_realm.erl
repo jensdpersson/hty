@@ -3,23 +3,20 @@
 %% Description: TODO: Add description to hty_fsrealm
 -module(hty_fs_realm).
 
-%%
-%% Include files
-%%
-
-%%
-%% Exported Functions
-%%
--export([new/2, name/1, signup/3, auth/3]).
+-export([mount/1, new/2, name/1, signup/3, auth/3]).
 
 -record(hty_fs_realm, {realmname, fspath}).
 
+mount(Fspath) ->
+    case lists:reverse(Fspath:parts()) of
+			[_Ext, Name | _] ->
+	    	{ok, new(Name, Fspath)};
+			_ ->
+	    	{ok, new("defaultrealm", Fspath)}
+    end.
 
-%%
-%% API Functions
-%%
-
-new(Realmname, Fspath) -> #hty_fs_realm{realmname=Realmname, fspath=Fspath}.
+new(Realmname, Fspath) ->
+	#hty_fs_realm{realmname=Realmname, fspath=Fspath}.
 
 name(This) -> This#hty_fs_realm.realmname.
 

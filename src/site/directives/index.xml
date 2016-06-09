@@ -1,6 +1,9 @@
 <?xml-stylesheet type="text/xsl" href="directives.xsl"?>
 <directives>
-  <directive uri="static.xml"/>
+  <directive uri="accesslog.xml"/>
+  <directive uri="bind.xml"/>
   <directive uri="catch.xml"/>
+  <directive uri="filelog.xml"/>
+  <directive uri="static.xml"/>
   <directive uri="xslpi.xml"/>
 </directives>

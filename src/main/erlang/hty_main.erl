@@ -14,12 +14,14 @@
 
 %print(M) -> io:format(M), io:format("~n").
 
+main([]) ->
+  io:format("Usage: hty <path-to-site>~n");
 main([Path]) ->
   case start(Path) of
     {error, Error} ->
       io:format("Failed starting hty ~p~n", [Error]),
       {error, Error};
-    Pid ->
+    _Pid ->
       receive
         stop -> ok
       end

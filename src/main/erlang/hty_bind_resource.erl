@@ -1,28 +1,32 @@
-%% @author jens
-%% @doc @todo Add description to hty_bind_resource.
-
-
 -module(hty_bind_resource).
+-record(hty_bind_resource, {key, bound}).
 
-%% ====================================================================
-%% API functions
-%% ====================================================================
--export([new/3, handle/2, next/2]).
+-export([mount/1, new/2, handle/2]).
 
--record(hty_bind_resource, {key, value, next}).
+mount(Fspath) ->
+  case lists:reverse(Fspath:parts()) of
+    ["bind", Params|_] ->
+      {Key, Type} = parseParams(Params),
+      case hty_mounter:walk(Fspath, Type) of
+        {ok, Subs} ->
+          {ok, new(Key, Subs)};
+        {error, _} = Error ->
+          Error
+      end;
+    ["bind"] ->
+      {error, "bind resource needs a parameter to use as the binding key"}
+  end.
 
-new(Key, Value, Next) ->
-    #hty_bind_resource{key=Key, value=Value, next=Next}.
-
-next(NewNext, This) ->
-	This#hty_bind_resource{next=NewNext}.
+new(Key, Bound) ->
+  #hty_bind_resource{key=Key, bound=Bound}.
 
 handle(Htx, This) ->
-	Htx1 = Htx:bind(This#hty_bind_resource.key, This#hty_bind_resource.value),
-	Htx1:dispatch(This#hty_bind_resource.next).
+  Htx:bind(This#hty_bind_resource.key, This#hty_bind_resource.bound).
 
-%% ====================================================================
-%% Internal functions
-%% ====================================================================
-
-
+parseParams(Params) ->
+  case string:tokens(Params, ",") of
+    [Key] ->
+      {Key, "resource"};
+    [Key, Type|_] ->
+      {Key, Type}
+  end.

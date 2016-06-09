@@ -10,26 +10,36 @@
 %%
 %% Exported Functions
 %%
--export([handle/2, new/2]).
+-export([mount/1, handle/2, new/2]).
 
-%%
-%% API Functions
-%%
+
+mount(Fspath) ->
+  case Fspath:parts() of
+    [Name, "dir"] ->
+      case hty_mounter:walk(Fspath, "resource") of
+        {ok, Subs} ->
+          {ok, new(Name, Subs)};
+        {error, _} = E ->
+          E
+      end;
+    Other ->
+      {error, Other}
+  end.
+
 new(Segment, Subs) ->
     #hty_dir_resource{segment=Segment, subs=Subs}.
 
 handle(Htx, This) ->
-    Segment = This#hty_dir_resource.segment,
-    Subs = This#hty_dir_resource.subs,
-    case Htx:consume(Segment) of
-	no ->
-	    Htx:not_found();
-	Htx1 ->
-	    Htx1:dispatch(Subs)
-    end.
+  Segment = This#hty_dir_resource.segment,
+  Subs = This#hty_dir_resource.subs,
+  case Htx:consume(Segment) of
+    no ->
+      Htx:not_found();
+    Htx1 ->
+      Htx1:dispatch(Subs)
+  end.
 
 
 %%
 %% Local Functions
 %%
-
