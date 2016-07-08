@@ -1,3 +1,4 @@
+<?xml-stylesheet type="text/xsl" href="simpletodoview.xsl"?>
 <todo>
     Main todo for hty project.
     <todo>
@@ -5,6 +6,7 @@
         <todo>
             Should realm and principal be bound in fields of their own or not?
         </todo>
+    </todo>
     <todo>
         Mounting
         <todo>
@@ -54,7 +56,116 @@
         </todo>
     </todo>
     <todo>
-      Resource classes. Each one needs an integ test case
-      <todo>accesslog - </todo>
+      All directives should be exercised in a passing integ test case and
+      have an entry in the directive docs that specifies that behaviour.
+      Or dropped if the serve no purpose.
+      <todo>
+        accesslog
+        <todo>Let hty_server use inet:peername to obtain peer IP</todo>
+        <todo>Set peer IP on tx.</todo>
+        <todo>Log peer ip in access log</todo>
+      </todo>
+      <todo>aggregate</todo>
+      <todo>basicauth</todo>
+      <todo>bind</todo>
+      <todo>catch</todo>
+      <todo>crash</todo>
+      <todo>css</todo>
+      <todo>dir</todo>
+      <todo>dryad</todo>
+      <todo>empty</todo>
+      <todo>filelog</todo>
+      <todo>filter</todo>
+      <todo>flat</todo>
+      <todo>forceget</todo>
+      <todo>formdocs</todo>
+      <todo>fs</todo>
+      <todo>gate</todo>
+      <todo>helloworld</todo>
+      <todo>history</todo>
+      <todo>html</todo>
+      <todo>http</todo>
+      <todo>index</todo>
+      <todo>links</todo>
+      <todo>listen</todo>
+      <todo>listing</todo>
+      <todo>logviewer</todo>
+      <todo>override</todo>
+      <todo>realm</todo>
+      <todo>redirect</todo>
+      <todo>rules</todo>
+      <todo>sendfile</todo>
+      <todo>shift</todo>
+      <todo>signup</todo>
+      <todo>site</todo>
+      <todo>siteref</todo>
+      <todo>static</todo>
+      <todo>status</todo>
+      <todo>status2</todo>
+      <todo>storage</todo>
+      <todo>ticketeer</todo>
+      <todo>timeseries</todo>
+      <todo>union</todo>
+      <todo>vhost</todo>
+      <todo>xml</todo>
+      <todo>xslpi</todo>
+      <todo>name_eq_pass</todo>
     </todo>
+    <todo>Add smtp server. should it use the same tx objects? should it
+      pass along tx for the entire mail or parts of the handshake?
+    </todo>
+    <todo>fswatch server. Param is file path to watch, content is handlers</todo>
+    <todo>timer server, either cron or delay/interval pattern. Could these be
+      unified? Would an offset number of units in each slot be enough to mimic
+      the delay/interval pattern with a thus extended cron?</todo>
+
+    <todo>STOMP server. param is a remote hostport to connect to, handlers
+      specify queue/topic
+    </todo>
+    <todo>http server should understand an extended syntax for port.
+      In addition to Port.http it should be possible to write MinPort,MaxPort.http.
+      also, omitting the port should mean use a random available port. </todo>
+    <todo>wsdl resource. param takes a module</todo>
+
+    <todo>the site should get this file carried across,
+       with some todoview xsl
+     <done/>
+     </todo>
+  <todo>
+    Fix integ tests
+    <todo>
+      They should run the escript binary as fixtures, not integrate into
+      hty_ modules.
+    </todo>
+    <todo>
+      Eunit is prolly not the ticket. We need other properties of the test output
+      <todo>
+        Test report should clearly report which fixture and which test case was run
+      </todo>
+      <todo>
+        Test report should have links to a xslpi view of the test case
+      </todo>
+      <todo>
+        Fixture stdout should be linked from the test case
+      </todo>
+    </todo>
+    <todo>
+      The directives pages should show what tests exercise them
+      <todo>
+      There should be an index generated from the test case fixture that mention
+      all directives in use in that fixture.
+      </todo>
+      <todo>
+        The directives page should contain a link into this index
+      </todo>
+    </todo>
+  </todo>
+  <todo>
+    If compilation fails the built site should reflect this!
+    <todo>Perhaps the build should start with a clean.</todo>
+    <todo>Build output logs should be copied to the site</todo>
+  </todo>
+  <todo>
+    hty_main should not invoke hty_mounter, it should send a message {mount, Fspath} to some central process that will mount and report back.
+  </todo>
 </todo>

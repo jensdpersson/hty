@@ -39,7 +39,7 @@ last_modified(This) ->
   hty_log:iso8601(Fs:last_modified(path(This))).
 
 
-
+-spec list(#hty_fspath) -> {error, any()} | [#hty_fspath].
 list(This) ->
     Path = path(This),
     Fs = fs(This),

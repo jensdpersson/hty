@@ -8,9 +8,9 @@ tstamp() ->
 
 today() ->
     {{Y,M,D},_} = erlang:localtime(),
-    integer_to_list(Y) ++ "-" ++
-    integer_to_list(M) ++ "-" ++
-    integer_to_list(D).
+    pad(Y) ++ "-" ++
+    pad(M) ++ "-" ++
+    pad(D).
 
 iso8601(DateTime) ->
 	{{Y,M,D},{H,Mi,S}} = DateTime,

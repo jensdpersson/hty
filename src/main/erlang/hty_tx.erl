@@ -65,8 +65,7 @@
 -export([bind/3,
 	 bound/2]).
 
--export([queryparams/1,
-	 queryparams/2]).
+-export([queryparam/1, queryparams/1, queryparams/2]).
 -export([socketreader/2]).
 
 -export([dispatch/2]).
@@ -171,18 +170,21 @@ bind(Key, Value, This) ->
     This#hty_tx{attributes=[{Key, Value}|Attrs]}.
 
 bound(Key, This) ->
-    case lists:keyfind(Key, 1, This#hty_tx.attributes) of
-	false ->
-	    no;
-	{_, Value} ->
-	    {ok, Value}
-    end.
+  case lists:keyfind(Key, 1, This#hty_tx.attributes) of
+    false ->
+      no;
+    {_, Value} ->
+      {ok, Value}
+  end.
 
 queryparams(This) ->
-    This#hty_tx.queryparams.
+  This#hty_tx.queryparams.
 
 queryparams(QueryParams, This) ->
-    This#hty_tx{queryparams=QueryParams}.
+  This#hty_tx{queryparams=QueryParams}.
+
+queryparam(Param, This) ->
+	[notyet].
 
 -spec ok(htx()) -> htx().
 ok(This) -> status(200, "OK", This).

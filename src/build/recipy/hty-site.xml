@@ -3,17 +3,22 @@
     <folder name="target">
         <artifact name="ebin"/>
         <folder name="site">
-            <copies of="src/site"/>
-            <folder name="edoc">
+          <folder name="8844.http">
+            <folder name="static">
+              <copies of="src/site"/>
+              <folder name="edoc">
                 <e:edoc/>
-            </folder>
-            <folder name="test-results">
+              </folder>
+              <folder name="test-results">
                 <artifact name="xsl" project="resultface"/>
                 <e:eunit-reports xslpi="resultface.xsl" ebin="target/ebin"/>
                 <index-xml xslpi="resultface-list.xsl" exclude=".*\.xsl"/>
+              </folder>
+              <artifact project="verdict" name="xslt"/>
+              <artifact project="prosith" name="pkg"/>
+              <artifact project="simpletodoview" name="xsl"/>
             </folder>
-            <artifact project="verdict" name="xslt"/>
-            <artifact project="prosith" name="pkg"/>
+          </folder>
         </folder>
     </folder>
 </recipe>

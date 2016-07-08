@@ -5,7 +5,7 @@
 mount(Fspath) ->
   case lists:reverse(Fspath:parts()) of
     ["accesslog", Key | _] ->
-      case hty_mounter:walk(Fspath, "logger") of
+      case hty_mounter:walk(Fspath, "resource") of
         {ok, Subs} ->
           {ok, new(Key, Subs)};
         {error, _} = Error ->
@@ -22,7 +22,7 @@ new(Key, Subs) ->
 handle(Htx, This) ->
     Key = This#hty_accesslog_resource.key,
     Subs = This#hty_accesslog_resource.subs,
-    Loggers = Htx:lookup(Key),
+    {ok, Loggers} = Htx:bound(Key),
 
     %Initial values
     Method = atom_to_list(Htx:method()),

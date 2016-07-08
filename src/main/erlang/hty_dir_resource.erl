@@ -3,27 +3,20 @@
 %% Description: TODO: Add description to hty_dir_resource
 -module(hty_dir_resource).
 -record(hty_dir_resource, {segment, subs}).
-%%
-%% Include files
-%%
 
-%%
-%% Exported Functions
-%%
 -export([mount/1, handle/2, new/2]).
 
-
 mount(Fspath) ->
-  case Fspath:parts() of
-    [Name, "dir"] ->
+  case lists:reverse(Fspath:parts()) of
+    ["dir", Name | _ ] ->
       case hty_mounter:walk(Fspath, "resource") of
         {ok, Subs} ->
           {ok, new(Name, Subs)};
         {error, _} = E ->
           E
       end;
-    Other ->
-      {error, Other}
+    _ ->
+      {error, "dir resource needs a name parameter"}
   end.
 
 new(Segment, Subs) ->

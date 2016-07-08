@@ -3,6 +3,7 @@
     Send a request to a resource under access logging, then ask for the log of
     that (the log writer content is also served as static).
   </synopsis>
+
   <transaction>
     <request>
       <url>http://localhost:10001/helloworld.txt</url>
