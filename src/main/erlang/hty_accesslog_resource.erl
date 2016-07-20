@@ -37,7 +37,14 @@ handle(Htx, This) ->
     T1 = hty_log:tstamp(),
 
     Category = [Method, $|, Path],
-    Message = [integer_to_list(StatusCode), " ", StatusText],
+    Peer = case Htx1:peer() of
+    	{ipv4, {A,B,C,D}, Port} ->
+    	  [" (", A, $., B, $., C, $., D, $:, Port, $)];
+    	{ipv6, {A,B,C,D,E,F,G,H}, Port} ->
+    	  [" (", A, $., B, $., C, $., D, $., E, $., F, $., G, $., H, $:, Port, $)];
+    	_ -> ""
+    end,
+    Message = [integer_to_list(StatusCode), " ", StatusText, Peer],
     lists:foreach(fun(Logger) ->
       Logger:log(T0, T1, Category, Message)
     end, Loggers),

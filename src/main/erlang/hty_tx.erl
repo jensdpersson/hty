@@ -80,7 +80,10 @@
 
 -export([new/0]).
 
+-export([peer/1, peer/2]).
+
 -record(hty_tx, {
+		peer={notset, nil, nil},
 	  proto="HTTP/1.1",
 	  method='GET',
 	  path={[], []},
@@ -480,3 +483,10 @@ commit(This) -> This#hty_tx{committed=true}.
 
 -spec committed(htx()) -> true | false.
 committed(This) -> This#hty_tx.committed.
+
+-spec peer({(ipv4 | ipv6 | other), any()::Address, any::integer()} -> htx().
+peer(Peer, This) ->
+	This#hty_tx{peer=Peer}.
+	
+peer(This) ->
+	This#hty_tx.peer.

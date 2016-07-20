@@ -56,25 +56,54 @@
         </todo>
     </todo>
     <todo>
+    	Milestone Ruta1
+    	
+    <todo>
       All directives should be exercised in a passing integ test case and
       have an entry in the directive docs that specifies that behaviour.
-      Or dropped if the serve no purpose.
+      Or dropped if they serve no purpose.
+      <todo>
+        Directives for Ruta1
       <todo>
         accesslog
-        <todo>Let hty_server use inet:peername to obtain peer IP</todo>
-        <todo>Set peer IP on tx.</todo>
-        <todo>Log peer ip in access log</todo>
+        <todo>Let hty_server use inet:peername to obtain peer IP<done/></todo>
+        <todo>Set peer IP on tx.<done/></todo>
+        <todo>Log peer ip in access log<done/></todo>
       </todo>
+      <todo>
+      	bind
+      	<todo>impl<done/></todo>
+      	<todo>test</todo>
+      	<todo>docs<done/></todo>
+      </todo>
+      
+      <todo>catch 	<todo>impl</todo>
+      	<todo>test</todo>
+      	<todo>docs</todo> </todo> 
+      
+      
+      <todo>history 	<todo>impl</todo>
+      	<todo>test</todo>
+      	<todo>docs</todo> </todo>
+      <todo>static 	<todo>impl</todo>
+      	<todo>test</todo>
+      	<todo>docs</todo> </todo>
+      <todo>vhost</todo>
+      <todo>xml</todo>
+      <todo>xslpi</todo> <todo>dir</todo> <todo>filelog</todo>
+      </todo>
+      <todo>directives to drop or postpone
+      
+      
       <todo>aggregate</todo>
       <todo>basicauth</todo>
-      <todo>bind</todo>
-      <todo>catch</todo>
+      
       <todo>crash</todo>
-      <todo>css</todo>
-      <todo>dir</todo>
+      <todo>css, drop</todo>
+      
       <todo>dryad</todo>
       <todo>empty</todo>
-      <todo>filelog</todo>
+      
       <todo>filter</todo>
       <todo>flat</todo>
       <todo>forceget</todo>
@@ -82,7 +111,7 @@
       <todo>fs</todo>
       <todo>gate</todo>
       <todo>helloworld</todo>
-      <todo>history</todo>
+     
       <todo>html</todo>
       <todo>http</todo>
       <todo>index</todo>
@@ -93,24 +122,25 @@
       <todo>override</todo>
       <todo>realm</todo>
       <todo>redirect</todo>
-      <todo>rules</todo>
+      <todo>rules, drop</todo>
       <todo>sendfile</todo>
       <todo>shift</todo>
       <todo>signup</todo>
       <todo>site</todo>
       <todo>siteref</todo>
-      <todo>static</todo>
+      
       <todo>status</todo>
       <todo>status2</todo>
       <todo>storage</todo>
       <todo>ticketeer</todo>
       <todo>timeseries</todo>
       <todo>union</todo>
-      <todo>vhost</todo>
-      <todo>xml</todo>
-      <todo>xslpi</todo>
+      
       <todo>name_eq_pass</todo>
+      </todo>
     </todo>
+    </todo>
+    
     <todo>Add smtp server. should it use the same tx objects? should it
       pass along tx for the entire mail or parts of the handshake?
     </todo>

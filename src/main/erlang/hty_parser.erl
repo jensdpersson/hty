@@ -37,8 +37,24 @@ respond(Socket, Htx) ->
 
 send_line(Socket, Line) -> gen_tcp:send(Socket,  Line ++ "\r\n").
 
+set_peer(Htx, Socket) ->
+	case inet:peername(Socket) of
+		{ok, {Address, Port}} ->
+			case Address of
+				{_,_,_,_} ->
+					Htx:peer({ipv4, Address, Port);
+				{_,_,_,_,_,_,_,_} ->
+				  Htx:peer({ipv6, Address, Port);
+				_ ->
+					Htx:peer({other, Address, Port})
+			end;
+		{error, _}	->
+			Htx
+	end.
+
 parse(Socket) ->
-    Htx0 = hty_tx:new(),
+    Htx = hty_tx:new(),
+    Htx0 = set_peer(Htx, Socket),
     parse_loop(Htx0, <<>>, fun method_parser/2, Socket).
 
 parse_loop(Htx, Unparsed, Parser, Socket) ->
