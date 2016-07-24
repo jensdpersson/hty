@@ -8,12 +8,16 @@
 %%
 %% Exported Functions
 %%
--export([handle/2, new/2]).
+-export([mount/1, handle/2, new/2]).
 -record(hty_history_resource, {fspath, diskformat}).
 
-%%
-%% API Functions
-%%
+mount(Fspath) ->
+	case lists:reverse(Fspath:parts()) of
+		["history", Diskformat | _] ->
+			{ok, new(Fspath, Diskformat)};
+		Other ->
+			{ok, new(Fspath, "xml")}
+	end.
 
 new(Fspath, DiskFormat) ->
     #hty_history_resource{fspath=Fspath, diskformat=DiskFormat}.
