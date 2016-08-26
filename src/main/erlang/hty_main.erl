@@ -19,7 +19,7 @@ main([]) ->
 main([Path]) ->
   case start(Path) of
     {error, Error} ->
-      io:format("Failed starting hty ~p~n", [Error]),
+      io:format("Failed starting hty: ~p~n", [Error]),
       {error, Error};
     _Pid ->
       receive

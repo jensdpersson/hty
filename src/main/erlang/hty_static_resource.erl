@@ -21,42 +21,41 @@ mount(Fspath) -> {ok, new(Fspath)}.
 new(Fspath) ->
   #hty_static_resource{fspath=Fspath}.
 
-  handle(Htx, This) ->
-    Fspath = This#hty_static_resource.fspath,
-    case Htx:method() of
-      'GET' ->
-        case Fspath:subpath(Htx:path_below()) of
-          ascension_denied ->
-            Htx:not_found();
-            Fspath1 ->
-              case Fspath1:isdir() of
+handle(Htx, This) ->
+  Fspath = This#hty_static_resource.fspath,
+  case Htx:method() of
+    'GET' ->
+      case Fspath:subpath(Htx:path_below()) of
+        ascension_denied ->
+          Htx:not_found();
+        Fspath1 ->
+          case Fspath1:isdir() of
+            true ->
+              F=fun(W) ->
+                Fspath2 = Fspath1:subpath([W]),
+                  case Fspath2:exists() of
+                    true -> [Fspath2];
+                    false -> []
+                  end
+              end,
+              L = ["index.html", "index.xml", "index.txt"],
+              case lists:flatmap(F, L) of
+                [Welcome|_] ->
+                  serve(Htx, Welcome);
+                [] ->
+                  Htx:not_found()
+              end;
+            false ->
+              case Fspath1:exists() of
                 true ->
-                  F=fun(W) ->
-                    Fspath2 = Fspath1:subpath([W]),
-                    %io:format("Does ~p exist?~n", [Fspath2:filepath()]),
-                    case Fspath2:exists() of
-                      true -> [Fspath2];
-                      false -> []
-                    end
-                  end,
-                  L = ["index.html", "index.xml", "index.txt"],
-                  case lists:flatmap(F, L) of
-                    [Welcome|_] ->
-                      serve(Htx, Welcome);
-                      [] ->
-                        Htx:not_found()
-                      end;
-                      false ->
-                        case Fspath1:exists() of
-                          true ->
-                            serve(Htx, Fspath1);
-                            false ->
-                              Htx:not_found()
-                            end
-                          end
-                        end;
-                        _Method -> Htx:method_not_allowed(['GET'])
-                      end.
+                  serve(Htx, Fspath1);
+                false ->
+                  Htx:not_found()
+              end
+          end
+      end;
+    _Method -> Htx:method_not_allowed(['GET'])
+  end.
 
 
 %%
@@ -71,13 +70,15 @@ serve(Htx0, Fs) ->
     [BTag] ->
       io:format("ETag Match: ~p~n", [ETag]),
       Htx01 = Htx0:rsp_header("ETag", ETag),
-      Htx01:not_modified();
-      SomethingElse ->
-        io:format("If-None-Match: ~p!=~p~n", [SomethingElse,ETag]),
-        Htx01 = Htx0:rsp_header("ETag", ETag),
-        Htx = Htx01:rsp_header("Cache-Control", "public"),
-        Mime = Htx:mimemap(Fs:ext()),
-        Htx2 = Htx:rsp_header('Content-Type', Mime),
-        Htx3 = Fs:send(Htx2),
-        Htx3:ok()
-      end.
+      Htx02 = Htx01:not_modified(),
+      Htx02:commit();
+    SomethingElse ->
+      io:format("If-None-Match: ~p!=~p~n", [SomethingElse,ETag]),
+      Htx01 = Htx0:rsp_header("ETag", ETag),
+      Htx = Htx01:rsp_header("Cache-Control", "public"),
+      Mime = Htx:mimemap(Fs:ext()),
+      Htx2 = Htx:rsp_header('Content-Type', Mime),
+      Htx3 = Fs:send(Htx2),
+      Htx4 = Htx3:ok(),
+      Htx4:commit()
+  end.

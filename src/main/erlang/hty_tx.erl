@@ -54,7 +54,8 @@
 	 conflict/1,
 	 server_error/1,
 	 server_error/2,
-	 forbidden/1]).
+	 forbidden/1,
+	 gone/1]).
 
 -export([commit/1, committed/1]).
 
@@ -65,7 +66,7 @@
 -export([bind/3,
 	 bound/2]).
 
--export([queryparam/1, queryparams/1, queryparams/2]).
+-export([queryparam/2, queryparams/1, queryparams/2]).
 -export([socketreader/2]).
 
 -export([dispatch/2]).
@@ -187,7 +188,13 @@ queryparams(QueryParams, This) ->
   This#hty_tx{queryparams=QueryParams}.
 
 queryparam(Param, This) ->
-	[notyet].
+  lists:filtermap(fun(Entry) ->
+    case Entry of
+      {Param, Value} ->
+        {true, Value};
+      _ -> false
+    end
+  end, This#hty_tx.queryparams).
 
 -spec ok(htx()) -> htx().
 ok(This) -> status(200, "OK", This).
@@ -198,7 +205,7 @@ not_found(This) -> status(404, "Not Found", This).
 -spec method_not_allowed(list(string()), htx()) -> htx().
 method_not_allowed(Okmethods, This) ->
     Htx1 = This:rsp_header("Allow", lists:concat(Okmethods)),
-    Htx1:status(405, "Method Not Allowed", This).
+    Htx1:status(405, "Method Not Allowed").
 
 service_unavailable(This) -> status(503, "Temporarily Unavailable", This).
 server_error(This) ->
@@ -221,6 +228,8 @@ temporary_redirect(URI, This) ->
     Htx1:status(307, "Temporary Redirect").
 forbidden(This) ->
     status(403, "Forbidden", This).
+gone(This) ->
+  status(510, "Gone", This).
 
 -spec conflict(htx()) -> htx().
 conflict(This) ->
@@ -418,7 +427,7 @@ log(This) ->
 log(Event, Data, This) ->
     Log = log(This),
     Context = ndc_peek(This),
-		io:format("APA ~p", [Context]),
+		%io:format("APA ~p", [Context]),
     Category = atom_to_list(element(1, Context)),
     This#hty_tx{log=[{Category,hty_log:tstamp(),Event,Data}|Log]}.
 
@@ -463,7 +472,7 @@ dispatch(Resources, This) ->
         {break, Htx5:server_error(Error)};
       error:Error ->
         Trace = erlang:get_stacktrace(),
-        io:format("Dispatch caught ~p ~p~n", [Error, Trace]),
+        io:format("Dispatch caught ~p :: ~p~n", [Error, Trace]),
         {break, Htx:server_error(atom_to_list(Error))}
     end
   end,
@@ -484,9 +493,9 @@ commit(This) -> This#hty_tx{committed=true}.
 -spec committed(htx()) -> true | false.
 committed(This) -> This#hty_tx.committed.
 
--spec peer({(ipv4 | ipv6 | other), any()::Address, any::integer()} -> htx().
+-spec peer({(ipv4 | ipv6 | other), Address::any(), Port::integer()}) -> htx().
 peer(Peer, This) ->
 	This#hty_tx{peer=Peer}.
-	
+
 peer(This) ->
 	This#hty_tx.peer.

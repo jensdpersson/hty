@@ -29,7 +29,7 @@ tests_in_fixture(Basedir, Fixture) ->
   case file:list_dir(TestFolder) of
     {ok, Tests} ->
       lists:map(fun(Test) ->
-        {Test, fun() -> hty_inte:run(filename:join(TestFolder, Test), Test) end}
+        {Fixture ++ ":" ++ Test, fun() -> hty_inte:run(filename:join(TestFolder, Test), Test) end}
       end, Tests);
     {error, enoent} ->
       io:format("Found no tests in ~p~n", [TestFolder]),

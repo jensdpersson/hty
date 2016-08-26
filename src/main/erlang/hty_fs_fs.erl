@@ -31,13 +31,7 @@ list(Path) ->
 last_modified(Path) ->
   filelib:last_modified(Path).
 
-load(Path) ->
-  case file:open(Path, [read, binary]) of
-    {ok, Fd} ->
-      file:read_file(Fd);
-    {error, Error} ->
-      {error, Error}
-  end.
+load(Path) -> file:read_file(Path).
 
 send(Path, Htx) ->
   Htx:sendfile(Path).
@@ -45,22 +39,17 @@ send(Path, Htx) ->
 recv(Path, Spafs, Htx) ->
   Htx:recvfile(Spafs, Path).
 
-save(Path, Data) ->
-  write(Path, Data, [write, binary]).
+save(Path, Data) -> file:write_file(Path, Data).
 
 append(Path, Data) ->
   case file:open(Path, [append, binary]) of
     {ok, Fd} ->
-      file:write(Fd, Data),
-      file:close(Fd);
-    {error, Error} ->
-      {error, Error}
-  end.
-
-write(Path, Data, Modes) ->
-  case file:open(Path, Modes) of
-    {ok, Fd} ->
-      file:write_file(Fd, Data);
+      case file:write(Fd, Data) of
+        ok ->
+          file:close(Fd);
+        {error, Error} ->
+          {error, {Error, "Failed writing to file"}}
+      end;
     {error, Error} ->
       {error, Error}
   end.

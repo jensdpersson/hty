@@ -42,9 +42,9 @@ set_peer(Htx, Socket) ->
 		{ok, {Address, Port}} ->
 			case Address of
 				{_,_,_,_} ->
-					Htx:peer({ipv4, Address, Port);
+					Htx:peer({ipv4, Address, Port});
 				{_,_,_,_,_,_,_,_} ->
-				  Htx:peer({ipv6, Address, Port);
+				  Htx:peer({ipv6, Address, Port});
 				_ ->
 					Htx:peer({other, Address, Port})
 			end;

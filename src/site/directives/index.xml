@@ -6,4 +6,5 @@
   <directive uri="filelog.xml"/>
   <directive uri="static.xml"/>
   <directive uri="xslpi.xml"/>
+  <directive uri="logviewer.xml/">
 </directives>

@@ -57,7 +57,7 @@
     </todo>
     <todo>
     	Milestone Ruta1
-    	
+
     <todo>
       All directives should be exercised in a passing integ test case and
       have an entry in the directive docs that specifies that behaviour.
@@ -76,12 +76,13 @@
       	<todo>test</todo>
       	<todo>docs<done/></todo>
       </todo>
-      
-      <todo>catch 	<todo>impl</todo>
+
+      <todo>catch
+        	<todo>impl</todo>
       	<todo>test</todo>
-      	<todo>docs</todo> </todo> 
-      
-      
+      	<todo>docs</todo> </todo>
+
+
       <todo>history 	<todo>impl<done/></todo>
       	<todo>test</todo>
       	<todo>docs</todo> </todo>
@@ -91,19 +92,33 @@
       <todo>vhost</todo>
       <todo>xml</todo>
       <todo>xslpi</todo> <todo>dir</todo> <todo>filelog</todo>
+
+
+<todo>ref and def - replacing site and siteref
+  A def_server listens for erlang messages and replies with resource trees.
+  These are stored in a process per webapp. Or?
+
+  the main actor will also listen for {site, Name, Actor} msgs
+  and {site, Name} msgs. If regged, a {site,Name} call will forward the request
+  to the actor owning that site. 
+  <todo>def_server
+
+  </todo>
+  <todo>ref_resource</todo>
+</todo>
+
       </todo>
       <todo>directives to drop or postpone
-      
-      
+
       <todo>aggregate</todo>
       <todo>basicauth</todo>
-      
+
       <todo>crash</todo>
       <todo>css, drop</todo>
-      
+
       <todo>dryad</todo>
       <todo>empty</todo>
-      
+
       <todo>filter</todo>
       <todo>flat</todo>
       <todo>forceget</todo>
@@ -111,7 +126,7 @@
       <todo>fs</todo>
       <todo>gate</todo>
       <todo>helloworld</todo>
-     
+
       <todo>html</todo>
       <todo>http</todo>
       <todo>index</todo>
@@ -128,19 +143,19 @@
       <todo>signup</todo>
       <todo>site</todo>
       <todo>siteref</todo>
-      
+
       <todo>status</todo>
       <todo>status2</todo>
       <todo>storage</todo>
       <todo>ticketeer</todo>
       <todo>timeseries</todo>
       <todo>union</todo>
-      
+
       <todo>name_eq_pass</todo>
       </todo>
     </todo>
     </todo>
-    
+
     <todo>Add smtp server. should it use the same tx objects? should it
       pass along tx for the entire mail or parts of the handshake?
     </todo>

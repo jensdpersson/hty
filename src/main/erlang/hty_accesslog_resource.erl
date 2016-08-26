@@ -27,25 +27,29 @@ handle(Htx, This) ->
     %Initial values
     Method = atom_to_list(Htx:method()),
     Path = hty_uri:pack(Htx:path()),
-    T0 = hty_log:tstamp(),
+    T0 = (hty_date:now()):format(),
 
     %Dispatch
     Htx1 = Htx:dispatch(Subs),
 
     %More stuff
     {StatusCode, StatusText} = Htx1:status(),
-    T1 = hty_log:tstamp(),
+    T1 = (hty_date:now()):format(),
 
-    Category = [Method, $|, Path],
+    Category = [Method, " ", Path],
     Peer = case Htx1:peer() of
     	{ipv4, {A,B,C,D}, Port} ->
-    	  [" (", A, $., B, $., C, $., D, $:, Port, $)];
+    	  [" (", s(A), $., s(B), $., s(C), $., s(D), $:, s(Port), $)];
     	{ipv6, {A,B,C,D,E,F,G,H}, Port} ->
-    	  [" (", A, $., B, $., C, $., D, $., E, $., F, $., G, $., H, $:, Port, $)];
+    	  [" (", s(A), $., s(B), $., s(C), $., s(D), $., s(E), $., s(F), $., s(G), $., s(H), $:,
+          s(Port), $)];
     	_ -> ""
     end,
-    Message = [integer_to_list(StatusCode), " ", StatusText, Peer],
+    Message = [Peer, " ", integer_to_list(StatusCode), " ", StatusText],
     lists:foreach(fun(Logger) ->
+      io:format("Sending to logger ~p", [Logger]),
       Logger:log(T0, T1, Category, Message)
     end, Loggers),
     Htx1.
+
+s(Int) -> integer_to_list(Int).

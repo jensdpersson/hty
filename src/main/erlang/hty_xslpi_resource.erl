@@ -2,26 +2,35 @@
 %% Created: 28 jan 2013
 %% Description: TODO: Add description to hty_xslpi_resource
 -module(hty_xslpi_resource).
--record(hty_xslpi_resource,  {subs}).
+-record(hty_xslpi_resource,  {subs, xslpi}).
 
--export([handle/2, new/1]).
+-export([handle/2]).
 -export([mount/1]).
 
 mount(Fspath) ->
-  {ok, Subs} = hty_mounter:walk(Fspath, "resource"),
-  {ok, new(Subs)}.
-
-new(Subs) ->
-    #hty_xslpi_resource{subs=Subs}.
+  case lists:reverse(Fspath:parts()) of
+    ["xslpi", Url] ->
+      case hty_mounter:walk(Fspath, "resource") of
+        {ok, Subs} ->
+          Xslpi = xslpi(Url),
+          {ok, #hty_xslpi_resource{subs=Subs, xslpi=Xslpi}};
+        {error, Error} ->
+          {error, {?MODULE, Error}}
+      end;
+    Other ->
+      {error, "hty_xslip_resource requires a url param"}
+  end.
 
 handle(Htx, This) ->
     %XslpiRules = This#hty_xslpi_resource.xslpirules,
     Subs = This#hty_xslpi_resource.subs,
-    HtxSub = hty_tx_factory:get(<<"xslpi">>),
-    HtxSub1 = HtxSub:dispatch(Subs),
-    Htx1 = Htx:echo(<<"<?xml-stylesheet type=\"text/xsl\" href=\"">>),
-    Htx2 = Htx1:copy(HtxSub1),
-    Htx2:echo(<<".xsl\"?>">>).
+    Htx1 = Htx:dispatch(Subs),
+    case Htx1:status() of
+      {200, _} ->
+        Htx1:prolog(This#hty_xslpi_resource.xslpi);
+      _ ->
+        Htx1
+    end.
     %Xchoice = case Htx1:bound("xslpi_choice") of
     %  {ok, Xslpichoice} -> Xslpichoice;
     %  no -> "any"
@@ -36,7 +45,7 @@ handle(Htx, This) ->
 %%
 %% Local Functions
 %%
-%xslpi(XslURL, Htx2) ->
-%    [
-%     hty_percentencoding:decode(list_to_binary(XslURL)),
-%     .
+xslpi(XslURL) ->
+  [<<"<?xml-stylesheet type=\"text/xsl\" href=\"">>,
+   hty_percentencoding:decode(list_to_binary(XslURL)),
+   <<".xsl\"?>">>].

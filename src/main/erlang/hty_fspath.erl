@@ -32,14 +32,14 @@ isdir(This) ->
 
 mkdir(This) ->
   Fs = This#hty_fspath.fs,
-  Fs:make_dir(path(This)).
+  Fs:mkdir(path(This)).
 
 last_modified(This) ->
   Fs = fs(This),
   hty_log:iso8601(Fs:last_modified(path(This))).
 
 
--spec list(#hty_fspath) -> {error, any()} | [#hty_fspath].
+-spec list(#hty_fspath{}) -> {error, any()} | [#hty_fspath{}].
 list(This) ->
     Path = path(This),
     Fs = fs(This),

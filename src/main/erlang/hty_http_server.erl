@@ -11,6 +11,6 @@ mount(Fspath) ->
     {ok, Resources} ->
       Root = hty_union_resource:new(Resources),
       {ok, hty_server:new("http", {0,0,0,0}, Port, Root)};
-    {error, _} = E ->
-      E
+    {error, Error} ->
+      {error, {?MODULE, Error}}
   end.

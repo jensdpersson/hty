@@ -12,8 +12,8 @@ mount(Fspath) ->
       case hty_mounter:walk(Fspath, "resource") of
         {ok, Subs} ->
           {ok, new(Name, Subs)};
-        {error, _} = E ->
-          E
+        {error, Error} ->
+          {error, "dir failed with " ++ Error}
       end;
     _ ->
       {error, "dir resource needs a name parameter"}
