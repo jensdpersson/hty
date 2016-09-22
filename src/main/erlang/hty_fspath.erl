@@ -11,7 +11,7 @@
 
 -export([send/2, recv/3, load/1, save/2, append/2, path/1]).
 
--export([basename/1, parent/1]).
+-export([basename/1, parent/1, type/1]).
 
 new(Path) ->
     #hty_fspath{path=Path, fs=hty_fs_fs}.
@@ -94,6 +94,9 @@ append(Data, This) ->
   (fs(This)):append(path(This), Data).
 
 basename(This) -> filename:basename(path(This)).
+
+type(This) ->
+  (fs(This)):type(path(This)).
 
 subpath(Pathsegments, This) ->
     case lists:foldl(fun(Item, Acc) ->

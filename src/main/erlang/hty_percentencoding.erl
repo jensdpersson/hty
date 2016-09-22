@@ -16,25 +16,26 @@
 %% API Functions
 %%
 encode(_Bin) -> not_implemented.
-decode(Bin) -> 
+decode(Bin) ->
 		decode(Bin, <<>>).
 
 %%
 %% Local Functions
 %%
-
+decode(In, Out) when is_list(In) ->
+	decode(list_to_binary(In), Out);
 decode(In, Out) ->
 	{A, B} = hty_scan:until_either(In, $%, $+),
-	case B of 
+	case B of
 		<<>> ->
 			<<Out/binary, A/binary>>;
                 <<$+, Rest/binary>> ->
                     Int = 32,
-		    Out1 = <<Out/binary, A/binary, Int:8/integer>>,	
+		    Out1 = <<Out/binary, A/binary, Int:8/integer>>,
 		  decode(Rest, Out1);
 		<<$%, H1:8/integer, H2:8/integer, Rest/binary>> ->
 			Int = dehex(H1) * 16 + dehex(H2),
-			Out1 = <<Out/binary, A/binary, Int:8/integer>>,	
+			Out1 = <<Out/binary, A/binary, Int:8/integer>>,
 		  decode(Rest, Out1)
 	end.
 

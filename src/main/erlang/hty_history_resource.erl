@@ -43,7 +43,7 @@ handle(Htx0, This) ->
       io:format("Processing ~p", [Segment]),
       case Rev of
         no ->
-          io:format("~n"),
+          io:format("Rev is [~p]~n", [Rev]),
           case tip(Fspath1) of
             nofile ->
               case Method of
@@ -67,7 +67,7 @@ handle(Htx0, This) ->
           'GET' ->
             case Fspath2:exists() of
               true ->
-                Htx1 = Htx:ok(),
+                Htx1 = (Htx:ok()):commit(),
                 Htx2 = Htx1:rsp_header("Content-Type", "application/xml"),
                 Fspath2:send(Htx2);
               false ->
@@ -105,11 +105,14 @@ handle(Htx0, This) ->
       end
   end.
 
-conflict(Htx, _Tip, _Rev) -> Htx:conflict().
+conflict(Htx, _Tip, _Rev) ->
+  Htx1 = Htx:conflict(),
+  Htx1.
 
 redirect(Htx, Tip) ->
   Location = hty_uri:matrix(Htx:path(), <<"rev">>, Tip),
-  Htx:temporary_redirect(hty_uri:pack(Location)).
+  Htx1 = Htx:temporary_redirect(hty_uri:pack(Location)),
+  Htx1:commit().
 
 save(Htx, Tip, Fs, DiskFormat) ->
   Spaf = spaf(Htx:req_header('Content-Type'), DiskFormat),
@@ -121,7 +124,8 @@ save(Htx, Tip, Fs, DiskFormat) ->
       Htx1:server_error(Error);
     ok ->
       Location = hty_uri:matrix(Htx1:path(), <<"rev">>, Tip),
-      Htx1:see_other(hty_uri:pack(Location))
+      Htx2 = Htx1:see_other(hty_uri:pack(Location)),
+      Htx2:commit()
   end.
 
 tip(Fs) ->

@@ -18,5 +18,5 @@ mount(Fspath) ->
 
 handle(Htx, This) ->
   Method = This#hty_chgmethod_resource.method,
-  Htx1 = Htx:method(),
+  Htx1 = Htx:method(Method),
   Htx1:dispatch(This#hty_chgmethod_resource.subs).

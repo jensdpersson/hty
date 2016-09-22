@@ -86,6 +86,7 @@ loop_accept(Listen, Resource) ->
           go ->
             Htx = hty_parser:parse(Socket),
             Htx1 = Resource:handle(Htx),
+            print_log(Htx1),
             hty_parser:respond(Socket, Htx1)
         end
       end),
@@ -97,3 +98,12 @@ loop_accept(Listen, Resource) ->
       end,
       loop_accept(Listen, Resource)
   end.
+
+
+print_log(Htx) ->
+  Log = Htx:log(),
+  Msg = lists:foldl(fun(Elem, Acc) ->
+    {Category,Tstamp,Event,Data} = Elem,
+    ["<log>", Category, $|, Tstamp, $|, Event, $|, Data, "</log>", 10|Acc]
+  end, ["</tx>", 10], Log),
+  io:format([10, "<tx>", 10|Msg]).

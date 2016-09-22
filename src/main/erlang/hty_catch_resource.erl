@@ -32,7 +32,7 @@ validate(String) ->
   handle(Htx, This) ->
     Status = This#hty_catch_resource.status,
     Subs = This#hty_catch_resource.subs,
-    io:format("Matching status ~p~n",[Htx:status()]),
+    io:format("Checking for code ~p in ~p~n",[Status, Htx:status()]),
     case Htx:status() of
       {Status, _} ->
         Htx:dispatch(Subs);

@@ -9,7 +9,7 @@
 
 mount(Fspath) ->
   case lists:reverse(Fspath:parts()) of
-    ["xslpi", Url] ->
+    ["xslpi", Url|_] ->
       case hty_mounter:walk(Fspath, "resource") of
         {ok, Subs} ->
           Xslpi = xslpi(Url),
@@ -18,7 +18,7 @@ mount(Fspath) ->
           {error, {?MODULE, Error}}
       end;
     Other ->
-      {error, "hty_xslip_resource requires a url param"}
+      {error, "hty_xslpi_resource requires a url param"}
   end.
 
 handle(Htx, This) ->

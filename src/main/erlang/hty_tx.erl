@@ -429,7 +429,7 @@ log(Event, Data, This) ->
     Context = ndc_peek(This),
 		%io:format("APA ~p", [Context]),
     Category = atom_to_list(element(1, Context)),
-    This#hty_tx{log=[{Category,hty_log:tstamp(),Event,Data}|Log]}.
+    This#hty_tx{log=[{Category,hty_date:format(hty_date:now()),Event,Data}|Log]}.
 
 -spec sendfile(Filename::string(), htx()) -> htx().
 sendfile(Filename, This) ->

@@ -10,13 +10,26 @@
 %%
 %% Exported Functions
 %%
--export([handle/2, new/2]).
+-export([handle/2, mount/1]).
 -record(hty_sendfile_resource, {mime, fspath}).
 %%
 %% API Functions
 %%
-new(Mime, Fspath) ->
-    #hty_sendfile_resource{mime=Mime, fspath=Fspath}.
+mount(Fspath) ->
+  case Fspath:type() of
+    file ->
+      case lists:reverse(Fspath:parts()) of
+        ["sendfile", Param|_] ->
+          Mime = binary_to_list(hty_percentencoding:decode(Param)),
+          {ok, #hty_sendfile_resource{mime=Mime, fspath=Fspath}};
+        _ ->
+          {error, "sendfile resource requires a mime type param"}
+      end;
+    none ->
+      {error, {"path given for sendfile resource does not exist", Fspath:path()}};
+    dir ->
+      {error, {"path given for sendfile resource is a folder, not a file", Fspath:path()}}
+  end.
 
 handle(Htx, This) ->
     case Htx:method() of
@@ -27,12 +40,14 @@ handle(Htx, This) ->
 	    %case Htx:path_below() of
 		%[Basename] ->
 	    Fspath = This#hty_sendfile_resource.fspath,
-	    Htx1:sendfile(Fspath:filepath());
+      Htx2 = Htx1:ok(),
+      Htx3 = Htx2:commit(),
+	    Htx3:sendfile(Fspath:path());
 		%_ ->
 		%    Htx:not_found()
 	    %end;
 	_Method ->
-	    Htx:method_not_allowed(['GET']) 
+	    Htx:method_not_allowed(['GET'])
     end.
 
 %%
