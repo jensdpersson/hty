@@ -13,6 +13,8 @@
 
 -export([basename/1, parent/1, type/1]).
 
+-export([collect/2]).
+
 new(Path) ->
     #hty_fspath{path=Path, fs=hty_fs_fs}.
 
@@ -56,9 +58,6 @@ list(This) ->
 list(Filter, This) ->
     lists:filter(Filter, list(This)).
 
-
-
-
 fs(This) ->
   This#hty_fspath.fs.
 
@@ -99,16 +98,23 @@ type(This) ->
   (fs(This)):type(path(This)).
 
 subpath(Pathsegments, This) ->
-    case lists:foldl(fun(Item, Acc) ->
-			     case Item of
-				 ".." -> no;
-				 [$/, Item1] -> lists:reverse(Item1) ++ Acc;
-				 "" -> Acc;
-				 _ -> lists:reverse(Item) ++ "/" ++ Acc
-			     end
-		     end,
-		     lists:reverse(path(This)),
-		     Pathsegments) of
-	no -> ascension_denied;
-	Path1 -> hty_fspath:new(lists:reverse(Path1))
-    end.
+  Fun = fun(Item, Acc) ->
+    case Acc of
+      no -> no;
+      _ ->
+        case Item of
+          ".." -> no;
+          [$/, Item1] -> lists:reverse(Item1) ++ Acc;
+          "" -> Acc;
+          _ -> lists:reverse(Item) ++ "/" ++ Acc
+        end
+    end
+  end,
+  RPath = lists:reverse(path(This)),
+  case lists:foldl(Fun, RPath, Pathsegments) of
+    no -> ascension_denied;
+    Path1 -> hty_fspath:new(lists:reverse(Path1))
+  end.
+
+collect(Predicate, This) ->  
+  (fs(This)):collect(path(This), Predicate).

@@ -4,7 +4,7 @@
 
 -export([type/1,
          list/1,
-
+         collect/2,
          send/2,
          recv/3,
          save/2,
@@ -62,3 +62,27 @@ has_subs(Path) ->
 
 mkdir(Path) ->
   file:make_dir(Path).
+
+collect(Path, Pred) ->
+  case file:open(Path, [read, binary]) of
+    {ok, Fd} ->
+      case collect_line(Fd, Pred, []) of
+        {error, Error} ->
+          {error, Error};
+        Lines ->
+          file:close(Fd),
+          Lines
+      end;
+    {error, Error} ->
+      {error, Error}
+  end.
+
+collect_line(Fd, Pred, Sofar) ->
+  case io:get_line(Fd, "") of
+    eof ->
+      Sofar;
+    {error, Error} ->
+      {error, Error};
+    Data ->
+      collect_line(Fd, Pred, [Pred(Data)|Sofar])
+  end.

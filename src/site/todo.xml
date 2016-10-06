@@ -69,7 +69,21 @@
         <todo>Let hty_server use inet:peername to obtain peer IP<done/></todo>
         <todo>Set peer IP on tx.<done/></todo>
         <todo>Log peer ip in access log<done/></todo>
+        <todo>integ test case</todo>
+        <todo>Docs</todo>
+
       </todo>
+
+      <todo>
+        Logviewer
+        <todo>docs</todo>
+        <todo>test case</todo>
+        <todo>
+          impl
+
+        </todo>
+      </todo>
+
       <todo>
       	bind
       	<todo>impl<done/></todo>
@@ -83,15 +97,28 @@
       	<todo>docs</todo> </todo>
 
 
-      <todo>history 	<todo>impl<done/></todo>
+      <todo>
+        history
+        <todo>impl<done/></todo>
+        <todo>Rename to revo</todo>
       	<todo>test</todo>
-      	<todo>docs</todo> </todo>
-      <todo>static 	<todo>impl</todo>
+      	<todo>docs</todo>
+      </todo>
+
+      <todo>static
+        <todo>impl</todo>
       	<todo>test</todo>
-      	<todo>docs</todo> </todo>
+      	<todo>docs</todo>
+      </todo>
+
       <todo>vhost</todo>
-      <todo>xml</todo>
-      <todo>xslpi</todo> <todo>dir</todo> <todo>filelog</todo>
+
+
+      <todo>xslpi</todo>
+      <todo>dir</todo>
+      <todo>filelog
+        <todo>filelog actor not supervised, doesnt restart on fail</todo>
+      </todo>
 
 
 <todo>ref and def - replacing site and siteref
@@ -100,7 +127,7 @@
 
   the main actor will also listen for {site, Name, Actor} msgs
   and {site, Name} msgs. If regged, a {site,Name} call will forward the request
-  to the actor owning that site. 
+  to the actor owning that site.
   <todo>def_server
 
   </todo>
@@ -108,10 +135,20 @@
 </todo>
 
       </todo>
-      <todo>directives to drop or postpone
 
-      <todo>aggregate</todo>
-      <todo>basicauth</todo>
+<todo>
+  milestone 2
+  <todo>https_server</todo>
+  <todo>basicauth</todo>
+  <todo>realm mechanism</todo>
+  <todo>gate resources</todo>
+</todo>
+
+      <todo>directives to drop or postpone
+                <todo>xml</todo>
+
+      <todo>aggregate<done/></todo>
+      <todo>basicauth<done/></todo>
 
       <todo>crash</todo>
       <todo>css, drop</todo>
@@ -133,7 +170,7 @@
       <todo>links</todo>
       <todo>listen</todo>
       <todo>listing</todo>
-      <todo>logviewer</todo>
+
       <todo>override</todo>
       <todo>realm</todo>
       <todo>redirect</todo>

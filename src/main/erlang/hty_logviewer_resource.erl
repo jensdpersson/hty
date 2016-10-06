@@ -11,25 +11,53 @@ mount(Fspath) ->
   end.
 
 handle(Htx, This) ->
-  From = This:first_or_default(Htx, <<"from">>, dawnoftime),
-  To = This:first_or_default(Htx, <<"to">>, endofdays),
-  Pattern = This:first_or_default(Htx, <<"pattern">>, ".*"),
-  After = This:first_or_default(Htx, <<"after">>, 0),
-  Before = This:first_or_default(Htx, <<"before">>, 0),
-  Logger = Htx:bound(This#hty_logviewer_resource.logger),
-  case Logger:grep(From, To, Pattern, Before, After) of
-    {ok, Lines} ->
-      ok(Htx, Lines);
-    {gone} ->
-      Htx:gone();
-    {error, Error} ->
-      Htx:server_error(Error);
-    {timeout} ->
-      Htx:service_unavailable()
+  From0 = Htx:queryparam(<<"from">>),
+  From1 = case From0 of
+    [] ->
+      (hty_date:now()):daybreak();
+    [Value|_] ->
+      hty_date:parse(Value)
+  end,
+  To0 = Htx:queryparam(<<"to">>),
+  To1 = case To0 of
+    [] ->
+      (hty_date:now()):nightfall();
+    [Value1|_] ->
+      hty_date:parse(Value1)
+  end,
+
+  case {From1, To1} of
+    {{error, _Error},_} ->
+      Htx1 = Htx:echo(["Bad from date:", From0]),
+      Htx1:bad_request();
+    {_,{error, _Error}} ->
+      Htx1 = Htx:echo(["Bad to date:", To0]),
+      Htx1:bad_request();
+    _ ->
+      Pattern = first_or_default(Htx, <<"grep">>, ".*"),
+      After = first_or_default(Htx, <<"after">>, 0),
+      Before = first_or_default(Htx, <<"before">>, 0),
+      case Htx:bound(This#hty_logviewer_resource.logger) of
+        no ->
+          Htx:server_error("No logger bound as " ++ This#hty_logviewer_resource.logger);
+        {ok, [Logger]} ->
+          case Logger:grep(From1, To1, Pattern, Before, After) of
+            {ok, Lines} ->
+              ok(Htx, Lines);
+            {gone} ->
+              Htx:gone();
+            {error, Error} ->
+              Htx:server_error(Error);
+            {timeout} ->
+              Htx:service_unavailable()
+          end
+      end
   end.
 
 ok(Htx, Lines) ->
-  Htx:ok().
+  Htx1 = Htx:echo(Lines),
+  Htx2 = Htx1:rsp_header('Content-Type', <<"text/plain">>),
+  (Htx2:ok()):commit().
 
 first_or_default(Htx, Param, Default) ->
   case Htx:queryparam(Param) of

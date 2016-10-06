@@ -3,7 +3,7 @@
 -export([parse/1, format/1, format_date/1, with/3]).
 -export([year/1, month/1, day/1]).
 
--export([now/0, tomorrow/1]).
+-export([now/0, tomorrow/1, daybreak/1, nightfall/1]).
 
 -record(hty_date, {year=0, month=1, day=1, hour=0, minute=0, second=0, milli=0}).
 
@@ -106,7 +106,21 @@ with(second, V, This) ->
 with(milli, V, This) ->
   This#hty_date{milli=V}.
 
+daybreak(This) ->
+  This#hty_date{
+    hour=0,
+    minute=0,
+    second=0,
+    milli=0
+  }.
 
+nightfall(This) ->
+  This#hty_date{
+    hour=23,
+    minute=59,
+    second=59,
+    milli=999
+  }.
 
 year(This) ->
     This#hty_date.year.

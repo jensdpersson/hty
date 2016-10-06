@@ -85,23 +85,28 @@ loop(Folder) ->
 do_grep(From, To, Regex, Before, After, Folder, ResultSoFar) ->
   %TODO is To before From?
   FromStr = From:format_date(),
-  File = Folder:subpath(FromStr),
+  File = Folder:subpath([FromStr ++ ".log"]),
   Result = case File:exists() of
     true ->
+      io:format("File does exist ~p ~n",[File]),
       grep_in_file(File, Regex, Before, After, ResultSoFar);
     false ->
+      io:format("File does not exist ~p ~n",[File]),
       ResultSoFar
   end,
   Tomorrow = From:tomorrow(),
+  io:format("Checking tomorrow ~p~n", [Tomorrow]),
   case To:format_date() >= Tomorrow:format_date() of
     true ->
+      io:format("Checking tomorrow ~p ... true ~n", [Tomorrow]),
       do_grep(Tomorrow, To, Regex, Before, After, Folder, Result);
     false ->
-      Result
+      io:format("Checking tomorrow ~p ... false ~n", [Tomorrow]),
+      {ok, Result}
   end.
 
-grep_in_file(File, Regex, Before, After, Result) ->
-  File:each_line(fun(Line) ->
+grep_in_file(File, Regex, _Before, _After, _Result) ->
+  File:collect(fun(Line) ->
     case re:run(Line, Regex) of
       {match, _} ->
         [Line];

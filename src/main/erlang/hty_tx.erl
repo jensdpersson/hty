@@ -173,6 +173,7 @@ bind(Key, Value, This) ->
     Attrs = This#hty_tx.attributes,
     This#hty_tx{attributes=[{Key, Value}|Attrs]}.
 
+-spec bound(Key::string(), #hty_tx{}) -> no | {ok, Value::any()}.
 bound(Key, This) ->
   case lists:keyfind(Key, 1, This#hty_tx.attributes) of
     false ->

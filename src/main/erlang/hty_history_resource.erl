@@ -15,7 +15,7 @@ mount(Fspath) ->
   case lists:reverse(Fspath:parts()) of
     ["history", Diskformat | _] ->
       {ok, new(Fspath, Diskformat)};
-    Other ->
+    _ ->
       {ok, new(Fspath, "xml")}
   end.
 

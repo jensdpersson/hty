@@ -17,7 +17,7 @@ mount(Fspath) ->
         {error, Error} ->
           {error, {?MODULE, Error}}
       end;
-    Other ->
+    _ ->
       {error, "hty_xslpi_resource requires a url param"}
   end.
 

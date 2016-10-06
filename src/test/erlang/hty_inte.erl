@@ -1,6 +1,6 @@
 -module(hty_inte).
 
--export([run/2]).
+-export([run/2, main/1]).
 
 run(Testdir, Test) ->
     Specfile = filename:join(Testdir, "testspec.xml"),
@@ -9,10 +9,8 @@ run(Testdir, Test) ->
     true = filelib:is_file(Specfile),
     {Doc, _} = xmerl_scan:file(Specfile),
     Transactions = xmerl_xpath:string("/testspec/transaction", Doc),
-    [Results] = lists:map(fun(Tx) ->
-
+    Results = lists:map(fun(Tx) ->
       [Request] = select("request", Tx, Doc),
-
       Method = case select("method", Request, Doc) of
         [] ->
           get;
@@ -74,9 +72,10 @@ run(Testdir, Test) ->
           {error, Error}
       end
     end, Transactions),
-    inets:stop(httpc, HttpcPid).
+    inets:stop(httpc, HttpcPid),
+    Results.
 
-check_asserts(Response, Asserts, Doc, Testdir, TestID) ->
+check_asserts(Response, Asserts, Doc, Testdir, _TestID) ->
   MakeCheck = fun(Assert) ->
     Target = case tagname(Assert) of
       status ->
@@ -120,7 +119,13 @@ check_asserts(Response, Asserts, Doc, Testdir, TestID) ->
   end,
 
   Checks = lists:flatten(lists:map(MakeCheck, select("*", Asserts, doc))),
-  lists:foreach(fun({exact, A, A, AssertName}) -> ok end, Checks).
+  lists:foreach(fun(Check) ->
+    case Check of
+      {exact, A, A, _AssertName} -> ok;
+      {exact, Expected, Actual, _AssertName} ->
+        throw({error, ["Expected ", Expected, " but got ", Actual]})
+    end
+  end, Checks).
 
   read(Elm, Doc, Dir) ->
       case select("@file", Elm, Doc) of
@@ -145,3 +150,42 @@ attr({xmlAttribute, _, _, _, _, _, _, _, Value, _}) ->
   Value.
 tagname({xmlElement,TagName,_,_,_,_,_,_,_,_, _, _}) ->
   TagName.
+
+
+  main(_) ->
+    Basedir = "src/test/inte/",
+    inets:start(),
+    Tests = case file:list_dir(Basedir) of
+      {ok, Fixtures} ->
+        lists:map(fun(Fixture) ->
+          Etcdir = filename:join(["src", "test", "inte", Fixture, "fixture"]),
+          Setup = fun() ->
+            {ok, _} = hty_main:start([Etcdir])
+          end,
+          Teardown = fun(_) ->
+            ok = hty_main:stop()
+          end,
+          {foreach, Setup, Teardown, tests_in_fixture(Basedir, Fixture)}
+        end, Fixtures);
+      {error, Error} ->
+        io:format("Failed running fixtures in ~p, got error ~p~n", [Basedir, Error]),
+        {"Create fixtures", fun() -> throw({error, Error}) end}
+    end,
+    Tests.
+
+  tests_in_fixture(Basedir, Fixture) ->
+    Fixturedir = filename:join(Basedir, Fixture),
+    TestFolder = filename:join(Fixturedir, "tests"),
+    case file:list_dir(TestFolder) of
+      {ok, Tests} ->
+        lists:map(fun(Test) ->
+          {Fixture ++ ":" ++ Test, fun() -> hty_inte:run(filename:join(TestFolder, Test), Test) end}
+        end, Tests);
+      {error, enoent} ->
+        io:format("Found no tests in ~p~n", [TestFolder]),
+        [];
+      {error, Error} ->
+        Msg = io_lib:format("Fixture ~p got error ~p ~n",
+          [Fixture, Error]),
+        [fun() -> fail = Msg end]
+    end.

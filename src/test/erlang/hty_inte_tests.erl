@@ -19,7 +19,7 @@ do_test_() ->
       end, Fixtures);
     {error, Error} ->
       io:format("Failed running fixtures in ~p, got error ~p~n", [Basedir, Error]),
-      {"Create fixtures", fun() -> ok = {error, Error} end}
+      {"Create fixtures", fun() -> throw({error, Error}) end}
   end,
   Tests.
 
