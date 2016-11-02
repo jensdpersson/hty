@@ -1,0 +1,15 @@
+<directive name="accesslog" type="resource-class">
+  <param pos="1">The key of a bound logger that will receive log messages</param>
+  <content type="resource-class">
+    The resource-classes to delegate to and log stuff about.
+  </content>
+  <desc>
+    When an accesslog resource is invoked it will note a timestamp and
+    delegate the request to its content. When the transaction returns up the
+    stack a new timestamp, along with other information about the transaction
+    are gathered and a log message describing this is sent to a bound logger
+    specified in a parameter</desc>
+  <status code="ANY">
+    Accesslog will return whatever status was set before or below it.
+  </status>
+</directive>

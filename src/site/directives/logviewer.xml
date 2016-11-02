@@ -5,7 +5,7 @@
   <query name="grep">The substring to match</query>
   <query name="before">The number of lines before a match to include</query>
   <query name="before">The number of lines after a match to include</query>
-<desc>
+  <desc>
     This resource class accesses and returns sections of previously written logs.
     params. Within a date interval log records are matched and returned together
     with configurable before- and after-context lines.
