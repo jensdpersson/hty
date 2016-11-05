@@ -1,15 +1,29 @@
-<directive name="accesslog" type="resource-class">
-  <param pos="1">The key of a bound logger that will receive log messages</param>
+<directive name="store" type="resource-class">
+  <param pos="1">
+  </param>
   <content type="resource-class">
-    The resource-classes to delegate to and log stuff about.
   </content>
   <desc>
-    When an accesslog resource is invoked it will note a timestamp and
-    delegate the request to its content. When the transaction returns up the
-    stack a new timestamp, along with other information about the transaction
-    are gathered and a log message describing this is sent to a bound logger
-    specified in a parameter</desc>
+    A store resource will respond to revo where the path-below is taken 
+    to be the key and the body the value.
+    If-matches should be used to indicate 
+    
+    A store resource will 
+    
+    
+    hmm. A dict resource could be the kvpair create/read but dont rewrite
+    resource. Then another could add revs?
+    
+    Any way, the history resource, could be called store and use the 
+    mechanisms with rev matrix params like today. Number of revs to keep
+    could be confable. 
+    
+    Though, the related appendtree resource, that will accept duplicate keys
+    without a previous rev being given may have a role. 
+    where history would let POST create a new revision, appendtree would 
+    add a new member of the list.
+  
+  </desc>
   <status code="ANY">
-    Accesslog will return whatever status was set before or below it.
   </status>
 </directive>
