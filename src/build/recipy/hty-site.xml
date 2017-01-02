@@ -3,7 +3,7 @@
     <folder name="target">
         <artifact name="ebin"/>
         <folder name="site">
-          <folder name="8844.http">
+          <folder name="8080.http">
             <folder name="static">
               <copies of="src/site"/>
               <folder name="edoc">
