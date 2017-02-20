@@ -9,8 +9,20 @@ pack_status({Code, Message}) when is_integer(Code) -> integer_to_list(Code) ++ "
 pack_status(Message) -> Message.
 
 pack_header(HeaderName, HeaderValue) when is_atom(HeaderName) ->
-    atom_to_list(HeaderName) ++ ": " ++ HeaderValue;
-pack_header(HeaderName, HeaderValue) -> HeaderName ++ ": " ++ HeaderValue.
+    to_list(HeaderName) ++ ": " ++ to_list(HeaderValue).
+
+to_list(Any) ->
+  case is_atom(Any) of
+    true ->
+      atom_to_list(Any);
+    false ->
+      case is_binary(Any) of
+        true ->
+          binary_to_list(Any);
+        false -> 
+          Any
+      end
+  end.
 
 respond(Socket, Htx) ->
     send_line(Socket, "HTTP/1.1 " ++ pack_status(Htx:status())),
@@ -38,19 +50,19 @@ respond(Socket, Htx) ->
 send_line(Socket, Line) -> gen_tcp:send(Socket,  Line ++ "\r\n").
 
 set_peer(Htx, Socket) ->
-	case inet:peername(Socket) of
-		{ok, {Address, Port}} ->
-			case Address of
-				{_,_,_,_} ->
-					Htx:peer({ipv4, Address, Port});
-				{_,_,_,_,_,_,_,_} ->
-				  Htx:peer({ipv6, Address, Port});
-				_ ->
-					Htx:peer({other, Address, Port})
-			end;
-		{error, _}	->
-			Htx
-	end.
+  case inet:peername(Socket) of
+    {ok, {Address, Port}} ->
+      case Address of
+        {_,_,_,_} ->
+          Htx:peer({ipv4, Address, Port});
+        {_,_,_,_,_,_,_,_} ->
+          Htx:peer({ipv6, Address, Port});
+        _ ->
+          Htx:peer({other, Address, Port})
+      end;
+    {error, _}	->
+      Htx
+  end.
 
 parse(Socket) ->
     Htx = hty_tx:new(),
@@ -59,16 +71,16 @@ parse(Socket) ->
 
 parse_loop(Htx, Unparsed, Parser, Socket) ->
     case Parser(Htx, Unparsed) of
-	{Htx1, Unparsed1, Parser1} ->
-	    parse_loop(Htx1, Unparsed1, Parser1, Socket);
-	more ->
-	    recv(Htx, Unparsed, Parser, Socket);
-	{more, []} ->
-	    recv(Htx, Unparsed, Parser, Socket);
-	{done, Htx1} ->
-	    Htx1:socketreader(hty_socketreader);
-	{error, Error} ->
-	    {error, Error}
+  {Htx1, Unparsed1, Parser1} ->
+      parse_loop(Htx1, Unparsed1, Parser1, Socket);
+  more ->
+      recv(Htx, Unparsed, Parser, Socket);
+  {more, []} ->
+      recv(Htx, Unparsed, Parser, Socket);
+  {done, Htx1} ->
+      Htx1:socketreader(hty_socketreader);
+  {error, Error} ->
+      {error, Error}
     end.
 
 recv(Htx, Unparsed, Parser, Socket) ->
@@ -83,7 +95,7 @@ recv(Htx, Unparsed, Parser, Socket) ->
 method_parser(Htx, Data) ->
     case token(Data, 32) of
         {token, Method, Rest} ->
-					{Htx:method(canonical_method(Method)),Rest,fun path_parser/2};
+          {Htx:method(canonical_method(Method)),Rest,fun path_parser/2};
         {more, _Token} -> more
     end.
 
@@ -94,26 +106,26 @@ canonical_method(<<"DELETE">>) -> 'DELETE';
 canonical_method(<<"OPTIONS">>) -> 'OPTIONS';
 canonical_method(<<"HEAD">>) -> 'HEAD';
 canonical_method(Method) when is_binary(Method) ->
-	list_to_atom(binary_to_list(Method)).
+  list_to_atom(binary_to_list(Method)).
 
 path_parser(Htx, Data) ->
     case token(Data, 32) of
-	{token, Path, Rest} ->
-	    {Segments, Query} = hty_uri:parse_path(Path),
-	    Pathzipper = hty_uri:pathzipper(Segments),
-	    Htx1 = Htx:path(Pathzipper),
-	    {Htx1:queryparams(Query),
-	     Rest, fun protocol_parser/2};
-	{more, _Token} ->
-	    more
+  {token, Path, Rest} ->
+      {Segments, Query} = hty_uri:parse_path(Path),
+      Pathzipper = hty_uri:pathzipper(Segments),
+      Htx1 = Htx:path(Pathzipper),
+      {Htx1:queryparams(Query),
+       Rest, fun protocol_parser/2};
+  {more, _Token} ->
+      more
     end.
 
 protocol_parser(Req, Data) ->
     case line(Data) of
         {token, Protocol, Rest} ->
-	    {Req:protocol(Protocol),Rest,fun header_parser/2};
+      {Req:protocol(Protocol),Rest,fun header_parser/2};
         {more, _Token} ->
-	    more
+      more
     end.
 
 
@@ -124,36 +136,36 @@ header_parser(Htx, Data) ->
     case token(Data, $:) of
         {token, Name, Data1} ->
             case line(Data1) of
-							{token, Value, Data2} ->
-								{
-								 Htx:req_header(list_to_atom(binary_to_list(Name)),
-																hty_util:ltrim(Value)),
-								 Data2,
-								 fun header_parser/2};
+              {token, Value, Data2} ->
+                {
+                 Htx:req_header(list_to_atom(binary_to_list(Name)),
+                                hty_util:ltrim(Value)),
+                 Data2,
+                 fun header_parser/2};
                {more, _Token} -> more
             end;
         {more, _Token} -> more
     end.
 
 body_parser(Htx, Data) ->
-	Leng = get_content_length(Htx),
-	Htx1 = Htx:unread(Leng),
-	{done, Htx1:buffer(Data)}.
+  Leng = get_content_length(Htx),
+  Htx1 = Htx:unread(Leng),
+  {done, Htx1:buffer(Data)}.
 
 get_content_length(Htx) ->
-	case Htx:req_header('Content-Length') of
-		[] -> -1;
-		[ContentLength] ->
-				{Len, []} = string:to_integer(binary_to_list(ContentLength)),
-				io:format("Conlen [~p]~n",[ContentLength]),
-				Len
-				%{Htx,
-				 %Data,
-				 %fun (Htx1, Data1) ->
-				%			assemble_body(Htx1, Data1, Len)
-				% end
-				%}
-	end.
+  case Htx:req_header('Content-Length') of
+    [] -> -1;
+    [ContentLength] ->
+        {Len, []} = string:to_integer(binary_to_list(ContentLength)),
+        io:format("Conlen [~p]~n",[ContentLength]),
+        Len
+        %{Htx,
+         %Data,
+         %fun (Htx1, Data1) ->
+        %			assemble_body(Htx1, Data1, Len)
+        % end
+        %}
+  end.
 
 %assemble_body(Htx, Data, Len) ->
 %	case Len =< 0 of
@@ -171,26 +183,26 @@ get_content_length(Htx) ->
 
 %Helpers
 token(Data, Delim) ->
-	{Token, Rest} = hty_scan:until(Data, Delim),
-	case Rest of
-		<<Delim:8/integer, Rest1/binary>> ->
-			{token, Token, Rest1};
-		<<>> ->
-			{more, Token}
-	end.
+  {Token, Rest} = hty_scan:until(Data, Delim),
+  case Rest of
+    <<Delim:8/integer, Rest1/binary>> ->
+      {token, Token, Rest1};
+    <<>> ->
+      {more, Token}
+  end.
 
 line(Data) ->
-	{Line, Rest} = hty_scan:until_either(Data, 13, 10),
-	case Rest of
-		<<13, 10, R2/binary>> ->
-			{token, Line, R2};
-		<<13, R2/binary>> ->
-			{token, Line, R2};
-		<<10, R2/binary>> ->
-			{token, Line, R2};
-		<<>> ->
-			{more, Line}
-	end.
+  {Line, Rest} = hty_scan:until_either(Data, 13, 10),
+  case Rest of
+    <<13, 10, R2/binary>> ->
+      {token, Line, R2};
+    <<13, R2/binary>> ->
+      {token, Line, R2};
+    <<10, R2/binary>> ->
+      {token, Line, R2};
+    <<>> ->
+      {more, Line}
+  end.
 
 
 %token(Token, [Delim|Input], Delim) -> {token, lists:reverse(Token), Input};

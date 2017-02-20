@@ -470,11 +470,13 @@ dispatch(Resources, This) ->
     catch
       throw:Error ->
         Htx5 = Htx:ndc_push(Resource),
+        %when is this popped?
         {break, Htx5:server_error(Error)};
       error:Error ->
         Trace = erlang:get_stacktrace(),
         io:format("Dispatch caught ~p :: ~p~n", [Error, Trace]),
         {break, Htx:server_error(atom_to_list(Error))}
+        %Should this not be Htx3:server_error, rather than Htx:server_error?
     end
   end,
   case hty_util:fold(F, This, Resources) of

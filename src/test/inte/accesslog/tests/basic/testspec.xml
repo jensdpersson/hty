@@ -6,7 +6,7 @@
 
   <transaction>
     <request>
-      <url>http://localhost:10001/helloworld.txt</url>
+      <url>http://localhost:8080/helloworld.txt</url>
     </request>
     <response>
       <status>200</status>
@@ -19,7 +19,7 @@
 
   <transaction>
     <request>
-      <url>http://localhost:10001/logs/</url>
+      <url>http://localhost:8080/logs/</url>
     </request>
     <response>
       <status>200</status>
