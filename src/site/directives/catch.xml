@@ -10,6 +10,6 @@
   </desc>
   <status code="ANY">
     If the status matches the status of the transaction,
-    then any status code set by subcontent will be the on returned.
+    then any status code set by subcontent will be the one returned.
   </status>
 </directive>

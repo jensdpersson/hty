@@ -69,41 +69,48 @@
         <todo>Let hty_server use inet:peername to obtain peer IP<done/></todo>
         <todo>Set peer IP on tx.<done/></todo>
         <todo>Log peer ip in access log<done/></todo>
-        <todo>integ test case</todo>
-        <todo>Docs</todo>
-
+        <todo>integ test case
+          <todo>Requires a new file line matching thing in the test rig. Instead
+          of "exact", something like "line contains"
+          <done/></todo>
+          <done/>
+        </todo>
+        <todo>Docs<done/></todo>
+        <done/>
       </todo>
 
       <todo>
         Logviewer
-        <todo>docs</todo>
-        <todo>test case</todo>
+        <todo>docs<done/></todo>
+        <todo>test case<done/></todo>
         <todo>
           impl
-
+<done/>
         </todo>
+        <done/>
       </todo>
 
       <todo>
       	bind
       	<todo>impl<done/></todo>
-      	<todo>test</todo>
+      	<todo>test<done/></todo>
       	<todo>docs<done/></todo>
+      	<done/>
       </todo>
 
-      <todo>catch
-        	<todo>impl</todo>
-      	<todo>test</todo>
-      	<todo>docs</todo> </todo>
-
-
-      <todo>
-        history
-        <todo>impl<done/></todo>
-        <todo>Rename to revo</todo>
-      	<todo>test</todo>
-      	<todo>docs</todo>
-      </todo>
+  <todo>catch
+    <todo>impl<done/></todo>
+    <todo>test<done/></todo>
+    <todo>docs<done/></todo>
+    <done/>
+  </todo>
+  <todo>
+    history
+    <todo>impl<done/></todo>
+    <todo>Rename to revo</todo>
+    <todo>test</todo>
+    <todo>docs</todo>
+  </todo>
 
       <todo>static
         <todo>impl</todo>

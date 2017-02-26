@@ -123,7 +123,18 @@ check_asserts(Response, Asserts, Doc, Testdir, _TestID) ->
     case Check of
       {exact, A, A, _AssertName} -> ok;
       {exact, Expected, Actual, _AssertName} ->
-        throw({error, ["Expected ", Expected, " but got ", Actual]})
+        throw({error, ["Expected ", Expected, " but got ", Actual]});
+      {match, Pattern, Actual, AssertName} -> 
+        case re:compile(Pattern) of
+          {ok, Mp} ->
+            case re:run(Actual, Mp) of
+              {match, _} -> ok;
+              nomatch -> 
+               throw({error, ["Expected match agains ", Pattern, " but got ", Actual]})
+            end;
+          {error, {Error, Pos}} ->
+            throw({error, ["Bad regex", AssertName, Error, Pos]})
+        end
     end
   end, Checks).
 
@@ -148,9 +159,8 @@ text({xmlElement,_,_,_,_,_,_,_,[XmlText], _, _, _}) ->
   text(XmlText).
 attr({xmlAttribute, _, _, _, _, _, _, _, Value, _}) ->
   Value.
-tagname({xmlElement,TagName,_,_,_,_,_,_,_,_, _, _}) ->
+tagname({xmlElement,TagName     ,_,_,_,_,_,_,_,_, _, _}) ->
   TagName.
-
 
   main(_) ->
     Basedir = "src/test/inte/",

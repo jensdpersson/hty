@@ -4,10 +4,10 @@
   <query name="to">The end (inclusive) of the datetime interval in which to match</query>
   <query name="grep">The substring to match</query>
   <query name="before">The number of lines before a match to include</query>
-  <query name="before">The number of lines after a match to include</query>
+  <query name="after">The number of lines after a match to include</query>
   <desc>
     This resource class accesses and returns sections of previously written logs.
-    params. Within a date interval log records are matched and returned together
+    Within a date interval log records are matched and returned together
     with configurable before- and after-context lines.
   </desc>
   <status code="200">
