@@ -8,8 +8,8 @@
 pack_status({Code, Message}) when is_integer(Code) -> integer_to_list(Code) ++ " " ++ Message;
 pack_status(Message) -> Message.
 
-pack_header(HeaderName, HeaderValue) when is_atom(HeaderName) ->
-    to_list(HeaderName) ++ ": " ++ to_list(HeaderValue).
+pack_header(HeaderName, HeaderValue) ->
+  to_list(HeaderName) ++ ": " ++ to_list(HeaderValue).
 
 to_list(Any) ->
   case is_atom(Any) of
