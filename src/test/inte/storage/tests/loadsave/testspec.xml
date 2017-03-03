@@ -4,7 +4,7 @@
   </synopsis>
   <transaction>
     <request>
-      <url>http://localhost:10010/bollhav</url>
+      <url>http://localhost:8080/bollhav</url>
       <method>PUT</method>
       <body file="datafile"/>
     </request>
@@ -14,7 +14,7 @@
   </transaction>
   <transaction>
     <request>
-      <url>http://localhost:10010/bollhav</url>
+      <url>http://localhost:8080/bollhav</url>
     </request>
     <response>
       <status>200</status>
