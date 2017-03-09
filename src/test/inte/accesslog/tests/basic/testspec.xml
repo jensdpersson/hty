@@ -25,7 +25,7 @@
       <status>200</status>
       <header name="content-type">text/plain</header>
       <body>
-	       <exact file="log.txt"/>
+	       <match file="pattern.txt"/>
       </body>
     </response>
   </transaction>
