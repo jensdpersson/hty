@@ -19,15 +19,17 @@ main([]) ->
 main([Path]) ->
   case start(Path) of
     {error, Error} ->
-      io:format("Failed starting hty: ~p~n", [Error]),
+      io:format("hty start status: fail ~p~n", [Error]),
       {error, Error};
-    _Pid ->
+    {ok, Status} ->
+      io:format("hty start status: started ~p~n", [Status]),
       receive
         stop -> ok
       end
   end.
 
 mount(Path) ->
+  io:format("Mounting ~p~n", [Path]),
   Fspath = hty_fspath:new(Path),
   case Fspath:exists() of
     true ->
@@ -47,7 +49,8 @@ mount(Path) ->
           end
       end;
     false ->
-      {error, enoent, Path}
+      io:format("Path does not exist from where I stand (~p)~n", [file:get_cwd()]),
+      {error, {enoent, Path}}
   end.
 
 start(Path) ->
