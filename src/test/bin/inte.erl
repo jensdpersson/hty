@@ -227,7 +227,7 @@ loop_fixture(Port) ->
       io:format("Fixture trapped exit ~p~n", [Reason])
   end.
 
-run_fixture(Fixture) ->
+run_fixture(Fixture, Output) ->
   io:format("About to start fixture ~p~n", [Fixture]),
   Fixturedir = basedir() ++ Fixture,
   Etcdir = filename:join(["src", "test", "inte", Fixture, "fixture"]),
@@ -243,7 +243,7 @@ run_fixture(Fixture) ->
     	    TestResults = lists:map(fun(Test) ->
     	      run_test(Fixturedir, Test)
     	    end, Tests),
-          {Fixture, TestResults};
+          {Fixture, TestResults, []};
         {error, enoent} ->
           io:format("Found no tests in ~p~n", [TestFolder]),
           {Fixture, []}
@@ -308,9 +308,10 @@ main([Outfile]) ->
     end,
 
     WriteFixture = fun(A) ->
-      {Fixture, TestResults} = A,
+      {Fixture, TestResults, Stdout} = A,
       file:write(Out, [<<"<fixture path=\"">>, Fixture, <<"\">">>, 10]),
       lists:foreach(WriteTestResult, TestResults),
+      file:write(Out, [<<"<console><![CDATA[">>, Stdout, <<"]]></console>">>]),
       file:write(Out, [<<"</fixture>">>,10])
     end,
 
