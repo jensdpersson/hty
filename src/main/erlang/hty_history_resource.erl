@@ -115,17 +115,22 @@ redirect(Htx, Tip) ->
   Htx1:commit().
 
 save(Htx, Tip, Fs, DiskFormat) ->
-  Spaf = spaf(Htx:req_header('Content-Type'), DiskFormat),
-  Datafile = Fs:subpath([Tip ++ ".data"]),
-  Htx1 = Datafile:recv(Spaf, Htx),
-  Tipfile = Fs:subpath(["tip"]),
-  case Tipfile:save(Tip) of
-    {error, Error} ->
-      Htx1:server_error(Error);
-    ok ->
-      Location = hty_uri:matrix(Htx1:path(), <<"rev">>, Tip),
-      Htx2 = Htx1:see_other(hty_uri:pack(Location)),
-      Htx2:commit()
+  case spaf(Htx:req_header('Content-Type'), DiskFormat) of
+    error ->
+      io:format("Headers ~p ~n", [Htx:req_headers()]),
+      (Htx:bad_request()):commit();
+    Spaf ->
+      Datafile = Fs:subpath([Tip ++ ".data"]),
+      Htx1 = Datafile:recv(Spaf, Htx),
+      Tipfile = Fs:subpath(["tip"]),
+      case Tipfile:save(Tip) of
+        {error, Error} ->
+          Htx1:server_error(Error);
+        ok ->
+          Location = hty_uri:matrix(Htx1:path(), <<"rev">>, Tip),
+          Htx2 = Htx1:see_other(hty_uri:pack(Location)),
+          Htx2:commit()
+      end
   end.
 
 tip(Fs) ->
@@ -151,4 +156,5 @@ tip(Fs) ->
 spaf([<<"application/x-www-form-urlencoded">>], "xml") ->
     [fun hty_formtree_spaf:parse/2, fun hty_xml_spaf:format/2];
 spaf(Mime, Diskf) ->
-    io:format("Unregged mime/diskformat combo [~p/~p]~n", [Mime, Diskf]).
+    io:format("Unregged mime/diskformat combo [~p/~p]~n", [Mime, Diskf]),
+    error.

@@ -244,15 +244,21 @@ status(Code, Message, This) ->
     This1 = log("status", Message, This),
     This1#hty_tx{status={Code, Message}}.
 
-req_header(Name, Value, This) -> This#hty_tx{reqh=[{Name,Value}|This#hty_tx.reqh]}.
+req_header(Name, Value, This) -> 
+  This#hty_tx{reqh=[{Name,Value}|This#hty_tx.reqh]}.
 
-req_header(Name, This) ->
-    lists:flatmap(fun(Item) ->
-			  case Item of
-			      {Name, Value} -> [Value];
-			      _ -> []
-			  end
-		  end, This#hty_tx.reqh).
+req_header(Name, This) when is_binary(Name) ->
+  req_header(binary_to_list(Name), This);
+req_header(Name, This) when is_atom(Name) ->
+  req_header(atom_to_list(Name), This);
+req_header(Name0, This) ->
+  Name = string:to_lower(Name0),
+  lists:flatmap(fun(Item) ->
+    case Item of
+      {Name, Value} -> [Value];
+      _ -> []
+    end
+  end, This#hty_tx.reqh).
 
 req_headers(This) -> This#hty_tx.reqh.
 

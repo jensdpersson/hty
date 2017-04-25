@@ -138,7 +138,7 @@ header_parser(Htx, Data) ->
             case line(Data1) of
               {token, Value, Data2} ->
                 {
-                 Htx:req_header(list_to_atom(binary_to_list(Name)),
+                 Htx:req_header(string:to_lower(binary_to_list(Name)),
                                 hty_util:ltrim(Value)),
                  Data2,
                  fun header_parser/2};
