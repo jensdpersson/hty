@@ -10,13 +10,17 @@
                 <e:edoc/>
               </folder>
               <folder name="test-results">
-                <artifact name="xsl" project="resultface"/>
-                <e:eunit-reports xslpi="resultface.xsl" ebin="target/ebin"/>
-                <index-xml xslpi="resultface-list.xsl" exclude=".*\.xsl"/>
+                <!--artifact name="xsl" project="resultface"/-->
+                <e:eunit-reports xslpi="../resultface.xsl" ebin="target/ebin"/>
+                <index-xml xslpi="../resultface-list.xsl" exclude=".*\.xsl"/>
               </folder>
-              <artifact project="verdict" name="xslt"/>
-              <artifact project="prosith" name="pkg"/>
-              <artifact project="simpletodoview" name="xsl"/>
+              <!-- artifact project="verdict" name="xslt"/-->
+              <unzipped>
+                <download
+                  uri="https://github.com/jensdpersson/prosith/releases/download/v0.2.0/prosith.zip"/>
+              </unzipped>
+
+              <!--artifact project="simpletodoview" name="xsl"/-->
             </folder>
           </folder>
         </folder>
