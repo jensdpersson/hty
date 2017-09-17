@@ -3,6 +3,7 @@
 -export([run/2, main/1]).
 
 run(Testdir, Test) ->
+  io:format(user, "Running test ~p/~p~n", [Testdir, Test]),
     Specfile = filename:join(Testdir, "testspec.xml"),
     Profile = list_to_atom(Test),
     {ok, HttpcPid} = inets:start(httpc, [{profile, Profile}]),
@@ -124,12 +125,12 @@ check_asserts(Response, Asserts, Doc, Testdir, _TestID) ->
       {exact, A, A, _AssertName} -> ok;
       {exact, Expected, Actual, _AssertName} ->
         throw({error, ["Expected ", Expected, " but got ", Actual]});
-      {match, Pattern, Actual, AssertName} -> 
+      {match, Pattern, Actual, AssertName} ->
         case re:compile(Pattern) of
           {ok, Mp} ->
             case re:run(Actual, Mp) of
               {match, _} -> ok;
-              nomatch -> 
+              nomatch ->
                throw({error, ["Expected match agains ", Pattern, " but got ", Actual]})
             end;
           {error, {Error, Pos}} ->

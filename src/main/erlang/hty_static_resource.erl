@@ -3,7 +3,7 @@
 %% Description: TODO: Add description to hty_public_resource
 -module(hty_static_resource).
 
--record(hty_static_resource, {fspath}).
+-record(hty_static_resource, {fspath, welcome}).
 
 
 %%
@@ -13,13 +13,21 @@
 %%
 %% Exported Functions
 %%
--export([handle/2, new/1, mount/1]).
+-export([handle/2, new/2, mount/1]).
 
 
-mount(Fspath) -> {ok, new(Fspath)}.
+mount(Fspath) ->
+  Welcome = case Fspath:param("welcome") of
+    no ->
+      hty_indexfile_welcome:new();
+    WelcomeType ->
+      WelcomeModule = list_to_atom("hty_" ++ WelcomeType ++ "_welcome"),
+      WelcomeModule:new()
+  end,
+  {ok, new(Fspath, Welcome)}.
 
-new(Fspath) ->
-  #hty_static_resource{fspath=Fspath}.
+new(Fspath, Welcome) ->
+  #hty_static_resource{fspath=Fspath, welcome=Welcome}.
 
 handle(Htx, This) ->
   Fspath = This#hty_static_resource.fspath,
@@ -31,54 +39,16 @@ handle(Htx, This) ->
         Fspath1 ->
           case Fspath1:isdir() of
             true ->
-              F=fun(W) ->
-                Fspath2 = Fspath1:subpath([W]),
-                  case Fspath2:exists() of
-                    true -> [Fspath2];
-                    false -> []
-                  end
-              end,
-              L = ["index.html", "index.xml", "index.txt"],
-              case lists:flatmap(F, L) of
-                [Welcome|_] ->
-                  serve(Htx, Welcome);
-                [] ->
-                  Htx:not_found()
-              end;
+              Welcome = This#hty_static_resource.welcome,
+              Welcome:list(Htx, Fspath1);
             false ->
               case Fspath1:exists() of
                 true ->
-                  serve(Htx, Fspath1);
+                  hty_fileserver:serve(Htx, Fspath1);
                 false ->
                   Htx:not_found()
               end
           end
       end;
     _Method -> Htx:method_not_allowed(['GET'])
-  end.
-
-
-%%
-%% Local Functions
-%%
-make_etag(Fs) -> [$"] ++ Fs:last_modified() ++ [$"].
-
-serve(Htx0, Fs) ->
-  ETag = make_etag(Fs),
-  BTag = list_to_binary(ETag),
-  case Htx0:req_header('If-None-Match') of
-    [BTag] ->
-      io:format("ETag Match: ~p~n", [ETag]),
-      Htx01 = Htx0:rsp_header("ETag", ETag),
-      Htx02 = Htx01:not_modified(),
-      Htx02:commit();
-    SomethingElse ->
-      io:format("If-None-Match: ~p!=~p~n", [SomethingElse,ETag]),
-      Htx01 = Htx0:rsp_header("ETag", ETag),
-      Htx = Htx01:rsp_header("Cache-Control", "public"),
-      Mime = Htx:mimemap(Fs:ext()),
-      Htx2 = Htx:rsp_header('Content-Type', Mime),
-      Htx3 = Fs:send(Htx2),
-      Htx4 = Htx3:ok(),
-      Htx4:commit()
   end.

@@ -1,0 +1,14 @@
+<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="1" failures="0" errors="1" skipped="0" time="0.007" name="module 'hty_timeseries_resource'">
+  <testcase time="0.005" name="hty_timeseries_resource_tests:add_entry_test/0_0" description="module 'hty_timeseries_resource_tests'">
+    <error type="error">
+::in function hty_fs_cursor:new/1
+  called as new("target/2017-08-13T10:52:21.tmp")
+in call from hty_timeseries_resource_tests:dut/0 (src/test/erlang/hty_timeseries_resource_tests.erl, line 18)
+in call from hty_timeseries_resource_tests:add_entry_test/0 (src/test/erlang/hty_timeseries_resource_tests.erl, line 8)
+in call from hty_timeseries_resource_tests:add_entry_test/0
+**error:undef
+    </error>
+    <system-out>
+    </system-out>
+  </testcase>
+</testsuite>

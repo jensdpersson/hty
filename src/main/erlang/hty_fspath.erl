@@ -13,7 +13,7 @@
 
 -export([basename/1, parent/1, type/1]).
 
--export([collect/2]).
+-export([collect/2, params/1, param/2]).
 
 new(Path) ->
     #hty_fspath{path=Path, fs=hty_fs_fs}.
@@ -23,6 +23,32 @@ new(Path, Fs) ->
 
 path(This) ->
     This#hty_fspath.path.
+
+params(This) ->
+  io:format("Parts=~w\n", [parts(This)]),
+  case parts(This) of
+    [_, Paramstring, _] ->
+      Paramstrings = string:tokens(Paramstring, ","),
+      lists:map(fun(Elem) ->
+        case string:tokens(Elem, "=") of
+          [Key, Value] ->
+            {Key, Value};
+          [Key] ->
+            {Key, []}
+        end
+      end, Paramstrings);
+    _ ->
+      []
+  end.
+
+param(Name, This) ->
+  io:format("Name=~p, Params=~w\n", [Name, This:params()]),
+  case lists:keyfind(Name, 1, This:params()) of
+    false ->
+      no;
+    {_, Value} ->
+      Value
+  end.
 
 exists(This) ->
   Fs = fs(This),
@@ -63,6 +89,8 @@ fs(This) ->
 
 parts(This) ->
 	string:tokens(basename(This), ".").
+
+
 
 ext(This) ->
 	[Rv|_] = lists:reverse(parts(This)),
@@ -116,5 +144,5 @@ subpath(Pathsegments, This) ->
     Path1 -> hty_fspath:new(lists:reverse(Path1))
   end.
 
-collect(Predicate, This) ->  
+collect(Predicate, This) ->
   (fs(This)):collect(path(This), Predicate).

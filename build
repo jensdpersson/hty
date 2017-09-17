@@ -8,6 +8,6 @@ if [ -d ./reci.py ]
     git clone --depth 1 https://github.com/jensdpersson/reci.py.git
     echo ./reci.py >> .gitignore
 fi
-./reci.py/src/main/python/reci.py site
-./reci.py/src/main/python/reci.py escript
+echo `./reci.py/src/main/python/reci.py site 2>&1`
+echo `./reci.py/src/main/python/reci.py escript 2>&1`
 chmod u+x hty

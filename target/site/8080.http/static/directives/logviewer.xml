@@ -1,0 +1,19 @@
+<directive name="logview" type="resource-class">
+  <param pos="1">The key of a bound logger to query for logs</param>
+  <query name="from">The beginning of the datetime interval in which to match</query>
+  <query name="to">The end (inclusive) of the datetime interval in which to match</query>
+  <query name="grep">The substring to match</query>
+  <query name="before">The number of lines before a match to include</query>
+  <query name="after">The number of lines after a match to include</query>
+  <desc>
+    This resource class accesses and returns sections of previously written logs.
+    Within a date interval log records are matched and returned together
+    with configurable before- and after-context lines.
+  </desc>
+  <status code="200">
+    An empty result is considered found if the dates were within a kept range.
+  </status>
+  <status code="410">
+    If the range is before the first available log.
+  </status>
+</directive>
