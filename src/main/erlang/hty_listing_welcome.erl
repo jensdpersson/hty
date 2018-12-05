@@ -19,7 +19,12 @@ list(Htx, Fspath, Attrs) ->
 
 listUrilist(Htx, Fspath) ->
 	Htx1 = lists:foldl(fun(Item, Acc) ->
-					Acc:echo([Item:basename(), 13, 10])
+          PerhapsSlash = case Item:isdir() of
+            true -> $/;
+            false -> ""
+          end,
+          Percented = hty_percentencoding:encode(Item:basename()),
+					Acc:echo([Percented, PerhapsSlash, 13, 10])
 				end, Htx, Fspath:list()),
 	Htx2 = Htx1:rsp_header("Content-Type", "text/uri-list"),
 	Htx2:ok().

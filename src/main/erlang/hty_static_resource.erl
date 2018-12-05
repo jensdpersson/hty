@@ -33,10 +33,12 @@ handle(Htx, This) ->
   Fspath = This#hty_static_resource.fspath,
   case Htx:method() of
     'GET' ->
+      %io:format("static path below [~p]~n", [Htx:path_below()]),
       case Fspath:subpath(Htx:path_below()) of
         ascension_denied ->
           Htx:not_found();
         Fspath1 ->
+          io:format("static subpath [~p]~n", [Fspath1]),
           case Fspath1:isdir() of
             true ->
               Welcome = This#hty_static_resource.welcome,

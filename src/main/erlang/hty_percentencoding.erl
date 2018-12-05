@@ -15,13 +15,25 @@
 %%
 %% API Functions
 %%
-encode(_Bin) -> not_implemented.
+encode(Str) when is_list(Str) ->
+	encode(list_to_binary(Str));
+encode(Bin) ->
+		encode(Bin, <<>>).
 decode(Bin) ->
 		decode(Bin, <<>>).
 
 %%
 %% Local Functions
 %%
+encode(In, Out) ->
+		{A, B} = hty_scan:until(In, 32),
+		case B of
+			<<>> ->
+				<<Out/binary, A/binary>>;
+			<<32, Rest/binary>> ->
+				encode(Rest, <<Out/binary, A/binary, "%20">>)
+		end.
+
 decode(In, Out) when is_list(In) ->
 	decode(list_to_binary(In), Out);
 decode(In, Out) ->
@@ -29,9 +41,9 @@ decode(In, Out) ->
 	case B of
 		<<>> ->
 			<<Out/binary, A/binary>>;
-                <<$+, Rest/binary>> ->
-                    Int = 32,
-		    Out1 = <<Out/binary, A/binary, Int:8/integer>>,
+    <<$+, Rest/binary>> ->
+      Int = 32,
+		  Out1 = <<Out/binary, A/binary, Int:8/integer>>,
 		  decode(Rest, Out1);
 		<<$%, H1:8/integer, H2:8/integer, Rest/binary>> ->
 			Int = dehex(H1) * 16 + dehex(H2),
