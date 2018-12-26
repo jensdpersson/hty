@@ -1,0 +1,41 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Haughty Http Server</title>
+    <style type="text/css">
+      div { border:1px solid grey; margin:3px; padding: 3px; }
+    </style>
+  </head>
+  <body>
+    <div>
+      A light weight scalable http server.
+    </div>
+    <div>
+    <div>
+      Loading model.
+      hty_main is invoked with a path parameter.
+      this folder is taken to be the root.
+      All content of the root is mapped as "servers".
+
+      Then they are started, they can also be stopped.
+
+      Some of these will be
+
+      hty_http_server:
+      walks all content and mounts it as "resources", dispatches http events
+
+      hty_site_server:
+      Will register a name in an actor to recv requests from siteref resources
+
+      hty_fswatch_server:
+      not sure.
+      dispatch requests of some sort based on changed files.
+
+      hty_cron_server: prolly the same
+
+      hty_code_server: adds its folder to code path and registers its prefix.
+
+    </div>
+    
+    	</div>
+  </body>
+</html>

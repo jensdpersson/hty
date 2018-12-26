@@ -1,0 +1,15 @@
+<directive name="filelog" type="logger">
+  <param pos="1">
+    If this parameter is set to a number log files older than this number of
+    days are purged.
+  </param>
+  <content type="output files">
+    The filelog does not read its content, instead it uses it as
+    repository for log files.
+  </content>
+  <desc>
+    This logger writes a set of files, rolling each night at 24 UTC.
+    The files are named by the iso-8601 dates. A separate process manages the
+    log file and the rolling.
+  </desc>
+</directive>

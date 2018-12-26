@@ -1,0 +1,58 @@
+<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="13" failures="0" errors="4" skipped="0" time="0.217" name="module 'hty_inte'">
+  <testcase time="0.089" name="hty_inte_tests:tests_in_fixture/2_0" description="accesslog:basic">
+    <error type="throw">
+::in function hty_inte:'-check_asserts/5-fun-3-'/1 (src/test/erlang/hty_inte.erl, line 127)
+in call from lists:foreach/2 (lists.erl, line 1336)
+in call from lists:map/2 (lists.erl, line 1237)
+in call from hty_inte:run/2 (src/test/erlang/hty_inte.erl, line 13)
+**throw:{error,["Expected ","200"," but got ","404"]}
+    </error>
+    <system-out>
+    </system-out>
+  </testcase>
+  <testcase time="0.005" name="hty_inte_tests:tests_in_fixture/2_0" description="catch:status_forward"/>
+  <testcase time="0.002" name="hty_inte_tests:tests_in_fixture/2_0" description="login:get_rootfile"/>
+  <testcase time="0.002" name="hty_inte_tests:tests_in_fixture/2_0" description="login:redirected_to_login"/>
+  <testcase time="0.003" name="hty_inte_tests:tests_in_fixture/2_0" description="static:get_rootfile"/>
+  <testcase time="0.003" name="hty_inte_tests:tests_in_fixture/2_0" description="static:get_rootindex"/>
+  <testcase time="0.003" name="hty_inte_tests:tests_in_fixture/2_0" description="static:get_subfile"/>
+  <testcase time="0.004" name="hty_inte_tests:tests_in_fixture/2_0" description="static:get_subindex"/>
+  <testcase time="0.004" name="hty_inte_tests:tests_in_fixture/2_0" description="static:indextxtaswelcomefile"/>
+  <testcase time="0.004" name="hty_inte_tests:tests_in_fixture/2_0" description="static_listing:list_root">
+    <error type="throw">
+::in function hty_inte:'-check_asserts/5-fun-3-'/1 (src/test/erlang/hty_inte.erl, line 127)
+in call from lists:foreach/2 (lists.erl, line 1336)
+in call from lists:map/2 (lists.erl, line 1237)
+in call from hty_inte:run/2 (src/test/erlang/hty_inte.erl, line 13)
+**throw:{error,["Expected ",
+        "&lt;dir&gt;&lt;file&gt;index.html&lt;/file&gt;&lt;file&gt;rootfile.html&lt;/file&gt;&lt;file&gt;rootfile1.html&lt;/file&gt;&lt;/dir&gt;\n",
+        " but got ",
+        "&lt;dir&gt;&lt;file&gt;subfolder&lt;/file&gt;&lt;file&gt;rootfile1.html&lt;/file&gt;&lt;file&gt;rootfile.html&lt;/file&gt;&lt;file&gt;index.html&lt;/file&gt;&lt;/dir&gt;"]}
+    </error>
+    <system-out>
+    </system-out>
+  </testcase>
+  <testcase time="0.003" name="hty_inte_tests:tests_in_fixture/2_0" description="static_listing:list_sub">
+    <error type="throw">
+::in function hty_inte:'-check_asserts/5-fun-3-'/1 (src/test/erlang/hty_inte.erl, line 127)
+in call from lists:foreach/2 (lists.erl, line 1336)
+in call from lists:map/2 (lists.erl, line 1237)
+in call from hty_inte:run/2 (src/test/erlang/hty_inte.erl, line 13)
+**throw:{error,["Expected ",
+        "&lt;dir&gt;&lt;file&gt;index.html&lt;/file&gt;&lt;file&gt;subfile.html&lt;/file&gt;&lt;file&gt;subfile1.html&lt;/file&gt;&lt;/dir&gt;\n",
+        " but got ",
+        "&lt;dir&gt;&lt;file&gt;subfile1.html&lt;/file&gt;&lt;file&gt;subfile.html&lt;/file&gt;&lt;file&gt;index.html&lt;/file&gt;&lt;/dir&gt;"]}
+    </error>
+    <system-out>
+    </system-out>
+  </testcase>
+  <testcase time="0.004" name="hty_inte_tests:tests_in_fixture/2_0" description="storage:loadsave"/>
+  <testcase time="0.001" name="hty_inte_tests:tests_in_fixture/2_0" description="xslpi:basic">
+    <error type="error">
+::in function hty_inte:run/2 (src/test/erlang/hty_inte.erl, line 9)
+**error:{badmatch,{error,{already_started,&lt;0.70.0&gt;}}}
+    </error>
+    <system-out>
+    </system-out>
+  </testcase>
+</testsuite>

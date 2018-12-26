@@ -1,20 +1,28 @@
-%% Author: jens
-%% Created: 17 apr 2013
--module(hty_listing_welcome).
--export([list/2, list/3, new/0]).
+-module(hty_listdir_resource).
+-record(hty_listdir_resource, {key}).
+-export([mount/1, handle/2]).
 
-new() -> hty_listing_welcome.
+mount(Fspath) ->
+  case lists:reverse(Fspath:parts()) of
+    ["listdir", StorageKey|_] ->
+      {ok, #hty_listdir_resource{key=StorageKey}};
+    _ ->
+      {error, "listdir resource needs storage key"}
+  end.
 
-list(Htx, Fspath) ->
-  list(Htx, Fspath, []).
-
-list(Htx, Fspath, Attrs) ->
-  case Htx:req_header('Accept') of
-    [<<"text/uri-list">>] ->
-      listUrilist(Htx, Fspath);
-    Other ->
-      io:format("Got non-urilist accept header ~p~n", [Other]),
-      listXml(Htx, Fspath, Attrs)
+handle(Htx, This) ->
+  Key = This#hty_listdir_resource.key,
+  case hty_pathmapper:htx_to_fspath(Htx, Key) of
+    {ok, Fspath} ->
+      case Htx:req_header('Accept') of
+        [<<"text/uri-list">>] ->
+          listUrilist(Htx, Fspath);
+        Other ->
+          io:format("Got non-urilist accept header ~p~n", [Other]),
+          listXml(Htx, Fspath, [])
+      end;
+    {no, Error} ->
+      Htx:server_error(Error)
   end.
 
 listUrilist(Htx, Fspath) ->

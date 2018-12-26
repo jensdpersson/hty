@@ -7,7 +7,7 @@
 -export([new/1, new/2]).
 
 -export([exists/1, isdir/1, mkdir/1, last_modified/1]).
--export([list/1, list/2, parts/1, prefix/1, ext/1, subpath/2]).
+-export([list/1, list/2, parts/1, prefix/1, ext/1, subpath/2, fs/1]).
 
 -export([send/2, recv/3, load/1, save/2, append/2, path/1]).
 
@@ -16,10 +16,14 @@
 -export([collect/2, params/1, param/2]).
 
 new(Path) ->
-    #hty_fspath{path=Path, fs=hty_fs_fs}.
+  new(Path, hty_fs_fs).
 
+new(Path, Fs) when is_binary(Path) ->
+  new(binary_to_list(Path), Fs);
 new(Path, Fs) ->
-    #hty_fspath{path=Path, fs=Fs}.
+  #hty_fspath{path=Path, fs=Fs}.
+
+
 
 path(This) ->
     This#hty_fspath.path.

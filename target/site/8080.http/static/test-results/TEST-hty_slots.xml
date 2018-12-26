@@ -1,0 +1,47 @@
+<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="6" failures="0" errors="0" skipped="0" time="0.018" name="module 'hty_slots'">
+  <testcase time="0.000" name="hty_slots_tests:middle_test/0_0">
+    <system-out>Slots=[[&lt;&lt;"Hello "&gt;&gt;,{key,&lt;&lt;"locus"&gt;&gt;},&lt;&lt;"!"&gt;&gt;]]
+Merging [{&lt;&lt;"locus"&gt;&gt;,&lt;&lt;"World"&gt;&gt;}] into [&lt;&lt;"Hello "&gt;&gt;,
+                                          {key,&lt;&lt;"locus"&gt;&gt;},
+                                          &lt;&lt;"!"&gt;&gt;]
+
+    </system-out>
+  </testcase>
+  <testcase time="0.000" name="hty_slots_tests:start_test/0_0">
+    <system-out>Slots=[[&lt;&lt;&gt;&gt;,{key,&lt;&lt;"greeting"&gt;&gt;},&lt;&lt;" World!"&gt;&gt;]]
+Merging [{&lt;&lt;"greeting"&gt;&gt;,&lt;&lt;"Hello"&gt;&gt;}] into [&lt;&lt;&gt;&gt;,
+                                             {key,&lt;&lt;"greeting"&gt;&gt;},
+                                             &lt;&lt;" World!"&gt;&gt;]
+
+    </system-out>
+  </testcase>
+  <testcase time="0.000" name="hty_slots_tests:end_test/0_0">
+    <system-out>Slots=[[&lt;&lt;"Hello World"&gt;&gt;,{key,&lt;&lt;"punctuation"&gt;&gt;},&lt;&lt;&gt;&gt;]]
+Merging [{&lt;&lt;"punctuation"&gt;&gt;,&lt;&lt;"!"&gt;&gt;}] into [&lt;&lt;"Hello World"&gt;&gt;,
+                                            {key,&lt;&lt;"punctuation"&gt;&gt;},
+                                            &lt;&lt;&gt;&gt;]
+
+    </system-out>
+  </testcase>
+  <testcase time="0.000" name="hty_slots_tests:bad_test/0_0"/>
+  <testcase time="0.000" name="hty_slots_tests:missing_test/0_0">
+    <system-out>Merging [{&lt;&lt;"greeting"&gt;&gt;,&lt;&lt;"Hello"&gt;&gt;}] into [&lt;&lt;&gt;&gt;,
+                                             {key,&lt;&lt;"greeting"&gt;&gt;},
+                                             &lt;&lt;" "&gt;&gt;,
+                                             {key,&lt;&lt;"locus"&gt;&gt;},
+                                             &lt;&lt;"!"&gt;&gt;]
+
+    </system-out>
+  </testcase>
+  <testcase time="0.000" name="hty_slots_tests:many_test/0_0">
+    <system-out>Merging [{&lt;&lt;"greeting"&gt;&gt;,&lt;&lt;"Hello"&gt;&gt;},{&lt;&lt;"locus"&gt;&gt;,&lt;&lt;"World"&gt;&gt;}] into [&lt;&lt;&gt;&gt;,
+                                                                       {key,
+                                                                        &lt;&lt;"greeting"&gt;&gt;},
+                                                                       &lt;&lt;" "&gt;&gt;,
+                                                                       {key,
+                                                                        &lt;&lt;"locus"&gt;&gt;},
+                                                                       &lt;&lt;"!"&gt;&gt;]
+
+    </system-out>
+  </testcase>
+</testsuite>

@@ -1,0 +1,26 @@
+<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="2" failures="0" errors="2" skipped="0" time="0.006" name="module 'hty_xslpi_resource'">
+  <testcase time="0.000" name="hty_xslpi_resource_tests:simple_test/0_0">
+    <error type="error">
+::in function hty_tx_factory:new/0
+  called as new()
+in call from hty_xslpi_resource_tests:htx/1 (src/test/erlang/hty_xslpi_resource_tests.erl, line 23)
+in call from hty_xslpi_resource_tests:simple_test/0 (src/test/erlang/hty_xslpi_resource_tests.erl, line 8)
+in call from hty_xslpi_resource_tests:simple_test/0
+**error:undef
+    </error>
+    <system-out>
+    </system-out>
+  </testcase>
+  <testcase time="0.000" name="hty_xslpi_resource_tests:choice_test/0_0">
+    <error type="error">
+::in function hty_tx_factory:new/0
+  called as new()
+in call from hty_xslpi_resource_tests:htx/1 (src/test/erlang/hty_xslpi_resource_tests.erl, line 23)
+in call from hty_xslpi_resource_tests:choice_test/0 (src/test/erlang/hty_xslpi_resource_tests.erl, line 14)
+in call from hty_xslpi_resource_tests:choice_test/0
+**error:undef
+    </error>
+    <system-out>
+    </system-out>
+  </testcase>
+</testsuite>

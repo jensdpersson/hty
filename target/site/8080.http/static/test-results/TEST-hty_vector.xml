@@ -1,0 +1,14 @@
+<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="2" failures="0" errors="1" skipped="0" time="0.006" name="module 'hty_vector'">
+  <testcase time="0.000" name="hty_vector_tests:basic_test/0_0">
+    <system-out>Checking filtered dataChecking culled elements
+    </system-out>
+  </testcase>
+  <testcase time="0.000" name="hty_vector_tests:add_remove_test/0_0">
+    <error type="error">
+::in function hty_vector_tests:add_remove_test/0 (src/test/erlang/hty_vector_tests.erl, line 36)
+**error:{badmatch,[{wrap,g},{wrap,f},{wrap,a},{wrap,c},{wrap,d}]}
+    </error>
+    <system-out>
+    </system-out>
+  </testcase>
+</testsuite>

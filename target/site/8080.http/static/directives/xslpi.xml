@@ -1,0 +1,17 @@
+<directive name="xslpi" type="resource-class">
+  <!-- param> no params </param -->
+  <content type="resource-class">
+    Contents are queried for a xslpi string to use.
+  </content>
+  <desc>
+    If content querying fails, the xslpi rc will also fail.
+    Some parts of the master http transaction needs to be copied to the synted
+    one that fetches the xslpi string, but exactly what is not clear at the moment.
+    The idea is, though, that the subcontent mechanism should replace the
+    previous system with {bound-choice = xslpistring} pairs being encoded in
+    the folder name.
+  </desc>
+  <status code="500">
+    If the subcontent cannot provide an xslpi to use.
+  </status>
+</directive>

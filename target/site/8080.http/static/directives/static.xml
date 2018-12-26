@@ -1,0 +1,17 @@
+<directive name="static" type="resource-class">
+  <!-- param> no params </param -->
+  <content type="filepath">
+    The remaining path is mapped onto the subcontent file structure.
+    Any file underneath is served as-is (using sendfile) when asked for.
+  </content>
+  <desc>
+    If the path corresponds to a file system folder, this is scanned for a
+    welcome file. Currently index.html, index.xml and index.txt are used.
+  </desc>
+  <status code="200">
+    If the path maps to a file, or a folder with a welcome file.
+  </status>
+  <status code="404">
+    If the path does not map to a file, or a folder with a welcome file.
+  </status>  
+</directive>

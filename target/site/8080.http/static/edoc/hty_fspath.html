@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module hty_fspath</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module hty_fspath</h1>
+<ul class="index"><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>
+
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#append-2">append/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#basename-1">basename/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#collect-2">collect/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#exists-1">exists/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ext-1">ext/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#fs-1">fs/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#isdir-1">isdir/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#last_modified-1">last_modified/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#list-1">list/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#list-2">list/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#load-1">load/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#mkdir-1">mkdir/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#new-1">new/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#new-2">new/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#param-2">param/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#params-1">params/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#parent-1">parent/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#parts-1">parts/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#path-1">path/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#prefix-1">prefix/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#recv-3">recv/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#save-2">save/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#send-2">send/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#subpath-2">subpath/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#type-1">type/1</a></td><td></td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="append-2">append/2</a></h3>
+<div class="spec">
+<p><tt>append(Data, This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="basename-1">basename/1</a></h3>
+<div class="spec">
+<p><tt>basename(This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="collect-2">collect/2</a></h3>
+<div class="spec">
+<p><tt>collect(Predicate, This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="exists-1">exists/1</a></h3>
+<div class="spec">
+<p><tt>exists(This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ext-1">ext/1</a></h3>
+<div class="spec">
+<p><tt>ext(This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="fs-1">fs/1</a></h3>
+<div class="spec">
+<p><tt>fs(This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="isdir-1">isdir/1</a></h3>
+<div class="spec">
+<p><tt>isdir(This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="last_modified-1">last_modified/1</a></h3>
+<div class="spec">
+<p><tt>last_modified(This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="list-1">list/1</a></h3>
+<div class="spec">
+<p><tt>list(Hty_fspath::#hty_fspath{}) -&gt; {error, any()} | [#hty_fspath{}]</tt><br></p>
+</div>
+
+<h3 class="function"><a name="list-2">list/2</a></h3>
+<div class="spec">
+<p><tt>list(Filter, This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="load-1">load/1</a></h3>
+<div class="spec">
+<p><tt>load(This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="mkdir-1">mkdir/1</a></h3>
+<div class="spec">
+<p><tt>mkdir(This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="new-1">new/1</a></h3>
+<div class="spec">
+<p><tt>new(Path) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="new-2">new/2</a></h3>
+<div class="spec">
+<p><tt>new(Path, Fs) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="param-2">param/2</a></h3>
+<div class="spec">
+<p><tt>param(Name, This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="params-1">params/1</a></h3>
+<div class="spec">
+<p><tt>params(This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="parent-1">parent/1</a></h3>
+<div class="spec">
+<p><tt>parent(This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="parts-1">parts/1</a></h3>
+<div class="spec">
+<p><tt>parts(This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="path-1">path/1</a></h3>
+<div class="spec">
+<p><tt>path(This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="prefix-1">prefix/1</a></h3>
+<div class="spec">
+<p><tt>prefix(This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="recv-3">recv/3</a></h3>
+<div class="spec">
+<p><tt>recv(Spafs, Htx, This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="save-2">save/2</a></h3>
+<div class="spec">
+<p><tt>save(Data, This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="send-2">send/2</a></h3>
+<div class="spec">
+<p><tt>send(Htx, This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="subpath-2">subpath/2</a></h3>
+<div class="spec">
+<p><tt>subpath(Pathsegments, This) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="type-1">type/1</a></h3>
+<div class="spec">
+<p><tt>type(This) -&gt; any()</tt></p>
+</div>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Dec 22 2018, 00:26:40.</i></p>
+</body>
+</html>
