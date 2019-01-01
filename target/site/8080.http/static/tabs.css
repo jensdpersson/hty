@@ -1,0 +1,38 @@
+.tabs {
+      margin: 10px;
+      border: 0px dotted gray;
+}
+
+.tabs .tab-titles a {
+      background: lightgrey;
+      border-top: 2px solid grey;
+      border-left: 2px solid grey;
+      border-right: 2px solid grey;
+       -moz-border-radius: 5px 5px 0px 0px;
+      -webkit-border-top-left-radius: 5px;
+      -webkit-border-top-right-radius: 5px;
+      padding-top: 2px;
+      padding-left: 5px;
+      padding-right: 5px;
+                      cursor: pointer;
+}
+
+.tabs .tab-titles .tab-title-selected {
+      padding-bottom: 5px;
+}
+
+.tabs .tab-titles .tab-title {
+      padding-bottom: 1px;
+}
+
+.tabs .tab-content-selected { 
+   border: 2px solid grey;
+   background: lightgrey;
+} 
+
+.tabs .tab-content { 
+   display: none;
+} 
+
+
+

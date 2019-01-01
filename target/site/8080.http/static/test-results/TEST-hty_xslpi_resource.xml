@@ -1,5 +1,5 @@
-<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="2" failures="0" errors="2" skipped="0" time="0.006" name="module 'hty_xslpi_resource'">
-  <testcase time="0.000" name="hty_xslpi_resource_tests:simple_test/0_0">
+<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="2" failures="0" errors="2" skipped="0" time="0.010" name="module 'hty_xslpi_resource'">
+  <testcase time="0.004" name="hty_xslpi_resource_tests:0 simple_test">
     <error type="error">
 ::in function hty_tx_factory:new/0
   called as new()
@@ -11,7 +11,7 @@ in call from hty_xslpi_resource_tests:simple_test/0
     <system-out>
     </system-out>
   </testcase>
-  <testcase time="0.000" name="hty_xslpi_resource_tests:choice_test/0_0">
+  <testcase time="0.000" name="hty_xslpi_resource_tests:0 choice_test">
     <error type="error">
 ::in function hty_tx_factory:new/0
   called as new()

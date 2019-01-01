@@ -1,8 +1,8 @@
-<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="1" failures="0" errors="1" skipped="0" time="0.010" name="module 'hty_timeseries_resource'">
-  <testcase time="0.007" name="hty_timeseries_resource_tests:add_entry_test/0_0" description="module 'hty_timeseries_resource_tests'">
+<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="1" failures="0" errors="1" skipped="0" time="0.016" name="module 'hty_timeseries_resource'">
+  <testcase time="0.013" name="hty_timeseries_resource_tests:0 add_entry_test (module 'hty_timeseries_resource_tests')">
     <error type="error">
 ::in function hty_fs_cursor:new/1
-  called as new("target/2018-12-22T00:26:43.tmp")
+  called as new("target/2018-12-30T21:19:09.tmp")
 in call from hty_timeseries_resource_tests:dut/0 (src/test/erlang/hty_timeseries_resource_tests.erl, line 18)
 in call from hty_timeseries_resource_tests:add_entry_test/0 (src/test/erlang/hty_timeseries_resource_tests.erl, line 8)
 in call from hty_timeseries_resource_tests:add_entry_test/0

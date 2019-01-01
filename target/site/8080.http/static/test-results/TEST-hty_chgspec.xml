@@ -1,5 +1,14 @@
 <?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="3" failures="0" errors="0" skipped="0" time="0.009" name="module 'hty_chgspec'">
-  <testcase time="0.000" name="hty_chgspec_tests:add_one_test/0_0"/>
-  <testcase time="0.000" name="hty_chgspec_tests:remove_one_test/0_0"/>
-  <testcase time="0.000" name="hty_chgspec_tests:multi_change_test/0_0"/>
+  <testcase time="0.000" name="hty_chgspec_tests:0 add_one_test">
+    <system-out>
+    </system-out>
+  </testcase>
+  <testcase time="0.000" name="hty_chgspec_tests:0 remove_one_test">
+    <system-out>
+    </system-out>
+  </testcase>
+  <testcase time="0.000" name="hty_chgspec_tests:0 multi_change_test">
+    <system-out>
+    </system-out>
+  </testcase>
 </testsuite>

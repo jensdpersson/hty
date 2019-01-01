@@ -10,14 +10,14 @@
 %%
 %% Exported Functions
 %%
--export([tofs/2, mount/1, new/2]).
+-export([tofs/2, mount/1]).
 
 mount(Fspath) ->
 	case Fspath:isdir() of
 		false ->
 			case Fspath:load() of
 				{ok, Path} ->
-					{ok, new(chomp(binary_to_list(Path)), Fspath)};
+					create(chomp(binary_to_list(Path)), Fspath);
 				{error, Error} ->
 					{error, Error}
 			end;
@@ -29,10 +29,15 @@ chomp(Str) ->
 	[_|Str1] = lists:reverse(Str),
 	lists:reverse(Str1).
 
-new(Path, Fspath) ->
+create(Path, Fspath) ->
 	Fs = Fspath:fs(),
 	Fspath1 = hty_fspath:new(Path, Fs),
-	#hty_external_storage{fspath=Fspath1}.
+	case Fspath1:exists() of
+	     true ->
+	     	  {ok, #hty_external_storage{fspath=Fspath1}};
+	     false ->
+	     	   {error, "Storage folder " + Path + " does not exist"}
+	end.
 
 tofs(Uripath, This) ->
 	Fspath = This#hty_external_storage.fspath,

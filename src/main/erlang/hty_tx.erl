@@ -211,6 +211,8 @@ method_not_allowed(Okmethods, This) ->
 service_unavailable(This) -> status(503, "Temporarily Unavailable", This).
 server_error(This) ->
     status(500, "Internal Server Error", This).
+server_error(Error, This) when is_atom(Error) ->
+    server_error(atom_to_list(Error), This);
 server_error(Error, This) ->
     (server_error(This)):log("ServerError", Error).
 bad_request(This) ->

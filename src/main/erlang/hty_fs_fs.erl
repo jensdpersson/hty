@@ -29,7 +29,10 @@ list(Path) ->
   file:list_dir(Path).
 
 last_modified(Path) ->
-  filelib:last_modified(Path).
+    Ret = filelib:last_modified(Path),
+    io:format("last_modified [~p] is [~p]~n", [Path, Ret]),
+    Ret.
+
 
 load(Path) -> file:read_file(Path).
 
