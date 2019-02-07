@@ -33,8 +33,13 @@ handle(Htx, This) ->
   Fspath = This#hty_static_resource.fspath,
   case Htx:method() of
     'GET' ->
-      %io:format("static path below [~p]~n", [Htx:path_below()]),
-      case Fspath:subpath(Htx:path_below()) of
+      io:format("static path below [~p,~p,~p]~n",
+        [Htx:path_below(),
+         hty_percentencoding:decode(Htx:path_below()),
+         hty_percentencoding:decode_each(Htx:path_below())
+        ]),
+      Filepath = hty_percentencoding:decode_each(Htx:path_below()),
+      case Fspath:subpath(Filepath) of
         ascension_denied ->
           Htx:not_found();
         Fspath1 ->

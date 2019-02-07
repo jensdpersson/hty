@@ -1,5 +1,5 @@
-<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="2" failures="0" errors="2" skipped="0" time="0.022" name="module 'hty_filter_resource'">
-  <testcase time="0.008" name="hty_filter_resource_tests:0 empty_chain_test">
+<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="2" failures="0" errors="2" skipped="0" time="0.019" name="module 'hty_filter_resource'">
+  <testcase time="0.009" name="hty_filter_resource_tests:empty_chain_test/0_0">
     <error type="error">
 ::in function hty_echo_resource:handle/1
   called as handle(mockhtx)
@@ -10,11 +10,11 @@ in call from hty_filter_resource_tests:empty_chain_test/0
     <system-out>
     </system-out>
   </testcase>
-  <testcase time="0.008" name="hty_filter_resource_tests:0 noop_filter_test">
+  <testcase time="0.005" name="hty_filter_resource_tests:noop_filter_test/0_0">
     <error type="error">
 ::in function hty_noop_filter:new/1
   called as new(hty_echo_resource)
-in call from lists:foldl/3 (lists.erl, line 1262)
+in call from lists:foldl/3 (lists.erl, line 1261)
 in call from hty_filter_resource:handle/2 (src/main/erlang/hty_filter_resource.erl, line 26)
 in call from hty_filter_resource_tests:noop_filter_test/0 (src/test/erlang/hty_filter_resource_tests.erl, line 26)
 in call from hty_filter_resource_tests:noop_filter_test/0

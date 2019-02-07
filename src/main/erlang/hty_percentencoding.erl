@@ -10,7 +10,7 @@
 %%
 %% Exported Functions
 %%
--export([encode/1, decode/1]).
+-export([encode/1, decode/1, decode_each/1]).
 
 %%
 %% API Functions
@@ -21,6 +21,12 @@ encode(Bin) ->
 		encode(Bin, <<>>).
 decode(Bin) ->
 		decode(Bin, <<>>).
+
+-spec decode_each(Input::list(list())) -> list(list()).
+decode_each(Input) ->
+	lists:map(fun(Item) ->
+		binary_to_list(decode(Item))
+	end, Input).
 
 %%
 %% Local Functions

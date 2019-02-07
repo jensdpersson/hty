@@ -36,9 +36,11 @@ create(Path, Fspath) ->
 	     true ->
 	     	  {ok, #hty_external_storage{fspath=Fspath1}};
 	     false ->
-	     	   {error, "Storage folder " + Path + " does not exist"}
+	     	   {error, "Storage folder " ++ Path ++ " does not exist"}
 	end.
 
 tofs(Uripath, This) ->
 	Fspath = This#hty_external_storage.fspath,
-  Fspath:subpath(Uripath).
+	Filepath = hty_percentencoding:decode_each(Uripath),
+	io:format("ExternalStorage(~p->~p)~n", [Uripath, Filepath]),
+  Fspath:subpath(Filepath).

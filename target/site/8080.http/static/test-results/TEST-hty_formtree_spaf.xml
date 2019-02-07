@@ -1,22 +1,7 @@
-<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="5" failures="0" errors="0" skipped="0" time="0.015" name="module 'hty_formtree_spaf'">
-  <testcase time="0.000" name="hty_formtree_spaf_tests:0 single_attr_test">
-    <system-out>
-    </system-out>
-  </testcase>
-  <testcase time="0.000" name="hty_formtree_spaf_tests:0 dual_attr_test">
-    <system-out>
-    </system-out>
-  </testcase>
-  <testcase time="0.000" name="hty_formtree_spaf_tests:0 nesting_test">
-    <system-out>
-    </system-out>
-  </testcase>
-  <testcase time="0.000" name="hty_formtree_spaf_tests:0 no_eq_test">
-    <system-out>
-    </system-out>
-  </testcase>
-  <testcase time="0.000" name="hty_formtree_spaf_tests:0 split_attr_test">
-    <system-out>
-    </system-out>
-  </testcase>
+<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="5" failures="0" errors="0" skipped="0" time="0.016" name="module 'hty_formtree_spaf'">
+  <testcase time="0.002" name="hty_formtree_spaf_tests:single_attr_test/0_0"/>
+  <testcase time="0.000" name="hty_formtree_spaf_tests:dual_attr_test/0_0"/>
+  <testcase time="0.000" name="hty_formtree_spaf_tests:nesting_test/0_0"/>
+  <testcase time="0.000" name="hty_formtree_spaf_tests:no_eq_test/0_0"/>
+  <testcase time="0.000" name="hty_formtree_spaf_tests:split_attr_test/0_0"/>
 </testsuite>

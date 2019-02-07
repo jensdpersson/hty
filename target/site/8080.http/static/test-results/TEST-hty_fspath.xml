@@ -1,5 +1,5 @@
-<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="1" failures="0" errors="0" skipped="0" time="0.003" name="module 'hty_fspath'">
-  <testcase time="0.000" name="hty_fspath_tests:0 some_params_test (module 'hty_fspath_tests')">
+<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="1" failures="0" errors="0" skipped="0" time="0.004" name="module 'hty_fspath'">
+  <testcase time="0.001" name="hty_fspath_tests:some_params_test/0_0" description="module 'hty_fspath_tests'">
     <system-out>Parts=[[49],[112,97,114,97,109,49,61,118,97,108,117,101,49,44,112,97,114,97,109,50],[115,111,109,101,101,120,116]]
 
     </system-out>
