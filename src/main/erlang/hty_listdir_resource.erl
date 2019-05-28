@@ -10,7 +10,14 @@ mount(Fspath) ->
       {error, "listdir resource needs storage key"}
   end.
 
+
 handle(Htx, This) ->
+    case Htx:method() of
+        'GET' -> do_get(Htx, This);
+        Other -> Htx:method_not_allowed(["GET"])
+    end.
+    
+do_get(Htx, This) ->
   Key = This#hty_listdir_resource.key,
   case hty_pathmapper:htx_to_fspath(Htx, Key) of
     {ok, Fspath} ->

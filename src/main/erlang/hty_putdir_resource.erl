@@ -14,24 +14,34 @@ mount(Fspath) ->
 handle(Htx, This) ->
     case Htx:method() of
 	'PUT' ->
-	    Key = This#hty_putdir_resource.storagekey,
-	    case hty_pathmapper:htx_to_fspath(Htx, Key) of
-		{ok, Fspath} ->
-		    Fsparent = Fspath:parent(),
-		    case Fsparent:isdir() of
-			false ->
-			    Htx:not_found();
-			true ->
-			    case Fspath:exists() of
-				true ->
-				    Htx:conflict();
-				false ->
-				    Fspath:mkdirs()
-			    end
-		    end;
-		_ ->
-		    erlang:display("Pathmapper not found")
-	    end;
+	    case Htx:req_header("Content-Type") of
+	        [<<"text/uri-list">>] -> 
+        	    Key = This#hty_putdir_resource.storagekey,
+        	    case hty_pathmapper:htx_to_fspath(Htx, Key) of
+            		{ok, Fspath} ->
+            		    Fsparent = Fspath:parent(),
+            		    case Fsparent:isdir() of
+            			false ->
+            			    Htx:not_found();
+            			true ->
+            			    case Fspath:exists() of
+            				true ->
+            				    Htx:conflict();
+            				false ->
+            				    case Fspath:mkdir() of
+            				        ok ->
+            				            (Htx:created()):commit();
+            				        error ->
+            				            Htx:server_error()
+            				    end
+            			    end
+            		    end;
+            		_ ->
+		                erlang:display("Pathmapper not found")   , Htx 
+                end;
+            OtherMime ->	    
+        		io:format("OtherMime, wont mkdir [~p]~n", [OtherMime]), Htx
+        end;
 	_ ->
 	    Htx:method_not_allowed(['GET'])
     end.

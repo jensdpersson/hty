@@ -1,4 +1,4 @@
-<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="6" failures="0" errors="0" skipped="0" time="0.019" name="module 'hty_slots'">
+<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="6" failures="0" errors="0" skipped="0" time="0.018" name="module 'hty_slots'">
   <testcase time="0.000" name="hty_slots_tests:middle_test/0_0">
     <system-out>Slots=[[&lt;&lt;"Hello "&gt;&gt;,{key,&lt;&lt;"locus"&gt;&gt;},&lt;&lt;"!"&gt;&gt;]]
 Merging [{&lt;&lt;"locus"&gt;&gt;,&lt;&lt;"World"&gt;&gt;}] into [&lt;&lt;"Hello "&gt;&gt;,

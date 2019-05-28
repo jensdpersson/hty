@@ -1,4 +1,4 @@
-<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="2" failures="0" errors="2" skipped="0" time="0.005" name="module 'hty_xslpi_resource'">
+<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="2" failures="0" errors="2" skipped="0" time="0.006" name="module 'hty_xslpi_resource'">
   <testcase time="0.000" name="hty_xslpi_resource_tests:simple_test/0_0">
     <error type="error">
 ::in function hty_tx_factory:new/0

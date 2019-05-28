@@ -1,5 +1,5 @@
-<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="5" failures="0" errors="0" skipped="0" time="0.016" name="module 'hty_formtree_spaf'">
-  <testcase time="0.002" name="hty_formtree_spaf_tests:single_attr_test/0_0"/>
+<?xml-stylesheet type='text/xsl' href='../resultface.xsl'?><testsuite tests="5" failures="0" errors="0" skipped="0" time="0.018" name="module 'hty_formtree_spaf'">
+  <testcase time="0.003" name="hty_formtree_spaf_tests:single_attr_test/0_0"/>
   <testcase time="0.000" name="hty_formtree_spaf_tests:dual_attr_test/0_0"/>
   <testcase time="0.000" name="hty_formtree_spaf_tests:nesting_test/0_0"/>
   <testcase time="0.000" name="hty_formtree_spaf_tests:no_eq_test/0_0"/>

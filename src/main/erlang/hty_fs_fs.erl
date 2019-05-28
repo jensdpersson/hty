@@ -13,6 +13,7 @@
          exists/1,
          has_subs/1,
          mkdir/1,
+         delete/1,
          last_modified/1]).
 
 type(Path) ->
@@ -65,6 +66,33 @@ has_subs(Path) ->
 
 mkdir(Path) ->
   file:make_dir(Path).
+
+delete(Path) ->
+  case filelib:is_dir(Path) of
+    true ->
+      io:format("~p is a folder~n", [Path]),
+        case file:list_dir(Path) of
+          {ok, Files} ->
+            lists:foreach(fun(Sub) -> delete(Path ++ [$/|Sub]) end, Files),
+          case file:del_dir(Path) of
+                {error, Error2} ->
+                  io:format("Failed removing ~p ~p~n", [Path, Error2]),
+                  {no, Error2};
+                ok -> ok
+              end;
+            {error, Error} ->
+              io:format("Failed listing ~p ~p~n", [Path, Error]),
+              {no, Error}
+          end;
+        false ->
+      case file:delete(Path) of
+        {error, Error} ->
+          io:format("Failed deleting ~p ~p~n", [Path, Error]),
+          {no, Error};
+        ok ->
+          ok
+      end
+  end.
 
 collect(Path, Pred) ->
   case file:open(Path, [read, binary]) of
