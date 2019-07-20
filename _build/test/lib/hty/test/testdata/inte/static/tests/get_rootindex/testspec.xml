@@ -1,0 +1,17 @@
+<testspec>
+  <synopsis>
+    Serve static content through the <b>static</b> resource class.
+  </synopsis>
+  <transaction>
+    <request>
+      <url>http://localhost:1031/</url>
+    </request>
+    <response>
+      <status>200</status>
+      <header name="content-type">text/html</header>
+      <body>
+	<exact file="facit.html"/>
+      </body>
+    </response>
+  </transaction>
+</testspec>

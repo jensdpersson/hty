@@ -1,0 +1,32 @@
+<testspec>
+  <synopsis>
+    Send a request to a resource under access logging, then ask for the log of
+    that (the log writer content is also served as static).
+  </synopsis>
+
+  <transaction>
+    <request>
+      <url>http://localhost:8080/helloworld.txt</url>
+    </request>
+    <response>
+      <status>200</status>
+      <header name="content-type">text/plain</header>
+      <body>
+	       <exact file="helloworld.txt"/>
+      </body>
+    </response>
+  </transaction>
+
+  <transaction>
+    <request>
+      <url>http://localhost:8080/logs/</url>
+    </request>
+    <response>
+      <status>200</status>
+      <header name="content-type">text/plain</header>
+      <body>
+	       <match file="pattern.txt"/>
+      </body>
+    </response>
+  </transaction>
+</testspec>
