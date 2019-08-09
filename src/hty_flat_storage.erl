@@ -20,4 +20,4 @@ new(Fspath) ->
 
 tofs(Uripath, This) ->
 	Fspath = This#hty_flat_storage.fspath,
-  Fspath:subpath(Uripath).
+  hty_fspath:subpath(Uripath, Fspath).

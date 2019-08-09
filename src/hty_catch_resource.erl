@@ -5,7 +5,7 @@
 -export([mount/1, new/2, handle/2]).
 
 mount(Fspath) ->
-  case lists:reverse(Fspath:parts()) of
+  case lists:reverse(hty_fspath:parts(Fspath)) of
     ["catch", Status|_] ->
       case validate(Status) of
         {ok, StatusCode} ->
@@ -32,10 +32,10 @@ validate(String) ->
   handle(Htx, This) ->
     Status = This#hty_catch_resource.status,
     Subs = This#hty_catch_resource.subs,
-    io:format("Checking for code ~p in ~p~n",[Status, Htx:status()]),
-    case Htx:status() of
+    io:format("Checking for code ~p in ~p~n",[Status, hty_tx:status(Htx)]),
+    case hty_tx:status(Htx) of
       {Status, _} ->
-        Htx:dispatch(Subs);
+        hty_tx:dispatch(Subs, Htx);
       _ ->
         Htx
     end.

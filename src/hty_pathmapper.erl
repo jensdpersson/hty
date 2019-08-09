@@ -4,7 +4,7 @@
 htx_to_fspath(Htx, Key) ->
   case Htx:bound(Key) of
     {ok, [Pathmapper]} ->
-      {ok, Pathmapper:tofs(Htx:path_below())};
+      {ok, hty_storage:invoke_tofs(Htx:path_below(), Pathmapper)};
     _ ->
       {no, "Pathmapper not bound as " ++ Key}
   end.

@@ -21,6 +21,7 @@ do_test_() ->
       io:format("Failed running fixtures in ~p, got error ~p~n", [Basedir, Error]),
       {"Create fixtures", fun() -> throw({error, Error}) end}
   end,
+  io:format(user, "Reporting tests ~p~n", [Tests]),
   Tests.
 
 tests_in_fixture(Basedir, Fixture) ->
@@ -29,7 +30,8 @@ tests_in_fixture(Basedir, Fixture) ->
   case file:list_dir(TestFolder) of
     {ok, Tests} ->
       lists:map(fun(Test) ->
-        {Fixture ++ ":" ++ Test, fun() -> hty_inte:run(filename:join(TestFolder, Test), Test) end}
+        TestID = Fixture ++ ":" ++ Test,
+        {TestID, fun() -> hty_inte_engine:run(filename:join(TestFolder, Test), TestID) end}
       end, Tests);
     {error, enoent} ->
       io:format("Found no tests in ~p~n", [TestFolder]),

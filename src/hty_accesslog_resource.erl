@@ -3,7 +3,7 @@
 -export([mount/1, new/2, handle/2]).
 
 mount(Fspath) ->
-  case lists:reverse(Fspath:parts()) of
+  case lists:reverse(hty_fspath:parts(Fspath)) of
     ["accesslog", Key | _] ->
       case hty_mounter:walk(Fspath, "resource") of
         {ok, Subs} ->
@@ -20,24 +20,25 @@ new(Key, Subs) ->
 
 -spec handle(hty_tx:htx(), #hty_accesslog_resource{}) -> hty_tx:htx().
 handle(Htx, This) ->
+    io:format("AccessLog.Handle"),
     Key = This#hty_accesslog_resource.key,
     Subs = This#hty_accesslog_resource.subs,
-    {ok, Loggers} = Htx:bound(Key),
+    {ok, Loggers} = hty_tx:bound(Key, Htx),
 
     %Initial values
-    Method = atom_to_list(Htx:method()),
-    Path = hty_uri:pack(Htx:path()),
-    T0 = (hty_date:now()):format(),
+    Method = atom_to_list(hty_tx:method(Htx)),
+    Path = hty_uri:pack(hty_tx:path(Htx)),
+    T0 = hty_date:format(hty_date:now()),
 
     %Dispatch
-    Htx1 = Htx:dispatch(Subs),
+    Htx1 = hty_tx:dispatch(Subs, Htx),
 
     %More stuff
-    {StatusCode, StatusText} = Htx1:status(),
-    T1 = (hty_date:now()):format(),
+    {StatusCode, StatusText} = hty_tx:status(Htx1),
+    T1 = hty_date:format(hty_date:now()),
 
     Category = [Method, " ", Path],
-    Peer = case Htx1:peer() of
+    Peer = case hty_tx:peer(Htx1) of
     	{ipv4, {A,B,C,D}, Port} ->
     	  [" (", s(A), $., s(B), $., s(C), $., s(D), $:, s(Port), $)];
     	{ipv6, {A,B,C,D,E,F,G,H}, Port} ->
@@ -48,7 +49,7 @@ handle(Htx, This) ->
     Message = [Peer, " ", integer_to_list(StatusCode), " ", StatusText],
     lists:foreach(fun(Logger) ->
       io:format("Sending to logger ~p", [Logger]),
-      Logger:log(T0, T1, Category, Message)
+      hty_filelog_logger:log(T0, T1, Category, Message, Logger)
     end, Loggers),
     Htx1.
 

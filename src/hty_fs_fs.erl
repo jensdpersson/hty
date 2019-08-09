@@ -38,10 +38,10 @@ last_modified(Path) ->
 load(Path) -> file:read_file(Path).
 
 send(Path, Htx) ->
-  Htx:sendfile(Path).
+  hty_tx:sendfile(Path, Htx).
 
 recv(Path, Spafs, Htx) ->
-  Htx:recvfile(Spafs, Path).
+  hty_tx:recvfile(Spafs, Path, Htx).
 
 save(Path, Data) -> file:write_file(Path, Data).
 

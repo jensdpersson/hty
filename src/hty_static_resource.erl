@@ -47,9 +47,9 @@ handle(Htx, This) ->
           case hty_fspath:isdir(Fspath1) of
             true ->
               Welcome = This#hty_static_resource.welcome,
-              Welcome:list(Htx, Fspath1);
+              hty_welcome:invoke_list(Htx, Fspath1, Welcome);
             false ->
-              case Fspath1:exists() of
+              case hty_fspath:exists(Fspath1) of
                 true ->
                   hty_fileserver:serve(Htx, Fspath1);
                 false ->

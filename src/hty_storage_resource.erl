@@ -18,34 +18,34 @@ new(Storage) ->
 
 handle(Htx, This) ->
   Storage = This#hty_storage_resource.storage,
-  Fspath = Storage:tofs(Htx:path_below()),
-  case Fspath:isdir() of
+  Fspath = hty_storage:invoke_tofs(hty_tx:path_below(Htx), Storage),
+  case hty_fspath:isdir(Fspath) of
     true ->
-      case Htx:method() of
+      case hty_tx:method(Htx) of
         'GET' ->
           hty_listing:list(Htx, Fspath);
         _ ->
-          Htx:method_not_allowed(['GET'])
+          hty_tx:method_not_allowed(['GET'], Htx)
       end;
     false ->
-      Exists = Fspath:exists(),
-      case Htx:method() of
+      Exists = hty_fspath:exists(Fspath),
+      case hty_tx:method(Htx) of
         'GET' ->
           case Exists of
             true ->
-              Fspath:send(Htx);
+              hty_fspath:send(Htx, Fspath);
             false ->
-              Htx:not_found()
+              hty_tx:not_found(Htx)
           end;
         'PUT' ->
-          Htx1 = Fspath:recv([], Htx),
-          case Htx1:status() of
+          Htx1 = hty_fspath:recv([], Htx, Fspath),
+          case hty_tx:status(Htx1) of
             {200, _} ->
               case Exists of
                 true ->
                   Htx1;
                 false ->
-                  Htx1:created()
+                  hty_tx:created(Htx1)
               end
           end
       end

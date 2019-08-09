@@ -10,8 +10,8 @@ new(Indexfiles) ->
 
 list(Htx, Fspath1, This) ->
   F=fun(W) ->
-    Fspath2 = Fspath1:subpath([W]),
-    case Fspath2:exists() of
+    Fspath2 = hty_fspath:subpath([W], Fspath1),
+    case hty_fspath:exists(Fspath2) of
       true -> [Fspath2];
       false -> []
     end
@@ -21,5 +21,5 @@ list(Htx, Fspath1, This) ->
     [Indexfile|_] ->
       hty_fileserver:serve(Htx, Indexfile);
     [] ->
-      Htx:not_found()
+      htx_tx:not_found(Htx)
   end.

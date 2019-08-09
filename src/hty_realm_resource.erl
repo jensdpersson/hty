@@ -21,5 +21,5 @@ new(Realm) ->
     #hty_realm_resource{realm=Realm}.
 
 handle(Htx, This) ->
-    Htx1 = Htx:realm(This#hty_realm_resource.realm),
+    Htx1 = hty_tx:realm(This#hty_realm_resource.realm, Htx),
     Htx1.

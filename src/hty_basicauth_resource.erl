@@ -18,7 +18,7 @@ new(Subs) ->
   #hty_basicauth_resource{subs=Subs}.
 
 handle(Htx, This) ->
-  case Htx:req_header('Authorization') of
+  case hty_tx:req_header('Authorization', Htx) of
     [] ->
       challenge(Htx);
     [<<"Basic ", Auth/binary>>] ->
@@ -31,18 +31,20 @@ handle(Htx, This) ->
 %% Local Functions
 %%
 challenge(Htx) ->
-    Realm = Htx:realm(),
-    Htx1 = Htx:rsp_header('WWW-Authenticate',  [<<"Basic realm=\"">>, Realm:name(), "\""]),
-    Htx1:status(401, "Not Authorized").
+    Realm = hty_tx:realm(Htx),
+    Htx1 = hty_tx:rsp_header('WWW-Authenticate',
+                             [<<"Basic realm=\"">>, hty_realm:invoke_name(Realm), "\""],
+                             Htx),
+    hty_tx:status(401, "Not Authorized", Htx1).
 
 check(Htx, Auth, This) ->
     String = base64:mime_decode(Auth),
     {Username, <<$:, Password/binary>>} = hty_scan:until(String, $:),
-    Realm = Htx:realm(),
-    case Realm:auth(Username, Password) of
+    Realm = hty_tx:realm(Htx),
+    case hty_realm:invoke_auth(Username, Password, Realm) of
 	{ok, Principal} ->
-	    Htx1 = Htx:principal(Principal),
-	    Htx1:dispatch(This#hty_basicauth_resource.subs);
+	    Htx1 = hty_tx:principal(Principal, Htx),
+	    hty_tx:dispatch(This#hty_basicauth_resource.subs, Htx1);
 	no ->
 	    challenge(Htx)
     end.

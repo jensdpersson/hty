@@ -6,6 +6,7 @@ run(Testdir, Test) ->
   io:format(user, "Running test ~p/~p~n", [Testdir, Test]),
     Specfile = filename:join(Testdir, "testspec.xml"),
     Profile = list_to_atom(Test),
+    io:format(user, "About to start httpc with profile ~p~n", [Profile]),
     {ok, HttpcPid} = inets:start(httpc, [{profile, Profile}]),
     true = filelib:is_file(Specfile),
     {Doc, _} = xmerl_scan:file(Specfile),
@@ -27,9 +28,9 @@ run(Testdir, Test) ->
       end,
 
       Headers = lists:map(fun(HeaderElm) ->
-          Name = select("@name", HeaderElm, Doc),
+          [Name] = select("@name", HeaderElm, Doc),
           Value = text(HeaderElm),
-          {Name, Value}
+          {attr(Name), Value}
         end,
         select("header", Request, Doc)
       ),
@@ -73,6 +74,7 @@ run(Testdir, Test) ->
           {error, Error}
       end
     end, Transactions),
+    io:format("Stopping http client"),
     inets:stop(httpc, HttpcPid),
     Results.
 

@@ -19,17 +19,17 @@ to_list(Any) ->
       case is_binary(Any) of
         true ->
           binary_to_list(Any);
-        false -> 
+        false ->
           Any
       end
   end.
 
 respond(Socket, Htx) ->
-    send_line(Socket, "HTTP/1.1 " ++ pack_status(Htx:status())),
+    send_line(Socket, "HTTP/1.1 " ++ pack_status(hty_tx:status(Htx))),
     send_line(Socket, "Server: haughty 0.4"),
     lists:foreach(fun({HName, HValue}) ->
       send_line(Socket, pack_header(HName, HValue))
-    end, Htx:rsp_headers()),
+    end, hty_tx:rsp_headers(Htx)),
     send_line(Socket, ""),
     lists:foreach(fun(Out) ->
       case Out of
@@ -45,7 +45,7 @@ respond(Socket, Htx) ->
           io:format("data('~p')~n", [IOList]),
           gen_tcp:send(Socket, IOList)
       end
-    end, lists:reverse(Htx:outs())).
+    end, lists:reverse(hty_tx:outs(Htx))).
 
 send_line(Socket, Line) -> gen_tcp:send(Socket,  Line ++ "\r\n").
 
@@ -54,11 +54,11 @@ set_peer(Htx, Socket) ->
     {ok, {Address, Port}} ->
       case Address of
         {_,_,_,_} ->
-          Htx:peer({ipv4, Address, Port});
+          hty_tx:peer({ipv4, Address, Port}, Htx);
         {_,_,_,_,_,_,_,_} ->
-          Htx:peer({ipv6, Address, Port});
+          hty_tx:peer({ipv6, Address, Port}, Htx);
         _ ->
-          Htx:peer({other, Address, Port})
+          hty_tx:peer({other, Address, Port}, Htx)
       end;
     {error, _}	->
       Htx
@@ -78,7 +78,7 @@ parse_loop(Htx, Unparsed, Parser, Socket) ->
   {more, []} ->
       recv(Htx, Unparsed, Parser, Socket);
   {done, Htx1} ->
-      Htx1:socketreader(hty_socketreader);
+      hty_tx:socketreader(hty_socketreader, Htx1);
   {error, Error} ->
       {error, Error}
     end.
@@ -95,7 +95,7 @@ recv(Htx, Unparsed, Parser, Socket) ->
 method_parser(Htx, Data) ->
     case token(Data, 32) of
         {token, Method, Rest} ->
-          {Htx:method(canonical_method(Method)),Rest,fun path_parser/2};
+          {hty_tx:method(canonical_method(Method), Htx),Rest,fun path_parser/2};
         {more, _Token} -> more
     end.
 
@@ -113,8 +113,8 @@ path_parser(Htx, Data) ->
   {token, Path, Rest} ->
       {Segments, Query} = hty_uri:parse_path(Path),
       Pathzipper = hty_uri:pathzipper(Segments),
-      Htx1 = Htx:path(Pathzipper),
-      {Htx1:queryparams(Query),
+      Htx1 = hty_tx:path(Pathzipper, Htx),
+      {hty_tx:queryparams(Query, Htx1),
        Rest, fun protocol_parser/2};
   {more, _Token} ->
       more
@@ -123,7 +123,7 @@ path_parser(Htx, Data) ->
 protocol_parser(Req, Data) ->
     case line(Data) of
         {token, Protocol, Rest} ->
-      {Req:protocol(Protocol),Rest,fun header_parser/2};
+      {hty_tx:protocol(Protocol, Req),Rest,fun header_parser/2};
         {more, _Token} ->
       more
     end.
@@ -138,8 +138,8 @@ header_parser(Htx, Data) ->
             case line(Data1) of
               {token, Value, Data2} ->
                 {
-                 Htx:req_header(string:to_lower(binary_to_list(Name)),
-                                hty_util:ltrim(Value)),
+                 hty_tx:req_header(string:to_lower(binary_to_list(Name)),
+                                hty_util:ltrim(Value), Htx),
                  Data2,
                  fun header_parser/2};
                {more, _Token} -> more
@@ -149,11 +149,11 @@ header_parser(Htx, Data) ->
 
 body_parser(Htx, Data) ->
   Leng = get_content_length(Htx),
-  Htx1 = Htx:unread(Leng),
-  {done, Htx1:buffer(Data)}.
+  Htx1 = hty_tx:unread(Leng, Htx),
+  {done, hty_tx:buffer(Data, Htx1)}.
 
 get_content_length(Htx) ->
-  case Htx:req_header('Content-Length') of
+  case hty_tx:req_header('Content-Length', Htx) of
     [] -> -1;
     [ContentLength] ->
         {Len, []} = string:to_integer(binary_to_list(ContentLength)),

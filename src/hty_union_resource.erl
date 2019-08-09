@@ -16,5 +16,4 @@ new(Subs) ->
     #hty_union_resource{subs=Subs}.
 
 handle(Htx, This) ->
-    Htx:dispatch(This#hty_union_resource.subs).
-
+    hty_tx:dispatch(This#hty_union_resource.subs, Htx).

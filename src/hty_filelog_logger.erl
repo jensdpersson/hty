@@ -54,8 +54,8 @@ grep(From, To, Pattern, Before, After, This) ->
   end.
 
 name(Folder) ->
-  Name = (hty_date:now()):format_date(),
-  Folder:subpath([Name ++ ".log"]).
+  Name = hty_date:format_date(hty_date:now()),
+  hty_fspath:subpath([Name ++ ".log"], Folder).
 
 loop(Folder) ->
   receive
@@ -63,7 +63,7 @@ loop(Folder) ->
       Line = [T0, $|, T1, $|, Cat, $|, Msg, 10],
       File = name(Folder),
       io:format("Logger got message ~p~n", [Line]),
-      case File:append(Line) of
+      case hty_fspath:append(Line, File) of
         ok -> noop;
         {error, Error} -> io:format("Failed writing to logfile ~p~n", [Error])
       end,
@@ -84,9 +84,9 @@ loop(Folder) ->
 
 do_grep(From, To, Regex, Before, After, Folder, ResultSoFar) ->
   %TODO is To before From?
-  FromStr = From:format_date(),
-  File = Folder:subpath([FromStr ++ ".log"]),
-  Result = case File:exists() of
+  FromStr = hty_date:format_date(From),
+  File = hty_fspath:subpath([FromStr ++ ".log"], Folder),
+  Result = case hty_fspath:exists(File) of
     true ->
       io:format("File does exist ~p ~n",[File]),
       grep_in_file(File, Regex, Before, After, ResultSoFar);
@@ -94,9 +94,9 @@ do_grep(From, To, Regex, Before, After, Folder, ResultSoFar) ->
       io:format("File does not exist ~p ~n",[File]),
       ResultSoFar
   end,
-  Tomorrow = From:tomorrow(),
+  Tomorrow = hty_date:tomorrow(From),
   io:format("Checking tomorrow ~p~n", [Tomorrow]),
-  case To:format_date() >= Tomorrow:format_date() of
+  case hty_date:format_date(To) >= hty_date:format_date(Tomorrow) of
     true ->
       io:format("Checking tomorrow ~p ... true ~n", [Tomorrow]),
       do_grep(Tomorrow, To, Regex, Before, After, Folder, Result);
@@ -106,11 +106,11 @@ do_grep(From, To, Regex, Before, After, Folder, ResultSoFar) ->
   end.
 
 grep_in_file(File, Regex, _Before, _After, _Result) ->
-  File:collect(fun(Line) ->
+  hty_fspath:collect(fun(Line) ->
     case re:run(Line, Regex) of
       {match, _} ->
         [Line];
       nomatch ->
         []
     end
-  end).
+  end, File).

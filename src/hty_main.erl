@@ -108,7 +108,7 @@ loop_dispatch(Servers) ->
       ReplyTo ! {status, Servers},
         loop_dispatch(Servers);
     {stop, ReplyTo} ->
-      Result = (catch lists:foreach(fun(Server) -> Server:stop() end, Servers)),
+      Result = (catch lists:foreach(fun(Server) -> hty_server:stop(Server) end, Servers)),
       case Result of
         ok ->
           ReplyTo ! stopping;
