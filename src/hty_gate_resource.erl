@@ -11,29 +11,45 @@
 %%
 %% Exported Functions
 %%
--export([handle/2, new/2]).
+-export([handle/2, new/2, mount/1]).
 
 %%
 %% API Functions
 %%
+mount(Fspath) ->
+  case lists:reverse(hty_fspath:parts(Fspath)) of
+    ["gate"|Rest] ->
+      case hty_mounter:walk(Fspath, "resource") of
+        {ok, Subs} ->
+          case Rest of
+            [] ->
+              Lookup = fun(Htx) ->
+                [Seg|_Segs] = hty_tx:path_below(Htx),
+                list_to_binary(Seg)
+              end,
+              {ok, hty_gate_resource:new(Lookup, Subs)};
+            [Role|_] ->
+              Lookup = fun(_) -> Role end,
+              {ok, hty_gate_resource:new(Lookup, Subs)}
+          end;
+        {error, _} = Error ->
+          Error
+      end
+  end.
+
 new(Lookup, Subs) ->
-    #hty_gate_resource{lookup=Lookup, subs=Subs}.
+  #hty_gate_resource{lookup=Lookup, subs=Subs}.
 
 handle(Htx, This) ->
-    Lookup = This#hty_gate_resource.lookup,
-    Subs = This#hty_gate_resource.subs,
-    io:format("Principal = ~p~n", [Htx:principal()]),
-    {_Nick, Roles} = Htx:principal(),
-    Role = Lookup(Htx),
-    io:format("member? ~p ~p~n", [Role, Roles]),
-    case lists:member(Role, Roles) of
-	true ->
-	    Htx:dispatch(Subs);
-	false ->
-	    Htx:forbidden()
-    end.
-
-%%
-%% Local Functions
-%%
-
+  Lookup = This#hty_gate_resource.lookup,
+  Subs = This#hty_gate_resource.subs,
+  io:format("Principal = ~p~n", [hty_tx:principal(Htx)]),
+  {_Nick, Roles} = hty_tx:principal(Htx),
+  Role = Lookup(Htx),
+  io:format("member? ~p ~p~n", [Role, Roles]),
+  case lists:member(Role, Roles) of
+    true ->
+      hty_tx:dispatch(Subs, Htx);
+    false ->
+      hty_tx:forbidden(Htx)
+  end.

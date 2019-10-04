@@ -4,38 +4,36 @@
 
 
 mount(Fspath) ->
-    case lists:reverse(Fspath:parts()) of
+    case lists:reverse(hty_fspath:parts(Fspath)) of
         ["delete", Key | _] ->
             {ok, #hty_delete_resource{key=Key}};
         _ ->
             {error, "delete resource requires a storage key parameter"}
     end.
-    
-    
+
+
 handle(Htx, This) ->
-  case Htx:method() of 
+  case hty_tx:method(Htx) of
       'DELETE' ->
 	    do_delete(Htx, This);
       _ ->
-	    Htx:method_not_allowed(['DELETE'])
+	    hty_tx:method_not_allowed(['DELETE'], Htx)
   end.
 
 do_delete(Htx, This) ->
   Key = This#hty_delete_resource.key,
   case hty_pathmapper:htx_to_fspath(Htx, Key) of
     {ok, Fspath} ->
-      case Fspath:exists() of
+      case hty_fspath:exists(Fspath) of
          true ->
-            case Fspath:delete() of
+            case hty_fspath:delete(Fspath) of
                 ok ->
-                    Htx2 = Htx:ok(),
-                    Htx2:commit();
-	            {no, Why} -> 
-	                Htx2 = Htx:server_error(Why),
-	                Htx2:commit()
+                    hty_tx:commit(hty_tx:ok(Htx));
+	            {no, Why} ->
+	                hty_tx:commit(hty_tx:server_error(Why, Htx))
 	        end;
 		 false ->
-		    Htx:not_found()
+		    hty_tx:not_found(Htx)
       end;
     _ ->
       erlang:display("Pathmapper not found"), Htx

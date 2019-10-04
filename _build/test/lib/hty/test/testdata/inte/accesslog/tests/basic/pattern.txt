@@ -1,1 +1,0 @@
-^.*|GET /helloworld.txt| .* 200

@@ -24,7 +24,7 @@ listUrilist(Htx, Fspath) ->
             false -> ""
           end,
           Percented = hty_percentencoding:encode(hty_fspath:basename(Item)),
-					Acc:echo([Percented, PerhapsSlash, 13, 10])
+					hty_tx:echo([Percented, PerhapsSlash, 13, 10], Acc)
 				end, Htx, hty_fspath:list(Fspath)),
 	Htx2 = hty_tx:rsp_header("Content-Type", "text/uri-list", Htx1),
 	Htx3 = hty_tx:ok(Htx2),

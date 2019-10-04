@@ -13,9 +13,9 @@
 -export([tofs/2, mount/1]).
 
 mount(Fspath) ->
-	case Fspath:isdir() of
+	case hty_fspath:isdir(Fspath) of
 		false ->
-			case Fspath:load() of
+			case hty_fspath:load(Fspath) of
 				{ok, Path} ->
 					create(chomp(binary_to_list(Path)), Fspath);
 				{error, Error} ->
@@ -30,9 +30,9 @@ chomp(Str) ->
 	lists:reverse(Str1).
 
 create(Path, Fspath) ->
-	Fs = Fspath:fs(),
+	Fs = hty_fspath:fs(Fspath),
 	Fspath1 = hty_fspath:new(Path, Fs),
-	case Fspath1:exists() of
+	case hty_fspath:exists(Fspath1) of
 	     true ->
 	     	  {ok, #hty_external_storage{fspath=Fspath1}};
 	     false ->
@@ -43,4 +43,4 @@ tofs(Uripath, This) ->
 	Fspath = This#hty_external_storage.fspath,
 	Filepath = hty_percentencoding:decode_each(Uripath),
 	io:format("ExternalStorage(~p->~p)~n", [Uripath, Filepath]),
-  Fspath:subpath(Filepath).
+  hty_fspath:subpath(Filepath, Fspath).

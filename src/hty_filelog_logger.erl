@@ -1,37 +1,22 @@
 -module(hty_filelog_logger).
--record(hty_filelog_logger, {actor, fspath}).
+-record(hty_filelog_logger, {actor}).
 -export([mount/1, log/5, grep/6]).
 
 mount(Fspath) ->
-  Actor = spawn(fun() ->
-    %Gbtree = loadFiles(Fspath),
-    loop(Fspath)
-   end),
-  {ok, #hty_filelog_logger{actor=Actor, fspath=Fspath}}.
+  case hty_mounter:walk(Fspath, "storage") of
+    {ok, [Storage]} ->
+      Actor = spawn(fun() ->
+        loop(hty_storage:invoke_tofs([], Storage))
+      end),
+      {ok, #hty_filelog_logger{actor=Actor}};
+    {error, _Error} = E ->
+      E
+  end.
 
 log(StartTstamp, EndTstamp, Category, Message, This) ->
   Actor = This#hty_filelog_logger.actor,
   Log = {log, StartTstamp, EndTstamp, Category, Message},
   Actor ! Log.
-
-%loadFiles(Fspath) ->
-%  case Fspath:list() of
-%    {error, _} = E ->
-%      E;
-%    Files ->
-%      Gbtree = lists:foldl(fun(File, Acc) ->
-%        ensureLoaded(File, Acc)
-%      end, gb_trees:empty(), Files),
-%      Gbtree
-%  end.
-
-%ensureLoaded(File, Gbtree) ->
-%  case hty_date:parse(File:basename()) of
-%    {error, Error} ->
-%      {error, Error};
-%    Date ->
-%      gb_trees:insert(Date, File, Gbtree)
-%  end.
 
 -spec grep(hty_date:datetime(),
           hty_date:datetime(),

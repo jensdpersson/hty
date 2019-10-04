@@ -1,6 +1,7 @@
 {application, hty, [
   {description, "An experimental web application server"},
   {vsn, "0.5"},
+  {mod, {hty_app, []}},
   {applications, [kernel,
                   stdlib]}
 ]}.

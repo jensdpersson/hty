@@ -4,7 +4,7 @@
 -export([mount/1, handle/2]).
 
 mount(Fspath) ->
-  case lists:reverse(Fspath:parts()) of
+  case lists:reverse(hty_fspath:parts(Fspath)) of
     ["putdir", StorageKey|_] ->
       {ok, #hty_putdir_resource{storagekey=StorageKey}};
     _ ->
@@ -12,36 +12,36 @@ mount(Fspath) ->
   end.
 
 handle(Htx, This) ->
-    case Htx:method() of
+    case hty_tx:method(Htx) of
 	'PUT' ->
-	    case Htx:req_header("Content-Type") of
-	        [<<"text/uri-list">>] -> 
+	    case hty_tx:req_header("Content-Type", Htx) of
+	        [<<"text/uri-list">>] ->
         	    Key = This#hty_putdir_resource.storagekey,
         	    case hty_pathmapper:htx_to_fspath(Htx, Key) of
             		{ok, Fspath} ->
-            		    Fsparent = Fspath:parent(),
-            		    case Fsparent:isdir() of
+            		    Fsparent = hty_fspath:parent(Fspath),
+            		    case hty_fspath:isdir(Fsparent) of
             			false ->
-            			    Htx:not_found();
+            			    hty_tx:not_found(Htx);
             			true ->
-            			    case Fspath:exists() of
+            			    case hty_fspath:exists(Fspath) of
             				true ->
-            				    Htx:conflict();
+            				    hty_tx:conflict(Htx);
             				false ->
-            				    case Fspath:mkdir() of
+            				    case hty_fspath:mkdir(Fspath) of
             				        ok ->
-            				            (Htx:created()):commit();
+            				            hty_tx:commit(hty_tx:created(Htx));
             				        error ->
-            				            Htx:server_error()
+            				            hty_tx:server_error(Htx)
             				    end
             			    end
             		    end;
             		_ ->
-		                erlang:display("Pathmapper not found")   , Htx 
+		                erlang:display("Pathmapper not found")   , Htx
                 end;
-            OtherMime ->	    
+            OtherMime ->
         		io:format("OtherMime, wont mkdir [~p]~n", [OtherMime]), Htx
         end;
 	_ ->
-	    Htx:method_not_allowed(['GET'])
+	    hty_tx:method_not_allowed(['PUT'], Htx)
     end.

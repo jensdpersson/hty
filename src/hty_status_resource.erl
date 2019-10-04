@@ -30,12 +30,12 @@ new(Content, Statusmap) ->
   #hty_status_resource{content=Content,statusmap=Statusmap}.
 
 handle(Htx, This) ->
-  Htx1 = Htx:dispatch([This#hty_status_resource.content]),
-  {Status, _} = Htx1:status(),
+  Htx1 = hty_tx:dispatch([This#hty_status_resource.content]),
+  {Status, _} = hty_tx:status(Htx1),
   io:format("Status ~p in ~p~n", [Status, This#hty_status_resource.statusmap]),
   case lists:keyfind(Status, 1, This#hty_status_resource.statusmap) of
     false ->
       Htx1;
     {_, Resource} ->
-      Htx1:dispatch([Resource])
+      hty_tx:dispatch([Resource], Htx1)
   end.

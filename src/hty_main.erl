@@ -1,23 +1,13 @@
-% @doc Entry point and central hub for the Haughty web server.
 -module(hty_main).
 
 -export([main/1]).
--export([start/1, stop/0]).
+-export([start/0, stop/0]).
 -export([status/0]).
-
-%loop_cli() ->
-%    receive
-%     stop -> ok
-%    after 10000 ->
-%	    loop_cli()
-%    end.
-
-%print(M) -> io:format(M), io:format("~n").
 
 main([]) ->
   io:format("Usage: hty <path-to-site>~n");
-main([Path]) ->
-  case start(Path) of
+main(_) ->
+  case start() of
     {error, Error} ->
       io:format("hty start status: fail ~p~n", [Error]),
       {error, Error};
@@ -53,10 +43,21 @@ mount(Path) ->
       {error, {enoent, Path}}
   end.
 
-start(Path) ->
+start() ->
+  Args = init:get_plain_arguments(),
+  erlang:display("hty process args: " ++ Args),
+  [Path|_] = case Args of
+    [_, "shell"|Realargs] -> Realargs;
+    ["console"|Realargs] -> Realargs;
+    _ -> Args
+  end,
   case spawn(fun loop_supervise/0) of
     Pidko when is_pid(Pidko) ->
-      mount(Path);
+      case mount(Path) of
+        {ok, started} ->
+          {ok, Pidko};
+        Error -> Error
+      end;
     Other ->
       {error, Other}
   end.

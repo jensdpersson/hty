@@ -12,7 +12,7 @@
 
 
 mount(Fspath) ->
-  case lists:reverse(Fspath:parts()) of
+  case lists:reverse(hty_fspath:parts(Fspath)) of
     ["putfile", Key | _] ->
       {ok, new(Key)};
     _ ->
@@ -23,33 +23,30 @@ new(Key) ->
     #hty_putfile_resource{key=Key}.
 
 handle(Htx, This) ->
-  case Htx:method() of 
+  case hty_tx:method(Htx) of
       'PUT' ->
 	  do_put(Htx, This);
       _ ->
-	  Htx:method_not_allowed(['PUT'])
+	  hty_tx:method_not_allowed(['PUT'], Htx)
   end.
 
 do_put(Htx, This) ->
   Key = This#hty_putfile_resource.key,
   case hty_pathmapper:htx_to_fspath(Htx, Key) of
     {ok, Fspath} ->
-      case Fspath:isdir() of
+      case hty_fspath:isdir(Fspath) of
         true ->
-          Htx:forbidden();
+          hty_tx:forbidden(Htx);
         false ->
-	      Fsparent = Fspath:parent(), 
-	      case Fsparent:exists() of
+	      Fsparent = hty_fspath:parent(Fspath),
+	      case hty_fspath:exists(Fsparent) of
 	      	   true ->
-		      Htx1 = Fspath:recv([], Htx),
-		      Htx2 = Htx1:ok(),
-		      Htx2:commit();
+		      Htx1 = hty_fspath:recv([], Htx, Fspath),
+		      hty_tx:commit(hty_tx:ok(Htx1));
 		   false ->
-		      Htx:not_found()
+		      hty_tx:not_found(Htx)
 	      end
       end;
     _ ->
       erlang:display("Pathmapper not found")
   end.
-
-

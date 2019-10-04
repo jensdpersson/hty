@@ -3,7 +3,7 @@
 -export([mount/1, handle/2]).
 
 mount(Fspath) ->
-  case lists:reverse(Fspath:parts()) of
+  case lists:reverse(hty_fspath:parts(Fspath)) of
     ["getfile", StorageKey|_] ->
       {ok, #hty_getfile_resource{storagekey=StorageKey}};
     _ ->
@@ -11,25 +11,25 @@ mount(Fspath) ->
   end.
 
 handle(Htx, This) ->
-    case Htx:method() of
+    case hty_tx:method(Htx) of
 	'GET' ->
 	    Key = This#hty_getfile_resource.storagekey,
 	    case hty_pathmapper:htx_to_fspath(Htx, Key) of
 		{ok, Fspath} ->
-		    case Fspath:isdir() of
+		    case hty_fspath:isdir(Fspath) of
 			true ->
-			    Htx:forbidden();
+			    hty_tx:forbidden(Htx);
 			false ->
-			    case Fspath:exists() of
+			    case hty_fspath:exists(Fspath) of
 				true ->
 				    hty_fileserver:serve(Htx, Fspath);
 				false ->
-				    Htx:not_found()
+				    hty_tx:not_found(Htx)
 			    end
 		    end;
 		_ ->
 		    erlang:display("Pathmapper not found")
 	    end;
 	_ ->
-	    Htx:method_not_allowed(['GET'])
+	    hty_tx:method_not_allowed(['GET'], Htx)
     end.
