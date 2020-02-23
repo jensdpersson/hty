@@ -11,7 +11,7 @@
 
 -export([send/2, recv/3, load/1, save/2, append/2, path/1]).
 
--export([basename/1, parent/1, type/1]).
+-export([basename/1, parent/1, type/1, move/2]).
 
 -export([collect/2, params/1, param/2]).
 
@@ -82,7 +82,9 @@ list(This) ->
 		      hty_fspath:new(Path2)
 	      end, Names);
       {error, enoent} ->
-        {error, {enoent, Path}}
+        {error, {enoent, Path}};
+      {error, enotdir} ->
+        {error, {enotdir, Path}}
     end.
 
 list(Filter, This) ->
@@ -129,6 +131,11 @@ type(This) ->
 
 delete(This) ->
   (fs(This)):delete(path(This)).
+  
+-spec move(From :: #hty_fspath{}, Dest :: #hty_fspath{}) -> ok | {error, Error :: file:posix()}.  
+move(From, Dest) ->
+  io:format("From ~p to ~p~n", [From, Dest]),
+  (fs(From)):move(path(From), path(Dest)).
 
 subpath(Pathsegments, This) ->
   Fun = fun(Item, Acc) ->

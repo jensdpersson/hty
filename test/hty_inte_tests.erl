@@ -4,21 +4,23 @@
 
 do_test_() ->
   Basedir = "test/testdata/inte/",
+  Workdir = "work",
+  {ok, _} = file:copy(Basedir, Workdir),
   inets:start(),
   Tests = case file:list_dir(Basedir) of
     {ok, Fixtures} ->
       lists:map(fun(Fixture) ->
-        Etcdir = filename:join(["test", "testdata", "inte", Fixture, "fixture"]),
+        Etcdir = filename:join([Workdir, Fixture, "fixture"]),
         Setup = fun() ->
-          {ok, _} = hty_main:start([Etcdir])
+          {ok, _} = hty_main:start(Etcdir)
         end,
         Teardown = fun(_) ->
           ok = hty_main:stop()
         end,
-        {foreach, Setup, Teardown, tests_in_fixture(Basedir, Fixture)}
+        {foreach, Setup, Teardown, tests_in_fixture(Workdir, Fixture)}
       end, Fixtures);
     {error, Error} ->
-      io:format("Failed running fixtures in ~p, got error ~p~n", [Basedir, Error]),
+      io:format("Failed running fixtures in ~p, got error ~p~n", [Workdir, Error]),
       {"Create fixtures", fun() -> throw({error, Error}) end}
   end,
   io:format(user, "Reporting tests ~p~n", [Tests]),

@@ -9,6 +9,7 @@
          recv/3,
          save/2,
          load/1,
+         move/2,
          append/2,
          exists/1,
          has_subs/1,
@@ -44,6 +45,8 @@ recv(Path, Spafs, Htx) ->
   hty_tx:recvfile(Spafs, Path, Htx).
 
 save(Path, Data) -> file:write_file(Path, Data).
+
+move(Path, Dest) -> file:rename(Path, Dest).
 
 append(Path, Data) ->
   case file:open(Path, [append, binary]) of
@@ -93,6 +96,7 @@ delete(Path) ->
           ok
       end
   end.
+
 
 collect(Path, Pred) ->
   case file:open(Path, [read, binary]) of

@@ -3,6 +3,7 @@
 -export([main/1]).
 -export([start/0, stop/0]).
 -export([status/0]).
+-export([start/1]).
 
 main([]) ->
   io:format("Usage: hty <path-to-site>~n");
@@ -18,7 +19,8 @@ main(_) ->
       end
   end.
 
-mount(Path) ->
+mount(Path0) ->
+  Path = filename:absname(Path0),
   io:format("Mounting ~p~n", [Path]),
   Fspath = hty_fspath:new(Path),
   case hty_fspath:exists(Fspath) of
@@ -45,12 +47,22 @@ mount(Path) ->
 
 start() ->
   Args = init:get_plain_arguments(),
-  erlang:display("hty process args: " ++ Args),
+  erlang:display(Args),
   [Path|_] = case Args of
+    % For running in shell
     [_, "shell"|Realargs] -> Realargs;
     ["console"|Realargs] -> Realargs;
+    % For running as an escript
+    [Head|Realargs] ->
+        case lists:reverse(Head) of 
+            [$e, $v, $r, $e, $s, $y, $t, $h|_] -> Realargs;
+            _ -> Args
+        end;
     _ -> Args
   end,
+  start(Path).
+  
+start(Path) ->
   case spawn(fun loop_supervise/0) of
     Pidko when is_pid(Pidko) ->
       case mount(Path) of

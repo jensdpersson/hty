@@ -10,7 +10,7 @@
 %%
 %% Exported Functions
 %%
--export([chain/1, binder/1]).
+-export([chain/1, binder/1, pump/2]).
 
 -type state() :: any().
 -type output() :: list().
@@ -56,6 +56,15 @@ chain([Parser, Formatter]) ->
 					 {no, Reason}
 			 end
 	end.
+	
+	
+pump(Format, Evtlist) ->
+    {_, Output} = lists:foldl(fun(Evt, {State, Outs}) ->
+        {ok, State1, Out} = Format(Evt, State),
+        {State1, [Out|Outs]}
+    end, {q0, []}, Evtlist),
+    list_to_binary(lists:reverse(Output)).
+
 %chain(Fs) ->
 %	fun(P, Q) -> 
 %		Q1 = case Q of

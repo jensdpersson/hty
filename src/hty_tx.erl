@@ -34,6 +34,7 @@
 -export([recvdata/2,
 	 recvfile/3,
 	 recvform/3,
+	 recvbody/1,
 	 buffer/2,
 	 unread/1,
 	 unread/2,
@@ -360,23 +361,23 @@ recvform(FormSchema, Callback, This) ->
 	     hty_spaf:binder(FormSchema)],
     Chain = hty_spaf:chain(Spafs),
     process_entity(fun(Data, State, Htx) ->
-			   case Chain(Data, State) of
-			       {ok, State1, Out} ->
-				   case Data of
-				       eos ->
-					   case Callback(Out, Htx) of
-					       {ok, Htx1} ->
-						   {ok, State1, Htx1};
-					       {no, Error} ->
-						   {no, Error}
-					   end;
-				       _ ->
-					   {ok, State1, Htx}
-				   end;
-			       {no, Error} ->
-				   {no, Error}
-			   end
-		   end, This).
+	  case Chain(Data, State) of
+	    {ok, State1, Out} ->
+		  case Data of
+		    eos ->
+		      case Callback(Out, Htx) of
+		        {ok, Htx1} ->
+		          {ok, State1, Htx1};
+			    {no, Error} ->
+			      {no, Error}
+			  end;
+			_ ->
+			  {ok, State1, Htx}
+		  end;
+		{no, Error} ->
+		  {no, Error}
+	  end
+	end, This).
 
 -spec recvfile(Spafs::list(), Filepath::string(), htx()) -> htx().
 recvfile(Spafs, Filepath, This) ->
@@ -423,6 +424,38 @@ recvfile(Spafs, Filepath, This) ->
       %  {no, {Reason, Reason1}}
     end
   end, This).
+  
+recvbody(This) ->
+  Bodybuilder = case req_header("Content-Type", This) of
+    [ContentType|_] ->
+      Spaf = case hty_mime:parse(ContentType) of
+        {ok, Mime} -> 
+          Name = "hty_" ++ hty_mime:subtype(Mime) ++ "_body",
+          case code:ensure_loaded(list_to_atom(Name)) of
+            {module, Module} -> Module;
+            {error, _Error} -> hty_noop_spaf
+          end;
+        {no, _Error} ->
+          hty_noop_spaf
+      end,
+      Chain = hty_spaf:chain([fun Spaf:parse/1]),
+      Fun = fun(Data, State, Htx) ->
+         case Chain(Data, State) of
+    	    {ok, State1, Out} ->
+    		  case Data of
+    		    eos ->
+    		      hty_tx:body(Out, This);
+    			_ ->
+    			  {ok, State1, Htx}
+    		  end;
+    		{no, Error} ->
+    		  {no, Error}
+    	  end
+      end,
+      process_entity(Fun, This);
+    [] ->
+      hty_tx:bad_request(This)
+  end.      
 
 ndc_push(Frame, This) ->
     This#hty_tx{ndc=[Frame|This#hty_tx.ndc]}.

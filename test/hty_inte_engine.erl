@@ -17,7 +17,7 @@ run(Testdir, Test) ->
         [] ->
           get;
         [Elm] ->
-          text(Elm)
+          list_to_atom(text(Elm))
       end,
 
       UrlOrError = case select("url", Request, Doc) of
