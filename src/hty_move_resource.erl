@@ -1,8 +1,8 @@
 -module(hty_move_resource).
 -record(hty_move_resource, {storagekey}).
--export([mount/1, handle/2]).
+-export([mount/2, handle/2]).
 
-mount(Fspath) ->
+mount(Fspath, Mc) ->
   case lists:reverse(hty_fspath:parts(Fspath)) of
     ["move", StorageKey|_] ->
       {ok, #hty_move_resource{storagekey=StorageKey}};

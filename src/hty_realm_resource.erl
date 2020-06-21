@@ -11,10 +11,10 @@
 %%
 %% Exported Functions
 %%
--export([mount/1, handle/2, new/1]).
+-export([mount/2, handle/2, new/1]).
 
-mount(Fspath) ->
-  {ok, [Realm]} = hty_mounter:walk(Fspath, "realm"),
+mount(Fspath, Mc) ->
+  {ok, [Realm]} = hty_mounter:walk(Fspath, "realm", Mc),
   {ok, new(Realm)}.
 
 new(Realm) ->

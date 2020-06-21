@@ -13,6 +13,7 @@
          append/2,
          exists/1,
          has_subs/1,
+         is_file/1,
          mkdir/1,
          delete/1,
          last_modified/1]).
@@ -66,6 +67,9 @@ exists(Path) ->
 
 has_subs(Path) ->
   filelib:is_dir(Path).
+  
+is_file(Path) ->
+  filelib:is_regular(Path).
 
 mkdir(Path) ->
   file:make_dir(Path).

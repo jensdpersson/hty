@@ -1,10 +1,10 @@
 -module(hty_site_resource).
 
--export([mount/1, handle/2]).
+-export([mount/2, handle/2]).
 
 -record(hty_site_resource, {site}).
 
-mount(Fspath) ->
+mount(Fspath, Mc) ->
   case lists:reverse(Fspath:parts()) of
     ["site", Site | _ ] ->
       {ok, #hty_site_resource{site=Site}};

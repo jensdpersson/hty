@@ -10,9 +10,9 @@
 %%
 %% Exported Functions
 %%
--export([tofs/2, mount/1, new/1]).
+-export([tofs/2, mount/2, new/1]).
 
-mount(Fspath) ->
+mount(Fspath, _Mc) ->
 	{ok, new(Fspath)}.
 
 new(Fspath) ->

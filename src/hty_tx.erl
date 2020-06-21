@@ -58,6 +58,8 @@
 	 forbidden/1,
 	 gone/1]).
 
+-export([with/2]).
+
 -export([commit/1, committed/1]).
 
 -export([realm/1,
@@ -126,6 +128,18 @@ mimemap("ico", _This) -> "image/vnd.microsoft.icon";
 mimemap("txt", _This) -> "text/plain";
 mimemap(_, _) -> "application/octetstream".
 
+with(Commands, This) ->
+    lists:foldl(fun(Command, Acc) ->
+        case Command of
+            Atom when is_atom(Atom) -> 
+                hty_tx:Command(Acc);
+            {First, Second} ->
+                hty_tx:First(Second, Acc);
+            {First, Second, Third} ->
+                hty_tx:First(Second, Third, Acc)
+        end
+    end, This, Commands).
+    
 protocol(Proto, This) ->
 	This#hty_tx{proto=Proto}.
 
@@ -546,7 +560,9 @@ commit(This) -> This#hty_tx{committed=true}.
 -spec committed(htx()) -> true | false.
 committed(This) -> This#hty_tx.committed.
 
--spec peer({(ipv4 | ipv6 | other), Address::any(), Port::integer()}) -> htx().
+-spec peer({(ipv4 | ipv6 | other), 
+            Address::any(), 
+            Port::integer()}, htx()) -> htx().
 peer(Peer, This) ->
 	This#hty_tx{peer=Peer}.
 

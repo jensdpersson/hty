@@ -6,7 +6,7 @@
 
 -export([new/1, new/2]).
 
--export([exists/1, isdir/1, mkdir/1, last_modified/1]).
+-export([exists/1, isdir/1, isfile/1, mkdir/1, last_modified/1]).
 -export([list/1, list/2, parts/1, prefix/1, ext/1, delete/1, subpath/2, fs/1]).
 
 -export([send/2, recv/3, load/1, save/2, append/2, path/1]).
@@ -61,6 +61,10 @@ exists(This) ->
 isdir(This) ->
   Fs = This#hty_fspath.fs,
   Fs:has_subs(path(This)).
+  
+isfile(This) ->
+  Fs = This#hty_fspath.fs,
+  Fs:is_file(path(This)).
 
 mkdir(This) ->
   Fs = This#hty_fspath.fs,

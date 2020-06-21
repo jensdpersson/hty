@@ -2,14 +2,14 @@
 
 -record(hty_catch_resource, {status, subs}).
 
--export([mount/1, new/2, handle/2]).
+-export([mount/2, new/2, handle/2]).
 
-mount(Fspath) ->
+mount(Fspath, Mc) ->
   case lists:reverse(hty_fspath:parts(Fspath)) of
     ["catch", Status|_] ->
       case validate(Status) of
         {ok, StatusCode} ->
-          {ok, Subs} = hty_mounter:walk(Fspath, "resource"),
+          {ok, Subs} = hty_mounter:walk(Fspath, "resource", Mc),
           {ok, hty_catch_resource:new(StatusCode, Subs)};
         _ ->
           {error, {"Bad params for catch", Status}}

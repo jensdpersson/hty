@@ -11,15 +11,15 @@
 %%
 %% Exported Functions
 %%
--export([handle/2, new/2, mount/1]).
+-export([handle/2, new/2, mount/2]).
 
 %%
 %% API Functions
 %%
-mount(Fspath) ->
+mount(Fspath, Mc) ->
   case lists:reverse(hty_fspath:parts(Fspath)) of
     ["gate"|Rest] ->
-      case hty_mounter:walk(Fspath, "resource") of
+      case hty_mounter:walk(Fspath, "resource", Mc) of
         {ok, Subs} ->
           case Rest of
             [] ->

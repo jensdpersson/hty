@@ -19,27 +19,44 @@ main(_) ->
       end
   end.
 
+walk_servers(Fspath, Mounter) ->
+  case hty_mounter:walk(Fspath, "server", Mounter) of
+      {error, Error} ->
+        {error, Error};
+      {ok, Servers} ->
+        ?MODULE ! {reload, Servers, self()},
+        io:format("Reloading cfg ~p~n", [Servers]),
+        receive
+          {ok, Status} ->
+            {ok, Status};
+          {error, Reason} ->
+            {error, Reason}
+        after
+          60000 -> timeout
+        end
+  end.
+
 mount(Path0) ->
   Path = filename:absname(Path0),
   io:format("Mounting ~p~n", [Path]),
   Fspath = hty_fspath:new(Path),
   case hty_fspath:exists(Fspath) of
     true ->
-      case hty_mounter:walk(Fspath, "server") of
-        {error, Error} ->
-          {error, Error};
-        {ok, Servers} ->
-          ?MODULE ! {reload, Servers, self()},
-          io:format("Reloading cfg ~p~n", [Servers]),
-          receive
-            {ok, Status} ->
-              {ok, Status};
-            {error, Reason} ->
-              {error, Reason}
-          after
-            60000 -> timeout
-          end
-      end;
+      %LibsDir = hty_fspath:subpath(["libs"], Fspath),
+      %case hty_fspath:exists(LibsDir) of
+      %  true ->
+        %case hty_mounter:walk(LibsDir, "lib", hty_mounter:new()) of
+        %  {error, _} = E -> E;
+        %    {ok, Libs} ->
+        %        Prefixes = lists:foldl(fun(Lib, Acc) ->
+        %            [hty_lib:prefix(Lib)|Acc]
+        %        end, ["hty"], Libs),
+        %        ServersDir = hty_fspath:subpath(["srvs"], Fspath),
+        %        walk_servers(ServersDir, hty_mounter:new(Prefixes))
+        %  end;
+    %    false ->
+          walk_servers(Fspath, hty_mounter:new());
+    %  end;
     false ->
       io:format("Path does not exist from where I stand (~p)~n", [file:get_cwd()]),
       {error, {enoent, Path}}
@@ -54,14 +71,14 @@ start() ->
     ["console"|Realargs] -> Realargs;
     % For running as an escript
     [Head|Realargs] ->
-        case lists:reverse(Head) of 
+        case lists:reverse(Head) of
             [$e, $v, $r, $e, $s, $y, $t, $h|_] -> Realargs;
             _ -> Args
         end;
     _ -> Args
   end,
   start(Path).
-  
+
 start(Path) ->
   case spawn(fun loop_supervise/0) of
     Pidko when is_pid(Pidko) ->

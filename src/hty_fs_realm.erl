@@ -3,11 +3,11 @@
 %% Description: TODO: Add description to hty_fsrealm
 -module(hty_fs_realm).
 
--export([mount/1, new/2, name/1, signup/3, auth/3]).
+-export([mount/2, new/2, name/1, signup/3, auth/3]).
 
 -record(hty_fs_realm, {realmname, fspath}).
 
-mount(Fspath) ->
+mount(Fspath, _Mc) ->
     case lists:reverse(hty_fspath:parts(Fspath)) of
 			[_Ext, Name | _] ->
 	    	{ok, new(Name, Fspath)};

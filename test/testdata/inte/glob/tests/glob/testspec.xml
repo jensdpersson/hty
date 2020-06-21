@@ -1,0 +1,20 @@
+<testspec>
+  <synopsis>
+    Match folders through a glob pattern
+  </synopsis>
+  <transaction>
+    <request>
+      <url>http://localhost:10101/</url>
+      <method>POST</method>
+      <header name="content-type">x-www-formurlencoded</header>
+      <body file="requestbody.txt"/>
+    </request>
+    <response>
+      <status>200</status>
+      <header name="content-type">text/urilist</header>
+      <body> 
+	       <exact file="facit.html"/>
+      </body>
+    </response>
+  </transaction>
+</testspec>

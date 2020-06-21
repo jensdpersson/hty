@@ -10,9 +10,9 @@
 %%
 %% Exported Functions
 %%
--export([tofs/2, mount/1]).
+-export([tofs/2, mount/2]).
 
-mount(Fspath) ->
+mount(Fspath, _Mc) ->
 	case hty_fspath:isdir(Fspath) of
 		false ->
 			case hty_fspath:load(Fspath) of

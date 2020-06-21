@@ -4,8 +4,8 @@
 
 do_test_() ->
   Basedir = "test/testdata/inte/",
-  Workdir = "work",
-  {ok, _} = file:copy(Basedir, Workdir),
+  Workdir = Basedir,
+  %{ok, _} = file:copy(Basedir, Workdir),
   inets:start(),
   Tests = case file:list_dir(Basedir) of
     {ok, Fixtures} ->

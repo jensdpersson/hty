@@ -1,11 +1,12 @@
 -module(hty_accesslog_resource).
 -record(hty_accesslog_resource, {key, subs}).
--export([mount/1, new/2, handle/2]).
+-export([mount/2, new/2, handle/2]).
 
-mount(Fspath) ->
+
+mount(Fspath, Mc) ->
   case lists:reverse(hty_fspath:parts(Fspath)) of
     ["accesslog", Key | _] ->
-      case hty_mounter:walk(Fspath, "resource") of
+      case hty_mounter:walk(Fspath, "resource", Mc) of
         {ok, Subs} ->
           {ok, new(Key, Subs)};
         {error, _} = Error ->

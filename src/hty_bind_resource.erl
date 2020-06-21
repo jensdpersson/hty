@@ -1,13 +1,13 @@
 -module(hty_bind_resource).
 -record(hty_bind_resource, {key, bound}).
 
--export([mount/1, new/2, handle/2]).
+-export([mount/2, new/2, handle/2]).
 
-mount(Fspath) ->
+mount(Fspath, Mc) ->
   case lists:reverse(hty_fspath:parts(Fspath)) of
     ["bind", Params|_] ->
       {Key, Type} = parseParams(Params),
-      case hty_mounter:walk(Fspath, Type) of
+      case hty_mounter:walk(Fspath, Type, Mc) of
         {ok, Subs} ->
           {ok, new(Key, Subs)};
         {error, _} = Error ->

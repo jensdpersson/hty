@@ -1,8 +1,8 @@
 -module(hty_getfile_resource).
 -record(hty_getfile_resource, {storagekey}).
--export([mount/1, handle/2]).
+-export([mount/2, handle/2]).
 
-mount(Fspath) ->
+mount(Fspath, _Mc) ->
   case lists:reverse(hty_fspath:parts(Fspath)) of
     ["getfile", StorageKey|_] ->
       {ok, #hty_getfile_resource{storagekey=StorageKey}};
@@ -31,5 +31,5 @@ handle(Htx, This) ->
 		    erlang:display("Pathmapper not found")
 	    end;
 	_ ->
-	    hty_tx:method_not_allowed(['GET'], Htx)
+	    hty_tx:method_not_allowed(["GET"], Htx)
     end.

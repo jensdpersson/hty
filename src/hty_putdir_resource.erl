@@ -1,9 +1,9 @@
 -module(hty_putdir_resource).
 -record(hty_putdir_resource, {storagekey}).
 
--export([mount/1, handle/2]).
+-export([mount/2, handle/2]).
 
-mount(Fspath) ->
+mount(Fspath, Mc) ->
   case lists:reverse(hty_fspath:parts(Fspath)) of
     ["putdir", StorageKey|_] ->
       {ok, #hty_putdir_resource{storagekey=StorageKey}};
@@ -43,5 +43,5 @@ handle(Htx, This) ->
         		io:format("OtherMime, wont mkdir [~p]~n", [OtherMime]), Htx
         end;
 	_ ->
-	    hty_tx:method_not_allowed(['PUT'], Htx)
+	    hty_tx:method_not_allowed(["PUT"], Htx)
     end.

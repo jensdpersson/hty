@@ -13,10 +13,10 @@
 %%
 %% Exported Functions
 %%
--export([handle/2, new/2, mount/1]).
+-export([handle/2, new/2, mount/2]).
 
 
-mount(Fspath) ->
+mount(Fspath, Mc) ->
   Welcome = case hty_fspath:param("welcome", Fspath) of
     no ->
       hty_indexfile_welcome:new();
@@ -57,5 +57,5 @@ handle(Htx, This) ->
               end
           end
       end;
-    _Method -> hty_tx:method_not_allowed(['GET'], Htx)
+    _Method -> hty_tx:method_not_allowed(["GET"], Htx)
   end.

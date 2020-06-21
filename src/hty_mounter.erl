@@ -1,20 +1,23 @@
 -module(hty_mounter).
+-record(hty_mounter, {prefixes=["hty"]}).
+-export([walk/3, new/1, new/0]).
 
--export([walk/2]).
+new() -> #hty_mounter{}.
+new(Prefixes) when is_list(Prefixes) -> #hty_mounter{prefixes=Prefixes}.
 
-mount(Fspath, Type) ->
-  Prefixes = ["hty_"],
+mount(Fspath, Type, Mounter) ->
   Suffix = hty_fspath:ext(Fspath) ++ "_" ++ Type,
+  Prefixes = Mounter#hty_mounter.prefixes,
   case mount2(Prefixes, Suffix, []) of
     {ok, Module} ->
-      hty_resource:invoke_mount(Fspath, Module);
+      Module:mount(Fspath, Mounter);
     {error, Error, Fails} ->
       Msg = "Could not load module from any of",
       {error, {Msg, Fails, Error}}
   end.
 
 mount2([Prefix|Prefixes], Suffix, Fails) ->
-  Name = Prefix ++ Suffix,
+  Name = Prefix ++ "_" ++ Suffix,
   case code:ensure_loaded(list_to_atom(Name)) of
     {module, Module} ->
       {ok, Module};
@@ -27,38 +30,18 @@ mount2([Prefix|Prefixes], Suffix, Fails) ->
       end
   end.
 
-walk(Fspath, Type) ->
+walk(Fspath, Type, Mounter) ->
   Files = sort(hty_fspath:list(Fspath)),
   io:format("Walking ~p~n", [Files]),
-  walk2(Files, Type, []).
+  walk2(Files, Type, [], Mounter).
 
-walk2([], _, Mounts) -> {ok, lists:reverse(Mounts)};
-walk2([Fspath|Fspaths], Type, Mounts) ->
-  case mount(Fspath, Type) of
+walk2([], _, Mounts, _) -> {ok, lists:reverse(Mounts)};
+walk2([Fspath|Fspaths], Type, Mounts, Mounter) ->
+  case mount(Fspath, Type, Mounter) of
     {ok, Mount} ->
-      walk2(Fspaths, Type, [Mount|Mounts]);
+      walk2(Fspaths, Type, [Mount|Mounts], Mounter);
     {error, _} = Error ->
       Error
   end.
-%append(Dict, Key, Value) ->
-%  case dict:is_key(Key, Dict) of
-%    true ->
-%      dict:append_list(Key, Value, Dict);
-%    false ->
-%      dict:store(Key, [Value], Dict)
-%  end.
 
 sort(List) -> lists:sort(List).
-
-%assemble(FspathList) ->
-%	Cmp = fun compare/2,
-%	lists:sort(Cmp, FspathList).
-
-%extract_position(X1) ->
-%    [X2|_] = X1:parts(),
-%    list_to_integer(X2).
-
-%compare(A, B) ->
-%	A1 = extract_position(A),
-%	B1 = extract_position(B),
-%	A1 < B1.

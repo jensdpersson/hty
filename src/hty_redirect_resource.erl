@@ -12,9 +12,9 @@
 %% Exported Functions
 %%
 -export([handle/2, new/1]).
--export([mount/1]).
+-export([mount/2]).
 %%
-mount(Fspath) ->
+mount(Fspath, _Mc) ->
 	case hty_fspath:ext(Fspath) of
 		"redirect" ->
 			case create(Fspath) of

@@ -1,8 +1,8 @@
 -module(hty_listdir_resource).
 -record(hty_listdir_resource, {key}).
--export([mount/1, handle/2]).
+-export([mount/2, handle/2]).
 
-mount(Fspath) ->
+mount(Fspath, _Mc) ->
   case lists:reverse(hty_fspath:parts(Fspath)) of
     ["listdir", StorageKey|_] ->
       {ok, #hty_listdir_resource{key=StorageKey}};
@@ -64,7 +64,7 @@ listXml(Htx, Fspath, Attrs) ->
 %% Local Functions
 %%
 add_files([In|Ins], Outs, Attrs) ->
-  Outs1 = [{text, list_to_binary(In:basename())},
+  Outs1 = [{text, list_to_binary(hty_fspath:basename(In))},
     {pop, <<"file">>}|Outs],
   Outs2 = lists:foldl(fun(Attr, Acc) -> add_attribute(In, Attr) ++ Acc end, Outs1, Attrs),
   Outs3 = [{push, <<"file">>}|Outs2],

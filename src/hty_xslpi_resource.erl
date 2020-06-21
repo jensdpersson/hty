@@ -5,12 +5,12 @@
 -record(hty_xslpi_resource,  {subs, xslpi}).
 
 -export([handle/2]).
--export([mount/1]).
+-export([mount/2]).
 
-mount(Fspath) ->
+mount(Fspath, Mc) ->
   case lists:reverse(hty_fspath:parts(Fspath)) of
     ["xslpi", Url|_] ->
-      case hty_mounter:walk(Fspath, "resource") of
+      case hty_mounter:walk(Fspath, "resource", Mc) of
         {ok, Subs} ->
           Xslpi = xslpi(Url),
           {ok, #hty_xslpi_resource{subs=Subs, xslpi=Xslpi}};

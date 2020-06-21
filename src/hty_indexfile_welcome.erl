@@ -21,5 +21,5 @@ list(Htx, Fspath1, This) ->
     [Indexfile|_] ->
       hty_fileserver:serve(Htx, Indexfile);
     [] ->
-      htx_tx:not_found(Htx)
+      hty_tx:not_found(Htx)
   end.

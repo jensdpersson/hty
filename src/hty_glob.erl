@@ -1,7 +1,7 @@
 -module(hty_glob).
 
 
--export([find/2, parse/1, glob/2]).
+-export([find/2, find/3, parse/1, glob/2]).
 
 -type glob() :: string().
 -export_type([glob/0]).
@@ -12,13 +12,17 @@
 % TODO "**" multifolder glob
 -spec find(Segs::list(), Fspath::any()) -> [string()].
 find(Segs, Path) ->
-    find_internal(Segs, Path, []).
+    find(Segs, Path, fun(Result) -> Result end).
+    
+find(Segs, Path, Sink) ->
+    find_internal(Segs, Path, [], Sink).
     
 % Segs are path segments,
 % Path is the context fs location
 % Above is the path prefix to include
-find_internal([], _, Above) -> [lists:reverse(Above)];
-find_internal([Seg|Segs], Path, Above) ->
+%find_internal([], _, Above) -> [lists:reverse(Above)];
+find_internal([], _, Above, Sink) -> [Sink(lists:reverse(Above))];
+find_internal([Seg|Segs], Path, Above, Sink) ->
     % Check for globs
     case parse(Seg) of
         % No globs, go straight to subfile
@@ -27,7 +31,7 @@ find_internal([Seg|Segs], Path, Above) ->
             % Check if such a file exists.
             Subpath = hty_fspath:subpath([Seg], Path),
             case hty_fspath:exists(Subpath) of
-                true -> find_internal(Segs, Subpath, [Seg|Above]);
+                true -> find_internal(Segs, Subpath, [Seg|Above], Sink);
                 false -> []
             end;
             
@@ -40,8 +44,8 @@ find_internal([Seg|Segs], Path, Above) ->
                         Subpaths ->
                             io:format("** Subpaths ~p ~n", [Subpaths]),
                             lists:flatmap(fun(Subpath) ->
-                                Matches = find_internal(Segs, Subpath, [hty_fspath:basename(Subpath)|Above]),
-                                Globs = find_internal([Seg|Segs], Subpath, [hty_fspath:basename(Subpath)|Above]),
+                                Matches = find_internal(Segs, Subpath, [hty_fspath:basename(Subpath)|Above], Sink),
+                                Globs = find_internal([Seg|Segs], Subpath, [hty_fspath:basename(Subpath)|Above], Sink),
                                 case {Matches, Globs} of
                                     {[],[]} -> [];
                                     {[], _} -> Globs;
@@ -63,7 +67,7 @@ find_internal([Seg|Segs], Path, Above) ->
                         Subpaths ->
                             io:format("Subpaths ~p ~n", [Subpaths]),
                             lists:flatmap(fun(Subpath) ->
-                                find_internal(Segs, Subpath, [hty_fspath:basename(Subpath)|Above])
+                                find_internal(Segs, Subpath, [hty_fspath:basename(Subpath)|Above], Sink)
                             end, Subpaths)
                     end;
                 false -> []

@@ -1,8 +1,8 @@
 -module(hty_logviewer_resource).
 -record(hty_logviewer_resource, {logger}).
--export([mount/1, handle/2]).
+-export([mount/2, handle/2]).
 
-mount(Fspath) ->
+mount(Fspath, Mc) ->
   case lists:reverse(hty_fspath:parts(Fspath)) of
     ["logviewer", BindingKey| _] ->
       {ok, #hty_logviewer_resource{logger=BindingKey}};

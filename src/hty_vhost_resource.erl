@@ -1,13 +1,13 @@
 -module(hty_vhost_resource).
 
--export([mount/1, handle/2, new/2]).
+-export([mount/2, handle/2, new/2]).
 -record(hty_vhost_resource, {aliases, subs}).
 
-mount(Fspath) ->
-  case lists:reverse(Fspath:parts()) of
+mount(Fspath, Mc) ->
+  case lists:reverse(hty_fspath:parts(Fspath)) of
     ["vhost", Aliases0 | _] ->
       Aliases = string:tokens(Aliases0, ","),
-      case hty_mounter:walk(Fspath, "resource") of
+      case hty_mounter:walk(Fspath, "resource", Mc) of
         {ok, Subs} ->
           {ok, new(Aliases, Subs)};
         {error, _} = Error ->

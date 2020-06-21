@@ -1,9 +1,9 @@
 -module(hty_delete_resource).
 -record(hty_delete_resource, {key}).
--export([mount/1, handle/2]).
+-export([mount/2, handle/2]).
 
 
-mount(Fspath) ->
+mount(Fspath, _Mc) ->
     case lists:reverse(hty_fspath:parts(Fspath)) of
         ["delete", Key | _] ->
             {ok, #hty_delete_resource{key=Key}};
@@ -17,7 +17,7 @@ handle(Htx, This) ->
       'DELETE' ->
 	    do_delete(Htx, This);
       _ ->
-	    hty_tx:method_not_allowed(['DELETE'], Htx)
+	    hty_tx:method_not_allowed(["DELETE"], Htx)
   end.
 
 do_delete(Htx, This) ->

@@ -3,10 +3,10 @@
 -record(hty_storage_resource, {storage}).
 
 -export([handle/2, new/1]).%, exists/2, get/2, put/4]).
--export([mount/1]).
+-export([mount/2]).
 
-mount(Fspath) ->
-  case hty_mounter:walk(Fspath, "storage") of
+mount(Fspath, Mc) ->
+  case hty_mounter:walk(Fspath, "storage", Mc) of
     {ok, [Storage]} ->
       {ok, #hty_storage_resource{storage=Storage}};
     {error, _Error} = E ->
@@ -25,7 +25,7 @@ handle(Htx, This) ->
         'GET' ->
           hty_listing:list(Htx, Fspath);
         _ ->
-          hty_tx:method_not_allowed(['GET'], Htx)
+          hty_tx:method_not_allowed(["GET"], Htx)
       end;
     false ->
       Exists = hty_fspath:exists(Fspath),

@@ -1,9 +1,9 @@
 -module(hty_filelog_logger).
 -record(hty_filelog_logger, {actor}).
--export([mount/1, log/5, grep/6]).
+-export([mount/2, log/5, grep/6]).
 
-mount(Fspath) ->
-  case hty_mounter:walk(Fspath, "storage") of
+mount(Fspath, Mc) ->
+  case hty_mounter:walk(Fspath, "storage", Mc) of
     {ok, [Storage]} ->
       Actor = spawn(fun() ->
         loop(hty_storage:invoke_tofs([], Storage))
@@ -22,8 +22,9 @@ log(StartTstamp, EndTstamp, Category, Message, This) ->
           hty_date:datetime(),
           string(),
           integer(),
-          integer(), #hty_filelog_logger{}) -> [
-          {match, hty_date:datetime(), string(), binary()}].
+          integer(), #hty_filelog_logger{}) -> 
+            {ok , [{match, hty_date:datetime(), string(), binary()}]} |
+            {error, any()} | {gone} | {timeout}.
 grep(From, To, Pattern, Before, After, This) ->
   Actor = This#hty_filelog_logger.actor,
   Actor ! {grep, From, To, Pattern, Before, After, self()},

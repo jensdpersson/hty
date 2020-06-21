@@ -4,12 +4,12 @@
 -module(hty_dir_resource).
 -record(hty_dir_resource, {segment, subs}).
 
--export([mount/1, handle/2, new/2]).
+-export([mount/2, handle/2, new/2]).
 
-mount(Fspath) ->
+mount(Fspath, Mc) ->
   case lists:reverse(hty_fspath:parts(Fspath)) of
     ["dir", Name | _ ] ->
-      case hty_mounter:walk(Fspath, "resource") of
+      case hty_mounter:walk(Fspath, "resource", Mc) of
         {ok, Subs} ->
           {ok, new(Name, Subs)};
         {error, Error} ->

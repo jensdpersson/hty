@@ -1,6 +1,6 @@
 -module(hty_urilist).
 
--export([parse_binary/1]).
+-export([parse_binary/1, pack/1]).
 
 parse_binary(Binary) ->
 	parse_binary_internal(Binary, []).
@@ -26,3 +26,8 @@ parse_binary_internal(Rest, Acc) ->
 				   [Line|Acc]
 		   end,
 	parse_binary_internal(Rest2, Acc1).
+	
+pack(Stringlist) ->
+    lists:flatmap(fun(String) ->
+        [String, "\r\n"]
+    end, Stringlist).

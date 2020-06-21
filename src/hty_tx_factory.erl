@@ -13,7 +13,11 @@ get(Uri) ->
 	hty_tx:method('GET', Htx2).
 
 listdir() ->
-	((hty_tx:new()):method('GET')):req_header('Accept', <<"text/uri-list">>).
+    Htx = hty_tx:new(),
+    hty_tx:with([
+        {method, 'GET'},
+        {req_header, 'Accept', <<"text/uri-list">>}
+    ], Htx).
 
 post(Uri, Body, Mime) ->
 	Htx = hty_tx_factory:get(Uri),

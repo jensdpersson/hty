@@ -10,7 +10,9 @@
 %%
 %% Exported Functions
 %%
--export([fold/3,find/2]).
+-export([fold/3,
+         find/2,
+         keyappend/3]).
 -export([ltrim/1, rewind/2, fast_forward/2]).
 
 -export([std_rule_match/3]).
@@ -44,6 +46,22 @@ fast_forward([A|As], [A|Bs]) ->
 	fast_forward(As, Bs);
 fast_forward(_, Bs) ->
 	{ok, Bs}.
+
+% Find the record in Entries whose 1st element is Key.
+% Append Item to the 2nd element.
+% If there is no such record, append one.
+keyappend(Key, Item, Entries) ->
+	keyappend_internal(Key, Item, [], Entries).
+	
+% Final case. No matching record existed, so add one.	
+keyappend_internal(Key, Item, NotOneOfThese, []) ->
+    [{Key, [Item]}|NotOneOfThese];
+% Final case. A matching record found. Append item and return.  
+keyappend_internal(Key, Item, NotOneOfThese, [{Key, Items}|Entries]) ->
+    rewind(NotOneOfThese, [{Key, [Item|Items]}|Entries]);
+% Recursive case.    
+keyappend_internal(Key, Item, NotOneOfThese, [Entry|Entries]) ->
+    keyappend_internal(Key, Item, [Entry|NotOneOfThese], Entries).
 
 %to_binary(MixedList) ->
 %	to_binary_internal(MixedList, <<"">>).

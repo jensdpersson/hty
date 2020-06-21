@@ -7,25 +7,24 @@
 %%
 %% Exported Functions
 %%
--export([handle/2, new/1, mount/1]).
+-export([handle/2, new/1, mount/2]).
 
 %%
 %% API Functions
 %%
-mount(Fspath) ->
+mount(Fspath, Mc) ->
   case hty_fspath:ext(Fspath) of
     "union" ->
-      {ok, assemble(Fspath)}
+      {ok, assemble(Fspath, Mc)}
 	end.
 
-new(Subs) ->
-    #hty_union_resource{subs=Subs}.
+new(Subs) -> #hty_union_resource{subs=Subs}.
 
 handle(Htx, This) ->
     hty_tx:dispatch(This#hty_union_resource.subs, Htx).
 
-assemble(Fspath) ->
-  {ok, Subs} = hty_mounter:walk(Fspath, "resource"),
+assemble(Fspath, Mc) ->
+  {ok, Subs} = hty_mounter:walk(Fspath, "resource", Mc),
   %A list of {ok, Res, Path, Rule}|{no, Reason...}
   %Sort the OKs after prefix Number segment.
 	%create a union resource instance
@@ -39,7 +38,7 @@ assemble(Fspath) ->
 
 extract_position({_,_,X,_}) ->
     X1 = hty_fspath:new(X),
-    [X2|_] = X1:parts(),
+    [X2|_] = hty_fspath:parts(X1),
     list_to_integer(X2).
 
 compare(A, B) ->

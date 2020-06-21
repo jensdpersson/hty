@@ -1,8 +1,8 @@
 -module(hty_exec_resource).
 -record(hty_exec_resource, {subcommander}).
--export([mount/1, handle/2]).
+-export([mount/2, handle/2]).
 
-mount(Fspath) ->
+mount(Fspath, _Mc) ->
   % We need two params: subcommander name and workdir
   {ok, #hty_exec_resource{subcommander=subcommander:start()}}.
 

@@ -1,6 +1,6 @@
 %% Author: jens
 -module(hty_putfile_resource).
--record(hty_putfile_resource, {key}).
+-record(this, {key}).
 %%
 %% Include files
 %%
@@ -8,10 +8,10 @@
 %%
 %% Exported Functions
 %%
--export([mount/1, handle/2, new/1]).
+-export([mount/2, handle/2, new/1]).
 
 
-mount(Fspath) ->
+mount(Fspath, _Mc) ->
   case lists:reverse(hty_fspath:parts(Fspath)) of
     ["putfile", Key | _] ->
       {ok, new(Key)};
@@ -20,18 +20,18 @@ mount(Fspath) ->
   end.
 
 new(Key) ->
-    #hty_putfile_resource{key=Key}.
+    #this{key=Key}.
 
 handle(Htx, This) ->
   case hty_tx:method(Htx) of
       'PUT' ->
 	  do_put(Htx, This);
       _ ->
-	  hty_tx:method_not_allowed(['PUT'], Htx)
+	  hty_tx:method_not_allowed(["PUT"], Htx)
   end.
 
 do_put(Htx, This) ->
-  Key = This#hty_putfile_resource.key,
+  Key = This#this.key,
   case hty_pathmapper:htx_to_fspath(Htx, Key) of
     {ok, Fspath} ->
       case hty_fspath:isdir(Fspath) of

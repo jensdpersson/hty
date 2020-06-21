@@ -10,12 +10,12 @@
 %%
 %% Exported Functions
 %%
--export([handle/2, mount/1]).
+-export([handle/2, mount/2]).
 -record(hty_sendfile_resource, {mime, fspath}).
 %%
 %% API Functions
 %%
-mount(Fspath) ->
+mount(Fspath, _Mc) ->
   case Fspath:type() of
     file ->
       case lists:reverse(Fspath:parts()) of
