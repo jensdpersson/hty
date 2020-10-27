@@ -15,7 +15,8 @@
 
     hello/1,
 
-    %static group
+    catch_forward/1,
+
     static_get_rootfile/1,
     static_get_subfile/1,
     static_index_txt_welcome/1,
@@ -36,6 +37,9 @@ all() -> [
 ].
 
 groups() -> [
+    {'catch', [
+        catch_forward
+    ]},
     {static, [
         static_get_rootfile,
         static_get_subfile,
@@ -165,27 +169,33 @@ trim_compare(Bin1, Bin2) ->
 
 hello(Config) -> ok.
 
-% static
+catch_forward(Config) ->
+  run_test(#exchange{
+    url = "http://localhost:1029/helloworld.html",
+    rsp_headers = [
+        {"content-type", "text/html"}
+    ],
+    rsp_file = "facit.html"
+  }, Config).
+
 static_get_rootfile(Config) ->
-    run_test(static_get_rootfile,
-            [#exchange{
+    run_test(#exchange{
                 url = "http://localhost:1031/rootfile.html",
                 rsp_headers = [
                     {"content-type", "text/html"}
                 ],
                 rsp_file = "facit.html"
-            }],
+            },
             Config).
 
 static_get_subfile(Config) ->
-    run_test(static_get_subfile,
-            [#exchange{
+    run_test(#exchange{
                 url = "http://localhost:1031/subfolder/subfile.html",
                 rsp_headers = [
                     {"content-type", "text/html"}
                 ],
                 rsp_file = "facit.html"
-            }],
+            },
             Config).
 
 static_index_txt_welcome(Config) ->
