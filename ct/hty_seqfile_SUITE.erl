@@ -3,6 +3,7 @@
 -export([
   all/0,
   init_per_suite/1,
+  end_per_suite/1,
   init_test/1,
   incr_test/1,
   badfile_test/1
@@ -15,6 +16,7 @@ all() -> [
 ].
 
 init_per_suite(Cfg) -> filelib:ensure_dir(priv_dir(Cfg)), Cfg.
+end_per_suite(Cfg) -> Cfg.
 
 priv_dir(Cfg) -> proplists:get_value(priv_dir, Cfg) ++ "hty_seqfile/".
 

@@ -32,6 +32,7 @@
 
 all() -> [
     hello,
+    {group, 'catch'},
     {group, static},
     {group, staticlisting}
 ].
