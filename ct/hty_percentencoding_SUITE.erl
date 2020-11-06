@@ -1,8 +1,7 @@
 %% Author: jens
 %% Created: 29 mar 2013
-%% Description: TODO: Add description to hty_percentencoding_tests
--module(hty_percentencoding_tests_tmprenamed).
-
+-module(hty_percentencoding_SUITE).
+-compile(export_all).
 %%
 %% Include files
 %%
@@ -10,22 +9,17 @@
 %%
 %% Exported Functions
 %%
--export([decode_test/0, decode2_test/0]).
+all() -> [
+	decode_square_brackets,
+	decode_latin1
+].
 
-%%
-%% API Functions
-%%
-decode_test() ->
+decode_square_brackets(_Cfg) ->
 	Input = <<"%5Blim/%5D">>,
 	Facit = <<$[, "lim/", $]>>,
 	Facit = hty_percentencoding:decode(Input).
 
-decode2_test() ->
+decode_latin1(_Cfg) ->
 	Input = <<"LIM%5Br%e4ksm%f6rg%e5s/%5DBOLLHAV">>,
 	Facit = <<"LIM[räksmörgås/]BOLLHAV">>,
 	Facit = hty_percentencoding:decode(Input).
-
-
-%%
-%% Local Functions
-%%

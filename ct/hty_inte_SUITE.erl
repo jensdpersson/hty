@@ -1,40 +1,12 @@
 -module(hty_inte_SUITE).
-
--export([
-    all/0,
-    groups/0,
-
-    init_per_suite/1,
-    end_per_suite/1,
-
-    init_per_group/2,
-    end_per_group/2,
-
-    init_per_testcase/2,
-    end_per_testcase/2,
-
-    hello/1,
-
-    catch_forward/1,
-
-    static_get_rootfile/1,
-    static_get_subfile/1,
-    static_index_txt_welcome/1,
-    static_get_rootindex/1,
-    static_get_subindex/1,
-
-    staticlisting_list_root/1,
-    staticlisting_list_sub/1,
-    staticlisting_prefer_welcomefile/1
-]).
-
-%%% Common test
+-compile(export_all).
 
 all() -> [
     hello,
     {group, 'catch'},
     {group, static},
-    {group, staticlisting}
+    {group, staticlisting},
+    {group, xslpi}
 ].
 
 groups() -> [
@@ -52,6 +24,9 @@ groups() -> [
         staticlisting_list_root,
         staticlisting_list_sub,
         staticlisting_prefer_welcomefile
+    ]},
+    {xslpi, [
+      xslpi_basic
     ]}
 ].
 
@@ -260,3 +235,13 @@ staticlisting_prefer_welcomefile(Config) ->
           rsp_file = "facit.html"
         },
         Config).
+
+xslpi_basic(Config) ->
+  run_test(#exchange{
+    url = "http://localhost:1030/docs/resource.xml",
+    rsp_headers = [
+      {"content-type", "text/xml"}
+    ],
+    rsp_file = "facit.xml"
+    },
+    Config).
