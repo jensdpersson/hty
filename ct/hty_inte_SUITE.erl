@@ -4,6 +4,7 @@
 all() -> [
     hello,
     {group, 'catch'},
+    {group, history},
     {group, static},
     {group, staticlisting},
     {group, xslpi}
@@ -12,6 +13,14 @@ all() -> [
 groups() -> [
     {'catch', [
         catch_forward
+    ]},
+    {history, [
+      history_empty,
+      history_unparsable_body,
+      history_post_and_reread,
+      history_get_latest,
+      history_get_earlier,
+      history_expect_conflict
     ]},
     {static, [
         static_get_rootfile,
@@ -65,6 +74,8 @@ end_per_testcase(Test, _Config) ->
 copy_fixture(From, To) ->
     case filelib:is_dir(From) of
         true ->
+            filelib:ensure_dir(To),
+            file:make_dir(To),
             {ok, Filenames} = file:list_dir(From),
             lists:foreach(fun(Filename) ->
                 copy_fixture(From ++ "/" ++ Filename, To ++ "/" ++ Filename)
@@ -78,6 +89,8 @@ copy_fixture(From, To) ->
 -record(exchange, {
     method = get,
     req_headers = [],
+    req_file = none,
+    req_body = none,
     url = no_url,
     status = 200,
     rsp_headers = [],
@@ -93,21 +106,41 @@ run_test(Exchanges, Config) ->
 run_test(Test, Exchange, Config) when is_record(Exchange, exchange) ->
   run_test(Test, [Exchange], Config);
 run_test(Test, Exchanges, Config) when is_list(Exchanges) ->
+    Filesdir = proplists:get_value(files_dir, Config)
+      ++ "/" ++ atom_to_list(Test) ++ "/",
     lists:foreach(fun(X) ->
+        Request = case {X#exchange.req_file, X#exchange.req_body} of
+          {none, none} -> {
+              X#exchange.url,
+              X#exchange.req_headers
+          };
+          {Reqfile, none} -> {
+              X#exchange.url,
+              X#exchange.req_headers,
+              proplists:get_value("content-type",
+                X#exchange.req_headers, "application/octet-stream"),
+              hty_result:assume_ok(file:read_file(Filesdir ++ Reqfile))
+          };
+          {none, Reqbody} -> {
+            X#exchange.url,
+            X#exchange.req_headers,
+            proplists:get_value("content-type",
+              X#exchange.req_headers, "application/octet-stream"),
+            Reqbody
+          };
+          {_,_} -> error(dont_specify_both_req_file_and_req_body)
+        end,
         {ok, Response} = httpc:request(
             X#exchange.method,
-            {
-                X#exchange.url,
-                X#exchange.req_headers
-            },
+            Request,
             [], % HttpOptions
             [{body_format, binary}], % Options
             Test),
-        {{_, Status, _}, ResponseHeaders, Body} = Response,
+        {{_, Status, StatusMessage}, ResponseHeaders, Body} = Response,
         case X#exchange.status of
             undefined -> ok;
             Status -> ok;
-            OtherStatus -> OtherStatus = Status
+            _ -> notok = io:format("Wrong status [~p ~p]~n", [Status, StatusMessage])
         end,
         lists:foreach(fun({Name, Value}) ->
             io:format("Looking for header ~s=~s in ~p~n", [Name, Value, ResponseHeaders]),
@@ -126,8 +159,7 @@ run_test(Test, Exchanges, Config) when is_list(Exchanges) ->
         case X#exchange.rsp_file of
             no_rsp_file -> ok;
             Filename ->
-                Filepath = proplists:get_value(files_dir, Config)
-                    ++ "/" ++ atom_to_list(Test) ++ "/" ++ Filename,
+                Filepath = Filesdir ++ Filename,
                 io:format("Reading facit file ~s~n", [Filepath]),
                 {ok, Facit} = file:read_file(Filepath),
                 io:format("About to compare facit [~s]~n with response body [~s]~n", [Facit, Body]),
@@ -138,9 +170,13 @@ run_test(Test, Exchanges, Config) when is_list(Exchanges) ->
         end
     end, Exchanges).
 
-trim_compare(Bin1, Bin2) ->
-  S1 = string:trim(binary_to_list(Bin1)),
-  S2 = string:trim(binary_to_list(Bin2)),
+trim_compare(Bin1, Bin2) when is_binary(Bin1) ->
+  trim_compare(binary_to_list(Bin1), Bin2);
+trim_compare(Str1, Bin2) when is_binary(Bin2) ->
+  trim_compare(Str1, binary_to_list(Bin2));
+trim_compare(Str1, Str2) ->
+  S1 = string:trim(Str1),
+  S2 = string:trim(Str2),
   S1 = S2.
 
 hello(Config) -> ok.
@@ -245,3 +281,121 @@ xslpi_basic(Config) ->
     rsp_file = "facit.xml"
     },
     Config).
+
+history_unparsable_body(Cfg) ->
+  run_test(
+    #exchange{
+      method = post,
+      url = "http://localhost:1033/unparsable.xml",
+      status = 400,
+      req_headers = [
+        {"content-type", "application/x-www-form-urlencoded"}
+      ],
+      req_body = <<"[=root&\"=lite_text&]=annan_root">>
+    }
+  ,Cfg).
+
+history_get_latest(Cfg) -> run_test([
+  #exchange{
+    url = "http://localhost:1033/get_latest.xml",
+    method = post,
+    req_headers = [
+      {"content-type", "application/x-www-form-urlencoded"}
+    ],
+    req_body = "[=apor&[=apa&\"=orangutang&]=apa&]=apor"
+  },
+  #exchange{
+    url = "http://localhost:1033/get_latest.xml",
+    method = post,
+    req_headers = [
+      {"content-type", "application/x-www-form-urlencoded"}
+    ],
+    req_body = "[=apor&[=apa&\"=bonobo&]=apa&]=apor"
+  },
+  #exchange{
+    url = "http://localhost:1033/get_latest.xml",
+    rsp_body = "<apor><apa>bonobo</apa></apor>",
+    entity_compare = trimmed
+  }
+  ], Cfg).
+
+
+history_get_earlier(Cfg) -> run_test([
+  #exchange{
+    url = "http://localhost:1033/get_earlier.xml",
+    method = post,
+    req_headers = [
+      {"content-type", "application/x-www-form-urlencoded"}
+    ],
+    req_body = "[=apor&[=apa&\"=orangutang&]=apa&]=apor"
+  },
+  #exchange{
+    url = "http://localhost:1033/get_earlier.xml",
+    method = post,
+    req_headers = [
+      {"content-type", "application/x-www-form-urlencoded"}
+    ],
+    req_body = "[=apor&[=apa&\"=bonobo&]=apa&]=apor"
+  },
+  #exchange{
+    url = "http://localhost:1033/get_earlier.xml;rev=0",
+    rsp_body = "<apor><apa>orangutang</apa></apor>",
+    entity_compare = trimmed
+  }
+], Cfg).
+
+history_expect_conflict(Cfg) -> run_test([
+  #exchange{
+    url = "http://localhost:1033/expect_conflict.xml",
+    method = post,
+    req_headers = [
+      {"content-type", "application/x-www-form-urlencoded"}
+    ],
+    req_body = "[=apor&[=apa&\"=orangutang&]=apa&]=apor"
+  },
+  #exchange{
+    url = "http://localhost:1033/expect_conflict.xml;rev=0",
+    method = post,
+    req_headers = [
+      {"content-type", "application/x-www-form-urlencoded"}
+    ],
+    req_body = "[=apor&[=apa&\"=bonobo&]=apa&]=apor"
+  },
+  #exchange{
+    url = "http://localhost:1033/expect_conflict.xml;rev=0",
+    method = post,
+    req_headers = [
+      {"content-type", "application/x-www-form-urlencoded"}
+    ],
+    status = 409,
+    req_body = "[=apor&[=apa&\"=gorilla&]=apa&]=apor"
+  },
+  #exchange{
+    url = "http://localhost:1033/expect_conflict.xml",
+    rsp_body = "<apor><apa>bonobo</apa></apor>",
+    entity_compare = trimmed
+  }
+], Cfg).
+
+history_post_and_reread(Cfg) ->
+  run_test([
+    #exchange{
+      url = "http://localhost:1033/apor.xml",
+      method = post,
+      req_headers = [
+        {"content-type", "application/x-www-form-urlencoded"}
+      ],
+      req_body = "[=apor&[=apa&\"=orangutang&]=apa&]=apor"
+    },
+    #exchange{
+      url = "http://localhost:1033/apor.xml",
+      rsp_file = "facit.xml",
+      entity_compare = trimmed
+    }
+  ], Cfg).
+
+history_empty(Config) ->
+  run_test(#exchange{
+    url = "http://localhost:1033/finns_inte.xml",
+    status = 404
+  }, Config).

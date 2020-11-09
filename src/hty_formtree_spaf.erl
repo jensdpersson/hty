@@ -20,6 +20,7 @@ parse(Data, q0) ->
 	parse(Data, {{expect_eq, <<>>}, []});
 
 parse(Data, {Expect, Stack}) ->
+	io:format("hty_formtree_spaf:parse(~p, {~p, ~p})", [Data, Expect, Stack]),
 	case Data of
 		eos ->
 			case Expect of
@@ -34,7 +35,7 @@ parse(Data, {Expect, Stack}) ->
 						{_S, _O1} ->
 							{no, {badeos, stacknotempty}}
 					end
-			end;	
+			end;
 		_ ->
 			case p(Data, Expect, Stack, []) of
 				{no, Reason} ->
@@ -43,7 +44,7 @@ parse(Data, {Expect, Stack}) ->
 					{ok, State, lists:reverse(Outs)}
 			end
 	end.
-	
+
 %%
 %% Local Functions
 %%
@@ -74,7 +75,7 @@ p(I, E, S, O) ->
 			end
 	end.
 
--spec make_out(binary(), binary(), list()) -> 
+-spec make_out(binary(), binary(), list()) ->
 				{no, any()} | {list(), any()}.
 make_out(Key0, Value0, Stack) ->
 	Key = hty_percentencoding:decode(Key0),
@@ -86,7 +87,7 @@ make_out(Key0, Value0, Stack) ->
 			{Stack, {text, Value}};
 		<<$]>> ->
 			case Stack of
-				[Value|Qs] -> 
+				[Value|Qs] ->
 					{Qs, {pop, Value}};
 				[Other|_] ->
 					{no, {badpop, Value, Other}};
@@ -96,8 +97,3 @@ make_out(Key0, Value0, Stack) ->
 		_ ->
 			{Stack, {kv, Key, Value}}
 	end.
-
-
-
-
-				

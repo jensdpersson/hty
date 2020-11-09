@@ -51,6 +51,7 @@
 	 not_modified/1,
 	 temporary_redirect/2,
 	 bad_request/1,
+	 bad_request/2,
 	 created/1,
 	 conflict/1,
 	 server_error/1,
@@ -131,7 +132,7 @@ mimemap(_, _) -> "application/octetstream".
 with(Commands, This) ->
     lists:foldl(fun(Command, Acc) ->
         case Command of
-            Atom when is_atom(Atom) -> 
+            Atom when is_atom(Atom) ->
                 hty_tx:Command(Acc);
             {First, Second} ->
                 hty_tx:First(Second, Acc);
@@ -139,7 +140,7 @@ with(Commands, This) ->
                 hty_tx:First(Second, Third, Acc)
         end
     end, This, Commands).
-    
+
 protocol(Proto, This) ->
 	This#hty_tx{proto=Proto}.
 
@@ -233,7 +234,10 @@ server_error(Error, This) ->
   log("ServerError", Error, server_error(This)).
 
 bad_request(This) ->
-  status(400, "Bad Request", This).
+	bad_request("Bad Request", This).
+
+bad_request(Msg, This) ->
+	status(400, Msg, This).
 
 created(This) ->
   status(201, "Created", This).
@@ -299,7 +303,12 @@ flush(This) ->
   end,
   case hty_util:fold(F, {Laststate, This}, Binlist) of
     {break, Error, Remains} ->
-      #hty_tx{status=Error, buffered=Remains};
+			hty_tx:with([
+				{bad_request, io_lib:format("~p", [Error])},
+				%{buffered, Remains},
+				{log, "spaf", io_lib:format("~p", [Error])}
+				], This);
+      %This#hty_tx{status=Error, buffered=Remains};
     {nobreak, {State, Htx2}} ->
       %{hty_tx, Tx1} = Htx2,
 			Tx1 = Htx2,
@@ -438,12 +447,12 @@ recvfile(Spafs, Filepath, This) ->
       %  {no, {Reason, Reason1}}
     end
   end, This).
-  
+
 recvbody(This) ->
   Bodybuilder = case req_header("Content-Type", This) of
     [ContentType|_] ->
       Spaf = case hty_mime:parse(ContentType) of
-        {ok, Mime} -> 
+        {ok, Mime} ->
           Name = "hty_" ++ hty_mime:subtype(Mime) ++ "_body",
           case code:ensure_loaded(list_to_atom(Name)) of
             {module, Module} -> Module;
@@ -469,7 +478,7 @@ recvbody(This) ->
       process_entity(Fun, This);
     [] ->
       hty_tx:bad_request(This)
-  end.      
+  end.
 
 ndc_push(Frame, This) ->
     This#hty_tx{ndc=[Frame|This#hty_tx.ndc]}.
@@ -560,8 +569,8 @@ commit(This) -> This#hty_tx{committed=true}.
 -spec committed(htx()) -> true | false.
 committed(This) -> This#hty_tx.committed.
 
--spec peer({(ipv4 | ipv6 | other), 
-            Address::any(), 
+-spec peer({(ipv4 | ipv6 | other),
+            Address::any(),
             Port::integer()}, htx()) -> htx().
 peer(Peer, This) ->
 	This#hty_tx{peer=Peer}.
