@@ -37,7 +37,13 @@ handle(Htx, This) ->
               {ok, Fsdest} = hty_pathmapper:htx_to_fspath(Htx, This#hty_move_resource.storagekey, 
                   [binary_to_list(Destination)]),
               case hty_fspath:move(Fspath, Fsdest) of
-                ok -> hty_tx:commit(hty_tx:ok(Htx1));
+                ok ->
+                    io:format("Moved OK"),
+                    H = hty_tx:with([
+                    {rsp_header, <<"location">>, Destination},
+                    ok,
+                    commit], Htx),
+                    io:format("Moved OK2"), H;
                 {error, enoent} -> hty_tx:not_found(Htx);
                 {error, eaccess} -> hty_tx:forbidden(Htx);
                 {error, Error} -> 

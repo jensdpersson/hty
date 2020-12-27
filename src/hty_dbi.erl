@@ -2,6 +2,6 @@
 
 -export([connect/5, query/2]).
 
-connect(Url, Db, User, Pass, Callback) -> notyet.
+connect(_Url, _Db, _User, _Pass, _Callback) -> notyet.
 
-query(Sql, Callback) -> notyet.
+query(_Sql, _Callback) -> notyet.

@@ -3,7 +3,9 @@
 
 all() -> [
     hello,
+    {group, accesslog},
     {group, 'catch'},
+    {group, move},
     {group, history},
     {group, static},
     {group, staticlisting},
@@ -11,6 +13,9 @@ all() -> [
 ].
 
 groups() -> [
+    {accesslog, [
+      accesslog_check_request_logged
+    ]},
     {'catch', [
         catch_forward
     ]},
@@ -21,6 +26,9 @@ groups() -> [
       history_get_latest,
       history_get_earlier,
       history_expect_conflict
+    ]},
+    {move, [
+        move_file
     ]},
     {static, [
         static_get_rootfile,
@@ -96,6 +104,7 @@ copy_fixture(From, To) ->
     rsp_headers = [],
     rsp_body = no_rsp_body,
     rsp_file = no_rsp_file,
+    rsp_pattern = no_rsp_pattern,
     entity_compare = strict :: strict | trimmed
 }).
 
@@ -146,6 +155,21 @@ run_test(Test, Exchanges, Config) when is_list(Exchanges) ->
             io:format("Looking for header ~s=~s in ~p~n", [Name, Value, ResponseHeaders]),
             true = lists:member({Name, Value}, ResponseHeaders)
         end, X#exchange.rsp_headers),
+
+        case X#exchange.rsp_pattern of
+          no_rsp_pattern -> ok;
+          Pattern ->
+            case re:compile(Pattern) of
+              {ok, Mp} ->
+                case re:run(Body, Mp) of
+                  {match, _} -> ok;
+                  nomatch ->
+                   throw({error, ["Expected match against ", Pattern, " but got ", Body]})
+                end;
+              {error, {Error, Pos}} ->
+                throw({error, ["Bad regex", Error, Pos]})
+            end
+        end,
 
         case X#exchange.rsp_body of
             no_rsp_body -> ok;
@@ -281,6 +305,54 @@ xslpi_basic(Config) ->
     rsp_file = "facit.xml"
     },
     Config).
+
+accesslog_check_request_logged(Cfg) -> run_test([
+  #exchange{
+    url = "http://localhost:1028/helloworld.txt",
+    rsp_headers = [
+      {"content-type", "text/plain"}
+    ],
+    rsp_file = "facit.txt"
+  },
+  #exchange{
+    url = "http://localhost:1028/logs",
+    rsp_headers = [
+      {"content-type", "text/plain"}
+    ],
+    rsp_pattern = "^.*|GET /helloworld.txt| .* 200"
+    }
+  ], Cfg).
+  
+  
+move_file(Cfg) -> run_test([
+    #exchange{
+        url = "http://localhost:1034/oldname",
+        rsp_pattern = <<"Hello, world!">>
+    },
+    #exchange{
+        url = "http://localhost:1034/newname",
+        status = 404
+    },
+    #exchange{
+        url = "http://localhost:1034/oldname",
+        method = delete,
+        req_headers = [
+            {"destination", "newname"},
+            {"overwrite", "F"},
+            {"x-http-method-override", "MOVE"}
+        ],
+        rsp_headers = [
+            {"location", "newname"}
+        ]
+    },
+    #exchange{
+        url = "http://localhost:1034/newname",
+        rsp_pattern = <<"Hello, world!">>
+    },
+    #exchange{
+        url = "http://localhost:1034/oldname",
+        status = 404
+    }], Cfg).
 
 history_unparsable_body(Cfg) ->
   run_test(
