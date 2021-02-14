@@ -1,6 +1,6 @@
 %% Author: jens
 -module(hty_putfile_resource).
--record(this, {key}).
+-record(hty_putfile_resource, {key}).
 %%
 %% Include files
 %%
@@ -20,7 +20,7 @@ mount(Fspath, _Mc) ->
   end.
 
 new(Key) ->
-    #this{key=Key}.
+    #hty_putfile_resource{key=Key}.
 
 handle(Htx, This) ->
   case hty_tx:method(Htx) of
@@ -31,7 +31,7 @@ handle(Htx, This) ->
   end.
 
 do_put(Htx, This) ->
-  Key = This#this.key,
+  Key = This#hty_putfile_resource.key,
   case hty_pathmapper:htx_to_fspath(Htx, Key) of
     {ok, Fspath} ->
       case hty_fspath:isdir(Fspath) of

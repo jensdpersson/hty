@@ -29,6 +29,7 @@ do_get(Htx, This) ->
           listXml(Htx, Fspath, [])
       end;
     {no, Error} ->
+      io:format("Unmappable path [~p]~n", [Key]),
       hty_tx:server_error(Error, Htx)
   end.
 

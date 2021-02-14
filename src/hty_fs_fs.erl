@@ -47,7 +47,13 @@ recv(Path, Spafs, Htx) ->
 
 save(Path, Data) -> file:write_file(Path, Data).
 
-move(Path, Dest) -> file:rename(Path, Dest).
+move(Path, Dest) -> 
+    case filelib:ensure_dir(Dest) of
+        ok -> 
+            file:rename(Path, Dest);
+        Error ->
+            Error
+    end.
 
 append(Path, Data) ->
   case file:open(Path, [append, binary]) of

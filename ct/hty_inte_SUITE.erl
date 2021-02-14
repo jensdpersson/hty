@@ -28,7 +28,8 @@ groups() -> [
       history_expect_conflict
     ]},
     {move, [
-        move_file
+        move_file,
+        move_folder
     ]},
     {static, [
         static_get_rootfile,
@@ -351,6 +352,36 @@ move_file(Cfg) -> run_test([
     },
     #exchange{
         url = "http://localhost:1034/oldname",
+        status = 404
+    }], Cfg).
+    
+move_folder(Cfg) -> run_test([
+    #exchange{
+        url = "http://localhost:1034/oldfolder/filename",
+        rsp_pattern = <<"Hello, world!">>
+    },
+    #exchange{
+        url = "http://localhost:1034/newfolder/filename",
+        status = 404
+    },
+    #exchange{
+        url = "http://localhost:1034/oldfolder/filename",
+        method = delete,
+        req_headers = [
+            {"destination", "newfolder/filename"},
+            {"overwrite", "F"},
+            {"x-http-method-override", "MOVE"}
+        ],
+        rsp_headers = [
+            {"location", "newfolder/filename"}
+        ]
+    },
+    #exchange{
+        url = "http://localhost:1034/newfolder/filename",
+        rsp_pattern = <<"Hello, world!">>
+    },
+    #exchange{
+        url = "http://localhost:1034/oldfolder/filename",
         status = 404
     }], Cfg).
 
