@@ -6,7 +6,8 @@
 mount(Fspath, Mc) ->
   case lists:reverse(hty_fspath:parts(Fspath)) of
     ["vhost", Aliases0 | _] ->
-      Aliases = string:tokens(Aliases0, ","),
+      Aliases1 = string:tokens(Aliases0, ","),
+      Aliases = lists:map(fun(A) -> list_to_binary(A) end, Aliases1),
       case hty_mounter:walk(Fspath, "resource", Mc) of
         {ok, Subs} ->
           {ok, new(Aliases, Subs)};
@@ -24,16 +25,16 @@ new(Aliases, Subs) ->
 handle(Htx, This) ->
   Aliases = This#hty_vhost_resource.aliases,
   Subs = This#hty_vhost_resource.subs,
-  case Htx:req_header('Host') of
+  case hty_tx:req_header('host', Htx) of
     [Host] ->
       case lists:member(Host, Aliases) of
         true ->
-          Htx:dispatch(Subs);
+          hty_tx:dispatch(Subs, Htx);
         false ->
-          Htx:not_found()
+          hty_tx:not_found(Htx)
       end;
     [] ->
-      Htx:not_found();
+      hty_tx:not_found(Htx);
     _ ->
-      Htx:bad_request()
+      hty_tx:bad_request(Htx)
   end.

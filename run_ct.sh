@@ -1,1 +1,1 @@
-erlc -o ebin src/*.erl && ct_run -logdir ct/logs -dir ct -pz ebin
+mkdir -p ebin && erlc -o ebin src/*.erl && ct_run -logdir ct/logs -dir ct -pz ebin

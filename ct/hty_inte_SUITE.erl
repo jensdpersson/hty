@@ -9,6 +9,7 @@ all() -> [
     {group, history},
     {group, static},
     {group, staticlisting},
+    {group, vhosts},
     {group, xslpi}
 ].
 
@@ -42,6 +43,9 @@ groups() -> [
         staticlisting_list_root,
         staticlisting_list_sub,
         staticlisting_prefer_welcomefile
+    ]},
+    {vhosts, [
+      vhosts_basic
     ]},
     {xslpi, [
       xslpi_basic
@@ -177,7 +181,8 @@ run_test(Test, Exchanges, Config) when is_list(Exchanges) ->
             Body -> ok;
             OtherBody ->
               case X#exchange.entity_compare of
-                strict -> OtherBody = Body;
+                strict -> 
+                  throw({error, ["Expected ", Body, " but got ", OtherBody]});  
                 trimmed -> trim_compare(OtherBody, Body)
               end
         end,
@@ -502,3 +507,22 @@ history_empty(Config) ->
     url = "http://localhost:1033/finns_inte.xml",
     status = 404
   }, Config).
+
+vhosts_basic(Cfg) ->
+  run_test([#exchange{
+        url = "http://localhost:1035/index.txt",
+        req_headers = [
+          {"accept", "text/plain"},
+          {"host", "orangutang"}
+        ],
+        status = 200,
+        rsp_body = <<"Hello Orangutan!">>
+  }, #exchange{
+        url = "http://localhost:1035/index.txt",
+        req_headers = [
+          {"accept", "text/plain"},
+          {"host", "schimpans"}
+        ],
+        status = 200,
+        rsp_body = <<"Hello Chimpanzee!">>
+  }], Cfg).
