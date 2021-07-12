@@ -45,7 +45,8 @@ groups() -> [
         staticlisting_prefer_welcomefile
     ]},
     {vhosts, [
-      vhosts_basic
+      vhosts_basic,
+      vhosts_subdomains
     ]},
     {xslpi, [
       xslpi_basic
@@ -510,7 +511,7 @@ history_empty(Config) ->
 
 vhosts_basic(Cfg) ->
   run_test([#exchange{
-        url = "http://localhost:1035/index.txt",
+        url = "http://localhost:1035/basic/index.txt",
         req_headers = [
           {"accept", "text/plain"},
           {"host", "orangutang"}
@@ -518,7 +519,7 @@ vhosts_basic(Cfg) ->
         status = 200,
         rsp_body = <<"Hello Orangutan!">>
   }, #exchange{
-        url = "http://localhost:1035/index.txt",
+        url = "http://localhost:1035/basic/index.txt",
         req_headers = [
           {"accept", "text/plain"},
           {"host", "schimpans"}
@@ -526,3 +527,23 @@ vhosts_basic(Cfg) ->
         status = 200,
         rsp_body = <<"Hello Chimpanzee!">>
   }], Cfg).
+
+  vhosts_subdomains(Cfg) ->
+    run_test([#exchange{
+          url = "http://localhost:1035/subdomains/index.txt",
+          req_headers = [
+            {"accept", "text/plain"},
+            {"host", "orangutang.jenspersson.com"}
+          ],
+          status = 200,
+          rsp_body = <<"Hello Orangutan!">>
+    }, #exchange{
+          url = "http://localhost:1035/subdomains/index.txt",
+          req_headers = [
+            {"accept", "text/plain"},
+            {"host", "schimpans.jenspersson.com"}
+          ],
+          status = 200,
+          rsp_body = <<"Hello Chimpanzee!">>
+    }], Cfg).
+  

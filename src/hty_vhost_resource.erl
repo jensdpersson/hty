@@ -7,7 +7,7 @@ mount(Fspath, Mc) ->
   case lists:reverse(hty_fspath:parts(Fspath)) of
     ["vhost", Aliases0 | _] ->
       Aliases1 = string:tokens(Aliases0, ","),
-      Aliases = lists:map(fun(A) -> list_to_binary(A) end, Aliases1),
+      Aliases = lists:map(fun(A) -> hty_percentencoding:decode(list_to_binary(A)) end, Aliases1),
       case hty_mounter:walk(Fspath, "resource", Mc) of
         {ok, Subs} ->
           {ok, new(Aliases, Subs)};
