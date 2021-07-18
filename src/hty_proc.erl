@@ -44,7 +44,7 @@ loop(Namespaces) ->
             case lists:keyfind(Namespace, 1, Namespaces) of
                 false -> ReplyTo ! no;
                 {_, Resources} ->
-                    case lists:find(Finder, Resources) of
+                    case lists:find(Finder, Resources) of % TODO find is not a function the that module!
                         false -> ReplyTo ! no;
                         {value, Value} -> ReplyTo ! {ok, Value}
                     end

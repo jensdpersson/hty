@@ -30,13 +30,13 @@ signup(Nick, Pass, This) ->
 	ok ->
 	    Userdir = hty_fspath:subpath(["data", Nick], Fspath),
 	    case hty_fspath:exists(Userdir) of
-		true ->
-		    {no, exists};
-		false ->
-		    case hty_fspath:mkdir(Userdir) of
-			{error, _Error} ->
-			    {no, createerror};
-			ok ->
+			true ->
+		    	{no, exists};
+			false ->
+		    	case hty_fspath:mkdir(Userdir) of
+					{error, _Error} ->
+			    		{no, createerror};
+					ok ->
 			    Secretfile = hty_fspath:subpath(["secret"], Userdir),
 			    Secret = crypto:hash(md5, Pass),
 			    case hty_fspath:save([Secret, 10], Secretfile) of

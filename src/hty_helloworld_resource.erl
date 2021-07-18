@@ -17,7 +17,7 @@
 %%
 handle(Htx) ->
 	Htx1 = hty_tx:rsp_header('Content-Type', "text/html", Htx),
-	hty_tx:echo(<<"<html><h1>Hello World!</h1></html>">>, Htx1).
+	hty_tx:echo([<<"<html><h1>Hello World!</h1></html>">>], Htx1).
 
 %%
 %% Local Functions

@@ -1,5 +1,5 @@
 -module(hty_sql).
--record(hty_sql, {from, joins=[], wheres=[]}).
+%-record(hty_sql, {from, joins=[], wheres=[]}).
 
 %from(Table) -> #hty_sql{from=Table}.
 

@@ -22,7 +22,7 @@ loop(Index, Sofar) ->
                         false ->
                             lists:takewhile(fun(Progress) ->
                                 Progress#hty_progress.index > Offset
-                            end)
+                            end, Sofar)
                     end
             end,
             ReplyTo ! {ok, Response},

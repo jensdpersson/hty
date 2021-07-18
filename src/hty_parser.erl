@@ -5,8 +5,7 @@
 
 -export([parse/1, respond/2]).
 
-pack_status({Code, Message}) when is_integer(Code) -> integer_to_list(Code) ++ " " ++ Message;
-pack_status(Message) -> Message.
+pack_status({Code, Message}) when is_integer(Code) -> integer_to_list(Code) ++ " " ++ Message.
 
 pack_header(HeaderName, HeaderValue) ->
   to_list(HeaderName) ++ ": " ++ to_list(HeaderValue).

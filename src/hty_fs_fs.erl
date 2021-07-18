@@ -1,6 +1,6 @@
 -module(hty_fs_fs).
 
--behaviour(hty_fs).
+%-behaviour(hty_fs).
 
 -export([type/1,
          list/1,

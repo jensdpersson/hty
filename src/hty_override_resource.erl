@@ -16,7 +16,7 @@ handle(Htx, This) ->
                 'GET' ->
                     ascend(Htx, Below, This);
                  _ ->
-                    hty_tx:method_not_allowed(['GET'], Htx)
+                    hty_tx:method_not_allowed(["GET"], Htx)
             end;
          _ ->
             hty_tx:not_found(Htx)

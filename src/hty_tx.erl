@@ -302,7 +302,7 @@ flush(This) ->
     end
   end,
   case hty_util:fold(F, {Laststate, This}, Binlist) of
-    {break, Error, Remains} ->
+    {break, Error, _Remains} ->
 			hty_tx:with([
 				{bad_request, io_lib:format("~p", [Error])},
 				%{buffered, Remains},
@@ -449,7 +449,7 @@ recvfile(Spafs, Filepath, This) ->
   end, This).
 
 recvbody(This) ->
-  Bodybuilder = case req_header("Content-Type", This) of
+  case req_header("Content-Type", This) of
     [ContentType|_] ->
       Spaf = case hty_mime:parse(ContentType) of
         {ok, Mime} ->
@@ -467,6 +467,7 @@ recvbody(This) ->
     	    {ok, State1, Out} ->
     		  case Data of
     		    eos ->
+              % TODO this function does not exist.
     		      hty_tx:body(Out, This);
     			_ ->
     			  {ok, State1, Htx}

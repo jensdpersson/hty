@@ -76,7 +76,7 @@ find_internal([Seg|Segs], Path, Above, Sink) ->
     
 
 
--spec parse(Token::string()) -> no_globs | glob().
+-spec parse(Token::string()) -> no_globs | double_glob | fun().
 parse("**") -> double_glob;
 parse(Token) -> 
     case string:find(Token, [$*]) of

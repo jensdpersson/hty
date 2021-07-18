@@ -4,7 +4,7 @@
 
 -record(hty_site_resource, {site}).
 
-mount(Fspath, Mc) ->
+mount(Fspath, _Mc) ->
   case lists:reverse(Fspath:parts()) of
     ["site", Site | _ ] ->
       {ok, #hty_site_resource{site=Site}};

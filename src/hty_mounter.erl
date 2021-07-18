@@ -30,10 +30,19 @@ mount2([Prefix|Prefixes], Suffix, Fails) ->
       end
   end.
 
-walk(Fspath, Type, Mounter) ->
+walk(Fspath, [T|_] = Type, Mounter) when is_integer(T) ->
+  walk(Fspath, [Type], Mounter);
+walk(Fspath, Types, Mounter) ->
   Files = sort(hty_fspath:list(Fspath)),
   io:format("Walking ~p~n", [Files]),
-  walk2(Files, Type, [], Mounter).
+  lists:foldl(fun(Item, Result) -> 
+      case {walk2(Files, Item, [], Mounter), Result} of 
+        {{ok, _},{ok, _}} -> {error, " duplicate mount matches for " ++ hty_fspath:path(Item)};
+        {{ok, _} = Ok, {error, _}} -> Ok;
+        {{error, _}, {ok, _} = Ok} -> Ok;
+        {{error, _} = Error, {error, _}} -> Error
+      end
+    end, {error, hty_mounter_walk_with_empty_list_of_types}, Types).
 
 walk2([], _, Mounts, _) -> {ok, lists:reverse(Mounts)};
 walk2([Fspath|Fspaths], Type, Mounts, Mounter) ->

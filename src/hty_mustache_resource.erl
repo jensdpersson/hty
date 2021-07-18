@@ -2,6 +2,6 @@
 -record(hty_mustache_resource, {}).
 -export([mount/1, handle/2]).
 
-mount(Fspath) -> {ok, #hty_mustache_resource{}}.
+mount(_Fspath) -> {ok, #hty_mustache_resource{}}.
 
-handle(Htx, This) -> htx_tx:ok().
+handle(_Htx, _This) -> htx_tx:ok().

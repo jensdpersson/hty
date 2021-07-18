@@ -92,7 +92,12 @@ list(This) ->
     end.
 
 list(Filter, This) ->
-    lists:filter(Filter, list(This)).
+  case list(This) of
+    {error, _} = Error ->
+      Error;
+    List ->
+      lists:filter(Filter, List)
+  end.
 
 fs(This) ->
   This#hty_fspath.fs.

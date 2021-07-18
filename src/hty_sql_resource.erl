@@ -24,7 +24,7 @@ handle(Htx, This) ->
     case hty_tx:bound(DbKey, Htx) of
         no ->
             hty_tx:server_error("Datasource key not bound for sql resource", Htx);
-        {ok, Datasource} ->
+        {ok, _Datasource} ->
             Meth = hty_tx:method(Htx),
             Sqlfilename = string:lowercase(atom_to_list(Meth)) ++ ".sql",
             Fspath = This#hty_sql_resource.sqldir,

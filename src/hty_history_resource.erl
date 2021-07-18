@@ -36,7 +36,7 @@ handle(Htx0, This) ->
           Htx2 = hty_listing_welcome:list(Htx1, Fspath, [last_modified]),
           hty_tx:commit(Htx2);
         'POST' ->
-          hty_tx:method_not_allowed(['GET'], Htx0)
+          hty_tx:method_not_allowed(["GET"], Htx0)
       end;
     [Segment] ->
       io:format("history:twig()", []),
@@ -103,7 +103,7 @@ handle(Htx0, This) ->
                 conflict(Htx, Num, Rev)
             end;
           _ ->
-            hty_tx:method_not_allowed(['GET', 'POST'], Htx)
+            hty_tx:method_not_allowed(["GET", "POST"], Htx)
         end
       end
   end.

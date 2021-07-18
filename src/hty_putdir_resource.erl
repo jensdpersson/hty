@@ -3,7 +3,7 @@
 
 -export([mount/2, handle/2]).
 
-mount(Fspath, Mc) ->
+mount(Fspath, _Mc) ->
   case lists:reverse(hty_fspath:parts(Fspath)) of
     ["putdir", StorageKey|_] ->
       {ok, #hty_putdir_resource{storagekey=StorageKey}};

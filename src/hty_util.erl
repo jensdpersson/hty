@@ -29,6 +29,7 @@ find(Pred, [X|Xs]) ->
 		 no -> find(Pred, Xs)
 	 end.
 
+-spec fold(any(), any(), any()) -> {nobreak, any()} | {break, any(), any()}.
 fold(_, Acc, []) -> {nobreak, Acc};
 fold(Fun, Acc, [X|Xs]) ->
 	case Fun(X, Acc) of

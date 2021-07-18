@@ -42,9 +42,9 @@ check(Htx, Auth, This) ->
     {Username, <<$:, Password/binary>>} = hty_scan:until(String, $:),
     Realm = hty_tx:realm(Htx),
     case hty_realm:invoke_auth(Username, Password, Realm) of
-	{ok, Principal} ->
-	    Htx1 = hty_tx:principal(Principal, Htx),
-	    hty_tx:dispatch(This#hty_basicauth_resource.subs, Htx1);
-	no ->
-	    challenge(Htx)
+	    {ok, Principal} ->
+	      Htx1 = hty_tx:principal(Principal, Htx),
+	      hty_tx:dispatch(This#hty_basicauth_resource.subs, Htx1);
+	    no ->
+	      challenge(Htx)
     end.

@@ -20,7 +20,7 @@ main(_) ->
   end.
 
 walk_servers(Fspath, Mounter) ->
-  case hty_mounter:walk(Fspath, "server", Mounter) of
+  case hty_mounter:walk(Fspath, ["server", "lib"], Mounter) of
       {error, Error} ->
         {error, Error};
       {ok, Servers} ->
@@ -86,9 +86,7 @@ start(Path) ->
         {ok, started} ->
           {ok, Pidko};
         Error -> Error
-      end;
-    Other ->
-      {error, Other}
+      end
   end.
 
 stop() ->

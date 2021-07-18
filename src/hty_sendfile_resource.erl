@@ -50,7 +50,7 @@ handle(Htx, This) ->
 		%    Htx:not_found()
 	    %end;
 	_Method ->
-	    hty_tx:method_not_allowed(['GET'], Htx)
+	    hty_tx:method_not_allowed(["GET"], Htx)
     end.
 
 %%

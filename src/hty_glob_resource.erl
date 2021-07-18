@@ -8,7 +8,7 @@
 mount(Fspath, _Mc) ->
     case lists:reverse(hty_fspath:parts(Fspath)) of
         ["glob", ProcStore, TargetStore | Rest] ->
-            Lastidfile = hty_fspath:subpath(["lastid"], Fspath),
+            %Lastidfile = hty_fspath:subpath(["lastid"], Fspath),
             Baseurlvar = case Rest of
                 [Baseurlvar0|_] -> {key, Baseurlvar0};
                 _ -> {val, "/"}
@@ -61,7 +61,7 @@ handle(Htx, This) ->
                   'POST' ->
                     do_post(Htx, TargetStoreRoot, This);
                   _ ->
-            	    hty_tx:method_not_allowed(['GET', 'POST'], Htx)
+            	    hty_tx:method_not_allowed(["GET", "POST"], Htx)
               end;
             false ->
                hty_tx:not_found(Htx)
@@ -112,10 +112,8 @@ do_post(Htx, TargetStoreRoot, This) ->
         	        end),
         	        "0"
         	    end,
-        	    case complete(Job, JobFolder) of
-        	        {error, _} ->
-        	            {ok, hty_tx:server_error(Htx2)};
-        	        Pid ->
+        	    case complete(Job, JobFolder) of        	        
+        	        _Pid ->
         	            Baseurl = baseurl(Htx, This),
         	            Location = Baseurl ++ "/" ++ JobPath,
         	            {ok, hty_tx:commit(hty_tx:see_other(Location, Htx2))}
@@ -142,7 +140,7 @@ get_proc_store_folder(Htx, This) ->
 	        {no, "Proc Pathmapper not found"}
 	end.
 
-get_last_id_file(Htx, ProcStoreFolder, This) ->
+get_last_id_file(_Htx, ProcStoreFolder, _This) ->
     hty_fspath:subpath(["lastid"], ProcStoreFolder).
 	
 baseurl(Htx, This) ->

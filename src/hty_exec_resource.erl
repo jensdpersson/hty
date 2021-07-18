@@ -2,11 +2,11 @@
 -record(hty_exec_resource, {subcommander}).
 -export([mount/2, handle/2]).
 
-mount(Fspath, _Mc) ->
+mount(_Fspath, _Mc) ->
   % We need two params: subcommander name and workdir
   {ok, #hty_exec_resource{subcommander=subcommander:start()}}.
 
-handle(Htx, This) ->
+handle(Htx, _This) ->
     Meth = Htx:method(),
     case Htx:path_below() of
         [] ->
@@ -15,7 +15,7 @@ handle(Htx, This) ->
                     list_jobs(Htx);
                 'POST' ->
                     create_job(Htx);
-                Other ->
+                _Other ->
                     Htx:method_not_allowed()
             end;
         [Job] ->
@@ -24,20 +24,20 @@ handle(Htx, This) ->
                     job_info(Job, Htx);
                 'DELETE' ->
                     cancel_job(Job, Htx);
-                Other ->
+                _Other ->
                     Htx:method_not_allowed()
             end;
         [Job, Resource] ->
             case Meth of
                 'GET' ->
                     serve_job_resource(Job, Resource);
-                Other ->
+                _Other ->
                     Htx:method_not_allowed()
             end
     end.
 
-list_jobs(Htx) -> notyet.
-create_job(Htx) -> notyet.
-job_info(Htx,_) -> notyet.
-cancel_job(Htx,_) -> notyet.
-serve_job_resource(Htx,_) -> notyet.
+list_jobs(_Htx) -> notyet.
+create_job(_Htx) -> notyet.
+job_info(_Htx,_) -> notyet.
+cancel_job(_Htx,_) -> notyet.
+serve_job_resource(_Htx,_) -> notyet.

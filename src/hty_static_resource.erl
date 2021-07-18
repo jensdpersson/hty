@@ -16,7 +16,7 @@
 -export([handle/2, new/2, mount/2]).
 
 
-mount(Fspath, Mc) ->
+mount(Fspath, _Mc) ->
   Welcome = case hty_fspath:param("welcome", Fspath) of
     no ->
       hty_indexfile_welcome:new();

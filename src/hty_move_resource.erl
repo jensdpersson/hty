@@ -2,7 +2,7 @@
 -record(hty_move_resource, {storagekey}).
 -export([mount/2, handle/2]).
 
-mount(Fspath, Mc) ->
+mount(Fspath, _Mc) ->
   case lists:reverse(hty_fspath:parts(Fspath)) of
     ["move", StorageKey|_] ->
       {ok, #hty_move_resource{storagekey=StorageKey}};
@@ -17,8 +17,10 @@ handle(Htx, This) ->
 	'GET' -> false;
 	_ ->
 	    case hty_tx:req_header("X-HTTP-Method-Override", Htx) of
-	        [<<"MOVE">>] -> true;
-	        Other -> erlang:display(hty_tx:req_headers(Htx)), false
+	        [<<"MOVE">>] -> 
+            true;
+	        _Other -> 
+            erlang:display(hty_tx:req_headers(Htx)), false
 	    end
   end,
   
@@ -33,14 +35,14 @@ handle(Htx, This) ->
 	      case hty_pathmapper:htx_to_fspath(Htx, This#hty_move_resource.storagekey) of
             {ok, Fspath} ->
               io:format("Moving ~p to ~p~n", [Fspath, Destination]),
-              Htx1 = hty_tx:echo(Destination, Htx),
+              % Htx1 = hty_tx:echo(Destination, Htx),
               {ok, Fsdest} = hty_pathmapper:htx_to_fspath(Htx, This#hty_move_resource.storagekey, 
                   [binary_to_list(Destination)]),
               case hty_fspath:move(Fspath, Fsdest) of
                 ok ->
                     io:format("Moved OK"),
                     H = hty_tx:with([
-                    {rsp_header, <<"location">>, Destination},
+                      {rsp_header, <<"location">>, Destination},
                     ok,
                     commit], Htx),
                     io:format("Moved OK2"), H;

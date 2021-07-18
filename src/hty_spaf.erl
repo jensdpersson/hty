@@ -49,7 +49,7 @@ chain([Parser, Formatter]) ->
 					 case hty_util:fold(Fold,	 {Qf, []}, Evts) of
 						 {nobreak, {Qf1, Outs}} ->
 							 {ok, [Qp1, Qf1], lists:reverse(Outs)};
-						 {break, Reason} ->
+						 {break, Reason, _} ->
 							 {no, Reason}
 					 end;
 				 {no, Reason} -> 

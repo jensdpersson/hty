@@ -1,13 +1,13 @@
 -module(hty_site_server).
 -record(hty_site_server, {regname, subs}).
 
--export([mount/1, start/1, stop/1]).
+-export([mount/2, start/1, stop/1]).
 -export([request/2]).
 
-mount(Fspath) ->
-  case Fspath:parts() of
+mount(Fspath, Mc) ->
+  case hty_fspath:parts(Fspath) of
     [Site, "site"] ->
-      case hty_mounter:walk(Fspath, "resource") of
+      case hty_mounter:walk(Fspath, "resource", Mc) of
         {ok, Subs} ->
           {ok, #hty_site_server{regname=regname(Site),subs=Subs}};
         {error, Error} ->
