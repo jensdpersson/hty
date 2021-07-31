@@ -549,7 +549,7 @@ dispatch(Resources, This) ->
       error:Error ->
         Trace = erlang:get_stacktrace(),
         io:format(user, "Dispatch caught ~p :: ~p~n", [Error, Trace]),
-        {break, hty_tx:server_error(atom_to_list(Error), Htx)}
+        {break, hty_tx:server_error(io_lib:format("~p", [Error]), Htx)}
         %Should this not be Htx3:server_error, rather than Htx:server_error?
     end
   end,

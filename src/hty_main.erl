@@ -20,7 +20,7 @@ main(_) ->
   end.
 
 walk_servers(Fspath, Mounter) ->
-  case hty_mounter:walk(Fspath, ["server", "lib"], Mounter) of
+  case hty_mounter:walk(Fspath, "server", Mounter) of
       {error, Error} ->
         {error, Error};
       {ok, Servers} ->
@@ -41,22 +41,14 @@ mount(Path0) ->
   io:format("Mounting ~p~n", [Path]),
   Fspath = hty_fspath:new(Path),
   case hty_fspath:exists(Fspath) of
-    true ->
-      %LibsDir = hty_fspath:subpath(["libs"], Fspath),
-      %case hty_fspath:exists(LibsDir) of
-      %  true ->
-        %case hty_mounter:walk(LibsDir, "lib", hty_mounter:new()) of
-        %  {error, _} = E -> E;
-        %    {ok, Libs} ->
-        %        Prefixes = lists:foldl(fun(Lib, Acc) ->
-        %            [hty_lib:prefix(Lib)|Acc]
-        %        end, ["hty"], Libs),
-        %        ServersDir = hty_fspath:subpath(["srvs"], Fspath),
-        %        walk_servers(ServersDir, hty_mounter:new(Prefixes))
-        %  end;
-    %    false ->
-          walk_servers(Fspath, hty_mounter:new());
-    %  end;
+    true ->      
+      case hty_mounter:walk(Fspath, "lib", hty_mounter:new([{ignore_notfound, true}])) of
+        {error, _} = E -> E;
+        {ok, Libs} ->
+          Prefixes = lists:map(fun(Lib) -> hty_lib:prefix(Lib) end, Libs),
+          Ignores = lists:map(fun(Lib) -> hty_lib:file_name(Lib) end, Libs),          
+          walk_servers(Fspath, hty_mounter:new([{prefixes, ["hty"|Prefixes]}, {ignores, Ignores}]))
+      end;
     false ->
       io:format("Path does not exist from where I stand (~p)~n", [file:get_cwd()]),
       {error, {enoent, Path}}

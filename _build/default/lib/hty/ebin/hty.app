@@ -8,7 +8,7 @@
                         hty_bind_resource,hty_catch_resource,
                         hty_chgmethod_resource,hty_chgspec,hty_date,hty_dbi,
                         hty_delete_resource,hty_dir_resource,hty_ebin_lib,
-                        hty_empty_realm,hty_exec_resource,
+                        hty_empty_realm,hty_esrc_lib,hty_exec_resource,
                         hty_external_storage,hty_filelog_logger,
                         hty_fileserver,hty_flat_storage,hty_formdocs_resource,
                         hty_formdocs_rule,hty_formtree_spaf,
