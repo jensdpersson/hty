@@ -333,15 +333,15 @@ accesslog_check_request_logged(Cfg) -> run_test([
   
 move_file(Cfg) -> run_test([
     #exchange{
-        url = "http://localhost:1034/oldname",
+        url = "http://localhost:1034/data/files/oldname",
         rsp_pattern = <<"Hello, world!">>
     },
     #exchange{
-        url = "http://localhost:1034/newname",
+        url = "http://localhost:1034/data/files/newname",
         status = 404
     },
     #exchange{
-        url = "http://localhost:1034/oldname",
+        url = "http://localhost:1034/data/files/oldname",
         method = delete,
         req_headers = [
             {"destination", "newname"},
@@ -353,41 +353,41 @@ move_file(Cfg) -> run_test([
         ]
     },
     #exchange{
-        url = "http://localhost:1034/newname",
+        url = "http://localhost:1034/data/files/newname",
         rsp_pattern = <<"Hello, world!">>
     },
     #exchange{
-        url = "http://localhost:1034/oldname",
+        url = "http://localhost:1034/data/files/oldname",
         status = 404
     }], Cfg).
     
 move_folder(Cfg) -> run_test([
     #exchange{
-        url = "http://localhost:1034/oldfolder/filename",
+        url = "http://localhost:1034/data/files/oldfolder/filename",
         rsp_pattern = <<"Hello, world!">>
     },
     #exchange{
-        url = "http://localhost:1034/newfolder/filename",
+        url = "http://localhost:1034/data/files/newfolder/filename",
         status = 404
     },
     #exchange{
-        url = "http://localhost:1034/oldfolder/filename",
+        url = "http://localhost:1034/data/files/oldfolder/filename",
         method = delete,
         req_headers = [
-            {"destination", "newfolder/filename"},
+            {"destination", "/data/files/newfolder/filename"},
             {"overwrite", "F"},
             {"x-http-method-override", "MOVE"}
         ],
         rsp_headers = [
-            {"location", "newfolder/filename"}
+            {"location", "/data/files/newfolder/filename"}
         ]
     },
     #exchange{
-        url = "http://localhost:1034/newfolder/filename",
+        url = "http://localhost:1034/data/files/newfolder/filename",
         rsp_pattern = <<"Hello, world!">>
     },
     #exchange{
-        url = "http://localhost:1034/oldfolder/filename",
+        url = "http://localhost:1034/data/files/oldfolder/filename",
         status = 404
     }], Cfg).
 

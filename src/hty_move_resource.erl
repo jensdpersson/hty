@@ -37,7 +37,8 @@ handle(Htx, This) ->
               io:format("Moving ~p to ~p~n", [Fspath, Destination]),
               % Htx1 = hty_tx:echo(Destination, Htx),
               {ok, Fsdest} = hty_pathmapper:htx_to_fspath(Htx, This#hty_move_resource.storagekey, 
-                  [binary_to_list(Destination)]),
+                  split(binary_to_list(Destination)),
+                  lists:reverse(hty_tx:path_above(Htx))),
               case hty_fspath:move(Fspath, Fsdest) of
                 ok ->
                     io:format("Moved OK"),
@@ -58,5 +59,11 @@ handle(Htx, This) ->
           end
       end
   end.
+  
+  split(Path) -> 
+    case string:split(Path, [$/], all) of 
+        [""|Segs] -> Segs;
+        Other -> Other
+    end.
     
     

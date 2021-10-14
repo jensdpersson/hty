@@ -11,9 +11,9 @@ mount(Fspath, Mc) ->
             {error, Error}
     end.
     
-handle(Htx, This) ->
+handle(Htx, _This) ->
     hty_tx:with([
         {echo, "Hello thirdparty!"},
         ok,
         commit
-        ]).
+        ], Htx).

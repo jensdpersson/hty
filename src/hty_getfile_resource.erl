@@ -24,6 +24,7 @@ handle(Htx, This) ->
 				true ->
 				    hty_fileserver:serve(Htx, Fspath);
 				false ->
+				io:format("Getfile: ~p doesn't exist", [hty_fspath:path(Fspath)]),
 				    hty_tx:not_found(Htx)
 			    end
 		    end;
