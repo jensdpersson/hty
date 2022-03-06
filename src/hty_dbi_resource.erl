@@ -2,7 +2,7 @@
 -record(hty_dbi_resource, {key, driver, opts}).
 -export([mount/2, handle/2]).
 
-mount(Fspath, Mountext) ->
+mount(Fspath, _Mountext) ->
     case lists:reverse(hty_fspath:path(Fspath)) of
         ["dbi", Key | _] ->
             case file:consult(Fspath) of
@@ -17,12 +17,13 @@ mount(Fspath, Mountext) ->
                             Driver = Drivermod:new(Key, Opts),
                             {ok, #hty_dbi_resource{key = Key, driver = Driver, opts = Opts}}
                     end;
-                {error, ["failed reading ", Fspath]}
+		_ ->
+		    {error, ["failed reading ", Fspath]}
             end;
         _ -> 
-            {error, ["missing key parameter"]
+            {error, ["missing key parameter"]}
     end.
             
             
 handle(Htx, This) ->
-    hty_tx:bind(Dbikey, This).
+    hty_tx:bind(This#hty_dbi_resource.key, This, Htx).

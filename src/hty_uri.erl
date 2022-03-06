@@ -117,8 +117,8 @@ parse_query(Params, Input, Segs) ->
 	end.
 
 pathzipper(Segments) ->
-	{[], lists:map(fun(Seg) when is_binary(Seg) ->
-						   binary_to_list(Seg);
-					  ({Name, Matrix}) ->
-						   {binary_to_list(Name), Matrix}
-				   end, Segments)}.
+    {[], lists:map(fun(Seg) when is_binary(Seg) ->
+			   binary_to_list(Seg);
+		      ({Name, Matrix}) ->
+			   {binary_to_list(Name), Matrix}
+		   end, Segments)}.

@@ -1,5 +1,5 @@
 -module(hty_http_server).
--behaviour(hty_server).
+%-behaviour(hty_server).
 -export([mount/2]).
 -export([new/4, start/1, stop/1]).
 -export([protocol/1, address/1, port/1, root/1]).

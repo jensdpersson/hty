@@ -1,6 +1,1 @@
-/reci.py
-/target
-/_build
-/ct/logs
-/ct/*.beam
-/ebin
+*~
