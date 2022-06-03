@@ -5,3 +5,4 @@
 /ct/*.beam
 /ebin
 ./_build
+*~

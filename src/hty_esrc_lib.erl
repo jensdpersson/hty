@@ -3,7 +3,7 @@
 
 -export([mount/2, prefix/1]).
 
-mount(Fspath, Mc) ->
+mount(Fspath, _Mc) ->
     case lists:reverse(hty_fspath:parts(Fspath)) of
         [Prefix, "esrc"] ->
             Files = hty_fspath:list(Fspath),

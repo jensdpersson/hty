@@ -2,8 +2,6 @@
 -record(hty_ebin_lib, {prefix}).
 -export([mount/2, prefix/1]).
 
--behaviour(hty_lib).
-
 mount(Fspath, _Mc) ->
     case lists:reverse(hty_fspath:parts(Fspath)) of
         ["ebin", Prefix|_] ->

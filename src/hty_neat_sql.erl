@@ -1,14 +1,14 @@
 -module(hty_neat_sql).
 -record(hty_neat_sql, {db, taxonomy}).
--export([append/0, query/1]).
+-export([append/3, query/2]).
 
 
-append() -> no.
+append(Neatpath, Data, This) -> no.
 
--type neatpath() :: [{
+-type segment() :: [{
     Name :: string(), 
     Preds :: [{
-        Functor :: string(), 
+        Functor :: string(),  
         Params :: [string()]
     }]
 }]. 
@@ -20,14 +20,14 @@ query(Neatpath, This) ->
     end, Neatpath),
     
 
--type taxonomy() :: [{
+-type taxon() :: {
         Name :: string(), 
         Key :: integer() | , 
         Columns :: [{
             Name :: string(), 
             Type :: text | int
         }]
-    }].
+    }.
 
 %
 % private parts
