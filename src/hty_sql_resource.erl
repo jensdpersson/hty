@@ -33,9 +33,9 @@ handle(Htx, This) ->
                 false ->
                     hty_tx:method_not_allowed([], Htx);
                 true ->
-                    hty_tx:server_error("not implemented", Htx)
+                    hty_tx:server_error("not implemented", Htx),
                     {ok, Content} = hty_fspath:load(Sqlfile),
                     Result = hty_dbi:query(Content, Dbi),
-                    hty_tx:bind(This#this.resultkey, Result, Htx)
+                    hty_tx:bind(This#hty_sql_resource.resultkey, Result, Htx)
             end
     end.

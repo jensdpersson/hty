@@ -15,7 +15,7 @@ mount(Fspath, Mountctx) ->
 
 handle(Htx, This) ->
     Neatpath = extract_path(Htx),
-    Pid = This#hty_neat_resource.pid,
+    Pid = This#hty_neatface_resource.pid,
     ReplyTo = self(),
     case hty_tx:method(Htx) of
 	'POST' ->
@@ -34,11 +34,11 @@ recv() ->
 	{SomeKindOfResponse} -> no
     end.
     
+extract_payload(_) -> notyet.
 extract_path(Htx) ->
     Pathbelow = hty_tx:path_below(Htx),
-    Segments = lists:map(fun(Urisegment) -> 
-				 
-			 end, Pathbelow),
+    Segments = lists:map(fun(_Urisegment) -> notyet end, Pathbelow),
+    notyet.
     
     
     

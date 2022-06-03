@@ -18,11 +18,12 @@ query(Neatpath, This) ->
     Segments1 = lists:map(fun(Segment) ->
         {Segment, lookup_taxon(Segment, Taxonomy)}
     end, Neatpath),
+    Segments1.
     
 
 -type taxon() :: {
         Name :: string(), 
-        Key :: integer() | , 
+        Key :: integer(), 
         Columns :: [{
             Name :: string(), 
             Type :: text | int
@@ -33,7 +34,7 @@ query(Neatpath, This) ->
 % private parts
 %
 add_taxon(Segment, Taxonomy) -> 
-    case lists:keyfind(Segment, 1, Taxonomy),
+    case lists:keyfind(Segment, 1, Taxonomy) of
         false -> unknown;
         Taxon -> Taxon
     end.

@@ -4,3 +4,6 @@
 -type pred() :: {Functor :: string(), [Param :: string()]}.
 
 
+with_name(_) -> notyet.
+
+add_param(_, _) -> notyet.
