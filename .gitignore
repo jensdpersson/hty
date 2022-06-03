@@ -4,3 +4,4 @@
 /ct/logs
 /ct/*.beam
 /ebin
+./_build
