@@ -16,6 +16,8 @@
          is_file/1,
          mkdir/1,
          delete/1,
+         copy/2,
+         copy/3,
          last_modified/1]).
 
 type(Path) ->
@@ -54,6 +56,29 @@ move(Path, Dest) ->
         Error ->
             Error
     end.
+    
+copy(From, To) ->
+    copy(From, To, [base, ext]).
+    
+-spec copy(string(), string(), any()) -> any().
+copy(From, To, IfExists) ->
+    case filelib:is_dir(From) of
+        true ->
+            filelib:ensure_dir(To),
+            file:make_dir(To),
+            {ok, Filenames} = file:list_dir(From),
+            lists:foreach(fun(Filename) ->
+                copy(From ++ "/" ++ Filename, To ++ "/" ++ Filename, IfExists)
+            end, Filenames);
+        false ->
+            ok = filelib:ensure_dir(To),
+            io:format("Copying from ~s to ~s", [From, To]),
+            case filelib:is_file(To) of
+                true -> {error, eexist};
+                false -> {ok, _} = file:copy(From, To)
+            end
+    end.
+
 
 append(Path, Data) ->
   case file:open(Path, [append, binary]) of

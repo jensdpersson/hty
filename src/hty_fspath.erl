@@ -11,7 +11,7 @@
 
 -export([send/2, recv/3, load/1, save/2, append/2, path/1]).
 
--export([basename/1, parent/1, type/1, move/2]).
+-export([basename/1, parent/1, type/1, move/2, copy/2, copy/3]).
 
 -export([collect/2, params/1, param/2]).
 
@@ -145,6 +145,12 @@ delete(This) ->
 move(From, Dest) ->
   io:format("From ~p to ~p~n", [From, Dest]),
   (fs(From)):move(path(From), path(Dest)).
+
+copy(From, To) ->
+  (fs(From)):copy(path(From), path(To)).
+  
+copy(From, To, IfExists) ->
+  (fs(From)):copy(path(From), path(To), IfExists).
 
 subpath(Pathsegments, This) ->
   Fun = fun(Item, Acc) ->
