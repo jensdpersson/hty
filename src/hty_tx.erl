@@ -57,6 +57,7 @@
 	 server_error/1,
 	 server_error/2,
 	 forbidden/1,
+	 precondition_failed/1,
 	 gone/1]).
 
 -export([with/2]).
@@ -238,6 +239,9 @@ bad_request(This) ->
 
 bad_request(Msg, This) ->
 	status(400, Msg, This).
+	
+precondition_failed(This) ->
+    status(412, "Precondition failed", This).
 
 created(This) ->
   status(201, "Created", This).

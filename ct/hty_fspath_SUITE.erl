@@ -112,7 +112,7 @@ test_move_or_copy(Cfg, #test_move_or_copy{from=From, dest=To, mode=MoveOrCopy, x
 init_per_group(Grp, Config) ->
     Datadir = proplists:get_value(data_dir, Config),
     Fromdir = Datadir ++ atom_to_list(Grp) ++ "/files/",
-    Todir = proplists:get_value(priv_dir, Config) ++ atom_to_list(Grp) ++ "/files/",
+    Todir = proplists:get_value(priv_dir, Config) ++ "/hty_fspath/" ++ atom_to_list(Grp) ++ "/files/",
     copy_fixture(Fromdir, Todir),
     [{files_dir, Todir}|Config].
 

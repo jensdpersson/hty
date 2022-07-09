@@ -5,6 +5,7 @@ all() -> [
     hello,
     {group, accesslog},
     {group, 'catch'},
+    {group, copy},
     {group, move},
     {group, history},
     {group, static},
@@ -19,6 +20,11 @@ groups() -> [
     ]},
     {'catch', [
         catch_forward
+    ]},
+    {copy, [
+        copy_deep,
+        copy_to_existing_folder,
+        copy_to_existing_file
     ]},
     {history, [
       history_empty,
@@ -65,7 +71,7 @@ init_per_group(Group, Config) ->
     Groupname = atom_to_list(Group),
     Groupdir = proplists:get_value(data_dir, Config) ++ Groupname,
     Fromdir = Groupdir ++ "/fixture",
-    Todir = proplists:get_value(priv_dir, Config) ++ Groupname ++ "/fixture",
+    Todir = proplists:get_value(priv_dir, Config) ++ "/inte/" ++ Groupname ++ "/fixture",
     copy_fixture(Fromdir, Todir),
     {ok, _Pid} = hty_main:start([Todir]),
     [{wwwroot, Todir},
@@ -220,6 +226,76 @@ catch_forward(Config) ->
     ],
     rsp_file = "facit.html"
   }, Config).
+  
+copy_deep(Config) ->
+    run_test([#exchange{
+        url = "http://localhost:1037/data/files/level1/level2/level3/file3",
+        rsp_pattern = <<"file3">>
+    }, #exchange{
+        url = "http://localhost:1037/data/files/newlevel1",
+        status = 404
+    }, #exchange{
+      url = "http://localhost:1037/data/files/level1",
+      method = delete,
+      req_headers = [
+            {"destination", "/data/files/newlevel1"},
+            {"overwrite", "F"},
+            {"x-http-method-override", "COPY"}
+      ]
+    }, #exchange{
+        url = "http://localhost:1037/data/files/newlevel1/level2/level3/file3",
+        rsp_pattern = <<"file3">>
+    }
+    ], Config).
+    
+copy_to_existing_folder(Config) ->
+    run_test([#exchange{
+        url = "http://localhost:1037/data/files/level1/level2/level3/file3",
+        rsp_pattern = <<"file3">>
+    }, #exchange{
+      url = "http://localhost:1037/data/files/level1",
+      method = delete,
+      req_headers = [
+            {"destination", "/data/files/newlevel1"},
+            {"overwrite", "F"},
+            {"x-http-method-override", "COPY"}
+      ]
+    }, #exchange{
+      url = "http://localhost:1037/data/files/level1_1",
+      method = delete,
+      status = 412,
+      req_headers = [
+            {"destination", "/data/files/newlevel1"},
+            {"overwrite", "F"},
+            {"x-http-method-override", "COPY"}
+      ]
+    }
+    ], Config).
+    
+copy_to_existing_file(Config) ->
+    run_test([#exchange{
+        url = "http://localhost:1037/data/files/level1/level2/level3/file3",
+        rsp_pattern = <<"file3">>
+    }, #exchange{
+      url = "http://localhost:1037/data/files/level1/file1",
+      method = delete,
+      status = 200,
+      req_headers = [
+            {"destination", "/data/files/newlevel1/newfile"},
+            {"overwrite", "F"},
+            {"x-http-method-override", "COPY"}
+      ]
+    }, #exchange{
+      url = "http://localhost:1037/data/files/level1_1/file1_1",
+      method = delete,
+      status = 412,
+      req_headers = [
+            {"destination", "/data/files/newlevel1/newfile"},
+            {"overwrite", "F"},
+            {"x-http-method-override", "COPY"}
+      ]
+    }
+    ], Config).
 
 static_get_rootfile(Config) ->
     run_test(#exchange{
