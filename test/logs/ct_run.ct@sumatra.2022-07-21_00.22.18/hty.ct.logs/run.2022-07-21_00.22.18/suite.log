@@ -1,0 +1,689 @@
+=== Suite started at 2022-07-21 00:22:18
+=== Starting test, 56 test cases
+=cases         56
+=user          jens
+=host          sumatra
+=hosts         sumatra 
+=emulator_vsn  9.2
+=emulator      beam
+=otp_release   20
+=started       2022-07-21 00:22:18
+=case          ct_framework:init_per_suite
+=logfile       ct_framework.init_per_suite.html
+=group_props   [{suite,hty_date_SUITE}]
+=started       2022-07-21 00:22:18
+=ended         2022-07-21 00:22:18
+=result        ok
+=elapsed       1.0e-6
+=case          hty_date_SUITE:t0_test
+=logfile       hty_date_suite.t0_test.html
+=started       2022-07-21 00:22:18
+=ended         2022-07-21 00:22:18
+=result        ok
+=elapsed       0.005593
+=case          ct_framework:end_per_suite
+=logfile       ct_framework.end_per_suite.html
+=group_props   [{suite,hty_date_SUITE}]
+=started       2022-07-21 00:22:18
+=ended         2022-07-21 00:22:18
+=result        ok
+=elapsed       1.0e-6
+=group_time    0.097s
+=case          ct_framework:init_per_suite
+=logfile       ct_framework.init_per_suite.2.html
+=group_props   [{suite,hty_formtree_spaf_SUITE}]
+=started       2022-07-21 00:22:18
+=ended         2022-07-21 00:22:18
+=result        ok
+=elapsed       1.0e-6
+=case          hty_formtree_spaf_SUITE:single_attr
+=logfile       hty_formtree_spaf_suite.single_attr.html
+=started       2022-07-21 00:22:18
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       0.037142
+=case          hty_formtree_spaf_SUITE:dual_attr
+=logfile       hty_formtree_spaf_suite.dual_attr.html
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       3.94e-4
+=case          hty_formtree_spaf_SUITE:nesting
+=logfile       hty_formtree_spaf_suite.nesting.html
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       5.98e-4
+=case          hty_formtree_spaf_SUITE:no_eq
+=logfile       hty_formtree_spaf_suite.no_eq.html
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       3.56e-4
+=case          hty_formtree_spaf_SUITE:split_attr
+=logfile       hty_formtree_spaf_suite.split_attr.html
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       7.14e-4
+=case          hty_formtree_spaf_SUITE:apor
+=logfile       hty_formtree_spaf_suite.apor.html
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       4.23e-4
+=case          ct_framework:end_per_suite
+=logfile       ct_framework.end_per_suite.18.html
+=group_props   [{suite,hty_formtree_spaf_SUITE}]
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       1.0e-6
+=group_time    0.302s
+=case          ct_framework:init_per_suite
+=logfile       ct_framework.init_per_suite.34.html
+=group_props   [{suite,hty_fspath_SUITE}]
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       1.0e-6
+=case          hty_fspath_SUITE:init_per_group
+=logfile       hty_fspath_suite.init_per_group.html
+=group_props   [{name,move}]
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       0.005944
+=case          hty_fspath_SUITE:move_direct_child_file
+=logfile       hty_fspath_suite.move_direct_child_file.html
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       0.011454
+=case          hty_fspath_SUITE:move_direct_child_folder
+=logfile       hty_fspath_suite.move_direct_child_folder.html
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       0.00146
+=case          hty_fspath_SUITE:move_nested_source
+=logfile       hty_fspath_suite.move_nested_source.html
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       0.001698
+=case          hty_fspath_SUITE:end_per_group
+=logfile       hty_fspath_suite.end_per_group.html
+=group_props   [{name,move}]
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       1.0e-6
+=group_time    0.171s
+=case          ct_framework:end_per_suite
+=logfile       ct_framework.end_per_suite.50.html
+=group_props   [{suite,hty_fspath_SUITE}]
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       1.0e-6
+=group_time    0.268s
+=case          ct_framework:init_per_suite
+=logfile       ct_framework.init_per_suite.66.html
+=group_props   [{suite,hty_glob_SUITE}]
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       1.0e-6
+=case          hty_glob_SUITE:initial_glob_test
+=logfile       hty_glob_suite.initial_glob_test.html
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       0.004927
+=case          hty_glob_SUITE:middle_glob_test
+=logfile       hty_glob_suite.middle_glob_test.html
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       2.0e-6
+=case          hty_glob_SUITE:final_glob_test
+=logfile       hty_glob_suite.final_glob_test.html
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       2.0e-6
+=case          hty_glob_SUITE:final_glob_fail_test
+=logfile       hty_glob_suite.final_glob_fail_test.html
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       1.0e-6
+=case          hty_glob_SUITE:double_glob_test
+=logfile       hty_glob_suite.double_glob_test.html
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       2.0e-6
+=case          hty_glob_SUITE:middle_glob_fail_test
+=logfile       hty_glob_suite.middle_glob_fail_test.html
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       2.0e-6
+=case          hty_glob_SUITE:find_explicit_test
+=logfile       hty_glob_suite.find_explicit_test.html
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       2.61e-4
+=case          hty_glob_SUITE:find_glob_test
+=logfile       hty_glob_suite.find_glob_test.html
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       0.001255
+=case          hty_glob_SUITE:mix_folders_and_files_test
+=logfile       hty_glob_suite.mix_folders_and_files_test.html
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:19
+=result        ok
+=elapsed       7.67e-4
+=case          hty_glob_SUITE:wild_middle_folder_test
+=logfile       hty_glob_suite.wild_middle_folder_test.html
+=started       2022-07-21 00:22:19
+=ended         2022-07-21 00:22:20
+=result        ok
+=elapsed       0.001457
+=case          hty_glob_SUITE:find_double_glob_test
+=logfile       hty_glob_suite.find_double_glob_test.html
+=started       2022-07-21 00:22:20
+=ended         2022-07-21 00:22:20
+=result        ok
+=elapsed       0.004217
+=case          ct_framework:end_per_suite
+=logfile       ct_framework.end_per_suite.82.html
+=group_props   [{suite,hty_glob_SUITE}]
+=started       2022-07-21 00:22:20
+=ended         2022-07-21 00:22:20
+=result        ok
+=elapsed       1.0e-6
+=group_time    0.507s
+=case          hty_inte_SUITE:init_per_suite
+=logfile       hty_inte_suite.init_per_suite.html
+=started       2022-07-21 00:22:20
+=ended         2022-07-21 00:22:20
+=result        ok
+=elapsed       0.061165
+=case          hty_inte_SUITE:hello
+=logfile       hty_inte_suite.hello.html
+=started       2022-07-21 00:22:20
+=ended         2022-07-21 00:22:20
+=result        ok
+=elapsed       1.0e-6
+=case          hty_inte_SUITE:init_per_group
+=logfile       hty_inte_suite.init_per_group.html
+=group_props   [{name,accesslog}]
+=started       2022-07-21 00:22:20
+=ended         2022-07-21 00:22:20
+=result        ok
+=elapsed       0.089635
+=case          hty_inte_SUITE:accesslog_check_request_logged
+=logfile       hty_inte_suite.accesslog_check_request_logged.html
+=started       2022-07-21 00:22:20
+=ended         2022-07-21 00:22:20
+=result        ok
+=elapsed       0.148288
+=case          hty_inte_SUITE:end_per_group
+=logfile       hty_inte_suite.end_per_group.html
+=group_props   [{name,accesslog}]
+=started       2022-07-21 00:22:20
+=ended         2022-07-21 00:22:20
+=result        ok
+=elapsed       2.12e-4
+=group_time    0.333s
+=case          hty_inte_SUITE:init_per_group
+=logfile       hty_inte_suite.init_per_group.98.html
+=group_props   [{name,'catch'}]
+=started       2022-07-21 00:22:20
+=ended         2022-07-21 00:22:20
+=result        ok
+=elapsed       0.026008
+=case          hty_inte_SUITE:catch_forward
+=logfile       hty_inte_suite.catch_forward.html
+=started       2022-07-21 00:22:20
+=ended         2022-07-21 00:22:20
+=result        ok
+=elapsed       0.009872
+=case          hty_inte_SUITE:end_per_group
+=logfile       hty_inte_suite.end_per_group.114.html
+=group_props   [{name,'catch'}]
+=started       2022-07-21 00:22:20
+=ended         2022-07-21 00:22:20
+=result        ok
+=elapsed       1.43e-4
+=group_time    0.115s
+=case          hty_inte_SUITE:init_per_group
+=logfile       hty_inte_suite.init_per_group.130.html
+=group_props   [{name,move}]
+=started       2022-07-21 00:22:20
+=ended         2022-07-21 00:22:20
+=result        ok
+=elapsed       0.030973
+=case          hty_inte_SUITE:move_file
+=logfile       hty_inte_suite.move_file.html
+=started       2022-07-21 00:22:20
+=ended         2022-07-21 00:22:20
+=result        ok
+=elapsed       0.068856
+=case          hty_inte_SUITE:move_folder
+=logfile       hty_inte_suite.move_folder.html
+=started       2022-07-21 00:22:20
+=ended         2022-07-21 00:22:21
+=result        ok
+=elapsed       0.051129
+=case          hty_inte_SUITE:end_per_group
+=logfile       hty_inte_suite.end_per_group.146.html
+=group_props   [{name,move}]
+=started       2022-07-21 00:22:21
+=ended         2022-07-21 00:22:21
+=result        ok
+=elapsed       1.43e-4
+=group_time    0.270s
+=case          hty_inte_SUITE:init_per_group
+=logfile       hty_inte_suite.init_per_group.162.html
+=group_props   [{name,history}]
+=started       2022-07-21 00:22:21
+=ended         2022-07-21 00:22:21
+=result        failed: {{badmatch,{error,enoent}},
+                        [{hty_inte_SUITE,copy_fixture,2,
+                             [{file,"hty_inte_SUITE.erl"},{line,100}]},
+                         {hty_inte_SUITE,init_per_group,2,
+                             [{file,"hty_inte_SUITE.erl"},{line,69}]},
+                         {test_server,ts_tc,3,
+                             [{file,"test_server.erl"},{line,1546}]},
+                         {test_server,run_test_case_eval1,6,
+                             [{file,"test_server.erl"},{line,1147}]},
+                         {test_server,run_test_case_eval,9,
+                             [{file,"test_server.erl"},{line,994}]}]}, [{hty_inte_SUITE,
+                                                                         copy_fixture,
+                                                                         100},
+                                                                        {hty_inte_SUITE,
+                                                                         init_per_group,
+                                                                         69},
+                                                                        {test_server,
+                                                                         ts_tc,
+                                                                         1546},
+                                                                        {test_server,
+                                                                         run_test_case_eval1,
+                                                                         1147},
+                                                                        {test_server,
+                                                                         run_test_case_eval,
+                                                                         994}]
+=== *** FAILED {hty_inte_SUITE,init_per_group} ***
+=== 
+=case          hty_inte_SUITE:history_empty
+=group_props   [{name,"history"}]
+=started       2022-07-21 00:22:21
+=result        auto_skipped: init_per_group failed
+=== *** Skipping test case #27 {hty_inte_SUITE,history_empty} ***
+=== 
+=case          hty_inte_SUITE:history_unparsable_body
+=group_props   [{name,"history"}]
+=started       2022-07-21 00:22:21
+=result        auto_skipped: init_per_group failed
+=== *** Skipping test case #28 {hty_inte_SUITE,history_unparsable_body} ***
+=== 
+=case          hty_inte_SUITE:history_post_and_reread
+=group_props   [{name,"history"}]
+=started       2022-07-21 00:22:21
+=result        auto_skipped: init_per_group failed
+=== *** Skipping test case #29 {hty_inte_SUITE,history_post_and_reread} ***
+=== 
+=case          hty_inte_SUITE:history_get_latest
+=group_props   [{name,"history"}]
+=started       2022-07-21 00:22:21
+=result        auto_skipped: init_per_group failed
+=== *** Skipping test case #30 {hty_inte_SUITE,history_get_latest} ***
+=== 
+=case          hty_inte_SUITE:history_get_earlier
+=group_props   [{name,"history"}]
+=started       2022-07-21 00:22:21
+=result        auto_skipped: init_per_group failed
+=== *** Skipping test case #31 {hty_inte_SUITE,history_get_earlier} ***
+=== 
+=case          hty_inte_SUITE:history_expect_conflict
+=group_props   [{name,"history"}]
+=started       2022-07-21 00:22:21
+=result        auto_skipped: init_per_group failed
+=== *** Skipping test case #32 {hty_inte_SUITE,history_expect_conflict} ***
+=== 
+=case          hty_inte_SUITE:end_per_group
+=group_props   [{name,"history"}]
+=started       2022-07-21 00:22:21
+=result        auto_skipped: init_per_group failed
+=== *** Skipping {hty_inte_SUITE,end_per_group} ***
+=case          hty_inte_SUITE:init_per_group
+=logfile       hty_inte_suite.init_per_group.178.html
+=group_props   [{name,static}]
+=started       2022-07-21 00:22:21
+=ended         2022-07-21 00:22:21
+=result        ok
+=elapsed       0.014737
+=case          hty_inte_SUITE:static_get_rootfile
+=logfile       hty_inte_suite.static_get_rootfile.html
+=started       2022-07-21 00:22:21
+=ended         2022-07-21 00:22:21
+=result        ok
+=elapsed       0.008406
+=case          hty_inte_SUITE:static_get_subfile
+=logfile       hty_inte_suite.static_get_subfile.html
+=started       2022-07-21 00:22:21
+=ended         2022-07-21 00:22:21
+=result        ok
+=elapsed       0.015916
+=case          hty_inte_SUITE:static_index_txt_welcome
+=logfile       hty_inte_suite.static_index_txt_welcome.html
+=started       2022-07-21 00:22:21
+=ended         2022-07-21 00:22:21
+=result        ok
+=elapsed       0.017772
+=case          hty_inte_SUITE:static_get_rootindex
+=logfile       hty_inte_suite.static_get_rootindex.html
+=started       2022-07-21 00:22:21
+=ended         2022-07-21 00:22:21
+=result        ok
+=elapsed       0.007257
+=case          hty_inte_SUITE:static_get_subindex
+=logfile       hty_inte_suite.static_get_subindex.html
+=started       2022-07-21 00:22:21
+=ended         2022-07-21 00:22:21
+=result        ok
+=elapsed       0.008822
+=case          hty_inte_SUITE:end_per_group
+=logfile       hty_inte_suite.end_per_group.194.html
+=group_props   [{name,static}]
+=started       2022-07-21 00:22:21
+=ended         2022-07-21 00:22:21
+=result        ok
+=elapsed       1.83e-4
+=group_time    0.313s
+=case          hty_inte_SUITE:init_per_group
+=logfile       hty_inte_suite.init_per_group.210.html
+=group_props   [{name,staticlisting}]
+=started       2022-07-21 00:22:21
+=ended         2022-07-21 00:22:21
+=result        ok
+=elapsed       0.041877
+=case          hty_inte_SUITE:staticlisting_list_root
+=logfile       hty_inte_suite.staticlisting_list_root.html
+=started       2022-07-21 00:22:21
+=ended         2022-07-21 00:22:21
+=result        failed: {{badmatch,
+                            "<dir><file>rootfile1.html</file><file>index.html</file><file>rootfile.html</file><file>subfolder</file></dir>"},
+                        [{hty_inte_SUITE,trim_compare,2,
+                             [{file,"hty_inte_SUITE.erl"},{line,211}]},
+                         {lists,foreach,2,[{file,"lists.erl"},{line,1338}]},
+                         {test_server,ts_tc,3,
+                             [{file,"test_server.erl"},{line,1546}]},
+                         {test_server,run_test_case_eval1,6,
+                             [{file,"test_server.erl"},{line,1062}]},
+                         {test_server,run_test_case_eval,9,
+                             [{file,"test_server.erl"},{line,994}]}]}, [{hty_inte_SUITE,
+                                                                         trim_compare,
+                                                                         211},
+                                                                        {lists,
+                                                                         foreach,
+                                                                         1338},
+                                                                        {test_server,
+                                                                         ts_tc,
+                                                                         1546},
+                                                                        {test_server,
+                                                                         run_test_case_eval1,
+                                                                         1062},
+                                                                        {test_server,
+                                                                         run_test_case_eval,
+                                                                         994}]
+=== *** FAILED test case 38 of 56 ***
+=case          hty_inte_SUITE:staticlisting_list_sub
+=logfile       hty_inte_suite.staticlisting_list_sub.html
+=started       2022-07-21 00:22:21
+=ended         2022-07-21 00:22:21
+=result        failed: {{badmatch,
+                            "<dir><file>subfile1.html</file><file>index.html</file><file>subfile.html</file></dir>"},
+                        [{hty_inte_SUITE,trim_compare,2,
+                             [{file,"hty_inte_SUITE.erl"},{line,211}]},
+                         {lists,foreach,2,[{file,"lists.erl"},{line,1338}]},
+                         {test_server,ts_tc,3,
+                             [{file,"test_server.erl"},{line,1546}]},
+                         {test_server,run_test_case_eval1,6,
+                             [{file,"test_server.erl"},{line,1062}]},
+                         {test_server,run_test_case_eval,9,
+                             [{file,"test_server.erl"},{line,994}]}]}, [{hty_inte_SUITE,
+                                                                         trim_compare,
+                                                                         211},
+                                                                        {lists,
+                                                                         foreach,
+                                                                         1338},
+                                                                        {test_server,
+                                                                         ts_tc,
+                                                                         1546},
+                                                                        {test_server,
+                                                                         run_test_case_eval1,
+                                                                         1062},
+                                                                        {test_server,
+                                                                         run_test_case_eval,
+                                                                         994}]
+=== *** FAILED test case 39 of 56 ***
+=case          hty_inte_SUITE:staticlisting_prefer_welcomefile
+=logfile       hty_inte_suite.staticlisting_prefer_welcomefile.html
+=started       2022-07-21 00:22:21
+=ended         2022-07-21 00:22:21
+=result        ok
+=elapsed       0.006251
+=case          hty_inte_SUITE:end_per_group
+=logfile       hty_inte_suite.end_per_group.226.html
+=group_props   [{name,staticlisting}]
+=started       2022-07-21 00:22:21
+=ended         2022-07-21 00:22:21
+=result        ok
+=elapsed       1.52e-4
+=group_time    0.259s
+=case          hty_inte_SUITE:init_per_group
+=logfile       hty_inte_suite.init_per_group.242.html
+=group_props   [{name,vhosts}]
+=started       2022-07-21 00:22:21
+=ended         2022-07-21 00:22:21
+=result        ok
+=elapsed       0.029009
+=case          hty_inte_SUITE:vhosts_basic
+=logfile       hty_inte_suite.vhosts_basic.html
+=started       2022-07-21 00:22:21
+=ended         2022-07-21 00:22:21
+=result        ok
+=elapsed       0.03425
+=case          hty_inte_SUITE:vhosts_subdomains
+=logfile       hty_inte_suite.vhosts_subdomains.html
+=started       2022-07-21 00:22:21
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       0.039064
+=case          hty_inte_SUITE:end_per_group
+=logfile       hty_inte_suite.end_per_group.258.html
+=group_props   [{name,vhosts}]
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       1.58e-4
+=group_time    0.218s
+=case          hty_inte_SUITE:init_per_group
+=logfile       hty_inte_suite.init_per_group.274.html
+=group_props   [{name,xslpi}]
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       0.05694
+=case          hty_inte_SUITE:xslpi_basic
+=logfile       hty_inte_suite.xslpi_basic.html
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       0.008233
+=case          hty_inte_SUITE:end_per_group
+=logfile       hty_inte_suite.end_per_group.290.html
+=group_props   [{name,xslpi}]
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       1.85e-4
+=group_time    0.148s
+=case          hty_inte_SUITE:end_per_suite
+=logfile       hty_inte_suite.end_per_suite.html
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       0.002031
+=group_time    2.149s
+=case          ct_framework:init_per_suite
+=logfile       ct_framework.init_per_suite.306.html
+=group_props   [{suite,hty_json_spaf_SUITE}]
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       1.0e-6
+=case          ct_framework:init_per_group
+=logfile       ct_framework.init_per_group.html
+=group_props   [{suite,hty_json_spaf_SUITE},{name,format}]
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       0.006691
+=case          hty_json_spaf_SUITE:empty_element
+=logfile       hty_json_spaf_suite.empty_element.html
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       0.006393
+=case          hty_json_spaf_SUITE:empty_attribute
+=logfile       hty_json_spaf_suite.empty_attribute.html
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       1.3e-5
+=case          hty_json_spaf_SUITE:element_with_text
+=logfile       hty_json_spaf_suite.element_with_text.html
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       1.4e-5
+=case          hty_json_spaf_SUITE:empty_element_with_attributes
+=logfile       hty_json_spaf_suite.empty_element_with_attributes.html
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       1.8e-5
+=case          hty_json_spaf_SUITE:element_with_text_and_attributes
+=logfile       hty_json_spaf_suite.element_with_text_and_attributes.html
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       1.9e-5
+=case          hty_json_spaf_SUITE:element_with_elements_with_different_names
+=logfile       hty_json_spaf_suite.element_with_elements_with_different_names.html
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       2.1e-5
+=case          hty_json_spaf_SUITE:element_with_elements_with_identical_names
+=logfile       hty_json_spaf_suite.element_with_elements_with_identical_names.html
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       2.0e-5
+=case          hty_json_spaf_SUITE:element_with_elements_and_text
+=logfile       hty_json_spaf_suite.element_with_elements_and_text.html
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       1.8e-5
+=case          ct_framework:end_per_group
+=logfile       ct_framework.end_per_group.html
+=group_props   [{suite,hty_json_spaf_SUITE},{name,format}]
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       7.6e-5
+=group_time    0.347s
+=case          ct_framework:end_per_suite
+=logfile       ct_framework.end_per_suite.322.html
+=group_props   [{suite,hty_json_spaf_SUITE}]
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       1.0e-6
+=group_time    0.436s
+=case          ct_framework:init_per_suite
+=logfile       ct_framework.init_per_suite.338.html
+=group_props   [{suite,hty_percentencoding_SUITE}]
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       1.0e-6
+=case          hty_percentencoding_SUITE:decode_square_brackets
+=logfile       hty_percentencoding_suite.decode_square_brackets.html
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       1.3e-5
+=case          hty_percentencoding_SUITE:decode_latin1
+=logfile       hty_percentencoding_suite.decode_latin1.html
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       1.8e-5
+=case          ct_framework:end_per_suite
+=logfile       ct_framework.end_per_suite.354.html
+=group_props   [{suite,hty_percentencoding_SUITE}]
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       1.0e-6
+=group_time    0.128s
+=case          hty_seqfile_SUITE:init_per_suite
+=logfile       hty_seqfile_suite.init_per_suite.html
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:22
+=result        ok
+=elapsed       4.98e-4
+=case          hty_seqfile_SUITE:init_test
+=logfile       hty_seqfile_suite.init_test.html
+=started       2022-07-21 00:22:22
+=ended         2022-07-21 00:22:23
+=result        ok
+=elapsed       0.00644
+=case          hty_seqfile_SUITE:incr_test
+=logfile       hty_seqfile_suite.incr_test.html
+=started       2022-07-21 00:22:23
+=ended         2022-07-21 00:22:23
+=result        ok
+=elapsed       0.001276
+=case          hty_seqfile_SUITE:badfile_test
+=logfile       hty_seqfile_suite.badfile_test.html
+=started       2022-07-21 00:22:23
+=ended         2022-07-21 00:22:23
+=result        ok
+=elapsed       2.52e-4
+=case          hty_seqfile_SUITE:end_per_suite
+=logfile       hty_seqfile_suite.end_per_suite.html
+=started       2022-07-21 00:22:23
+=ended         2022-07-21 00:22:23
+=result        ok
+=elapsed       1.0e-6
+=group_time    0.170s
+=== TEST COMPLETE, 48 ok, 2 failed, 6 skipped of 56 test cases
+
+=finished      2022-07-21 00:22:23
+=failed        2
+=successful    48
+=user_skipped  0
+=auto_skipped  6

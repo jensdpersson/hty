@@ -114,7 +114,9 @@ conflict(Htx, _Tip, _Rev) ->
 
 redirect(Htx, Tip) ->
   Location = hty_uri:matrix(hty_tx:path(Htx), <<"rev">>, Tip),
-  Htx1 = hty_tx:temporary_redirect(hty_uri:pack(Location), Htx),
+  Packed = hty_uri:pack(Location),
+  io:format("Redirecting to ~p~n", [Packed]),
+  Htx1 = hty_tx:temporary_redirect(Packed, Htx),
   hty_tx:commit(Htx1).
 
 save(Htx, Tip, Fs, DiskFormat) ->

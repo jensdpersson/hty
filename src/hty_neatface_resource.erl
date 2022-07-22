@@ -31,13 +31,13 @@ handle(Htx, This) ->
 
 recv() ->
     receive 
-	{SomeKindOfResponse} -> no
+	{_SomeKindOfResponse} -> no
     end.
     
 extract_payload(_) -> notyet.
 extract_path(Htx) ->
     Pathbelow = hty_tx:path_below(Htx),
-    Segments = lists:map(fun(_Urisegment) -> notyet end, Pathbelow),
+    _Segments = lists:map(fun(_Urisegment) -> notyet end, Pathbelow),
     notyet.
     
     

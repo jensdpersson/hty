@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Test hty_inte_SUITE:accesslog_check_request_logged result</title>
+<meta http-equiv="cache-control" content="no-cache"></meta>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"></meta>
+<link rel="stylesheet" href="../../ct_default.css" type="text/css"></link>
+<script type="text/javascript" src="../../jquery-latest.js"></script>
+<script type="text/javascript" src="../../jquery.tablesorter.min.js"></script>
+</head>
+<body>
+
+<a name="top"></a><pre>
+=== Test case: <a href="hty_inte_suite.src.html#accesslog_check_request_logged-1">hty_inte_SUITE:accesslog_check_request_logged/1</a> (click for source code)
+
+=== Config value:
+
+    [{wwwroot,"/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_00.02.10/hty.ct.logs/run.2022-07-21_00.02.11/log_private/accesslog/fixture"},
+     {files_dir,"/home/jens/projekt/hty/ct/hty_inte_SUITE_data/accesslog/files"},
+     {watchdog,&lt;0.286.0&gt;},
+     {tc_logfile,"/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_00.02.10/hty.ct.logs/run.2022-07-21_00.02.11/hty_inte_suite.accesslog_check_request_logged.html"},
+     {tc_group_properties,[{name,accesslog}]},
+     {tc_group_path,[]},
+     {data_dir,"/home/jens/projekt/hty/ct/hty_inte_SUITE_data/"},
+     {priv_dir,"/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_00.02.10/hty.ct.logs/run.2022-07-21_00.02.11/log_private/"}]
+
+=== Current directory is "/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_00.02.10"
+
+=== Started at 2022-07-21 00:02:13
+
+<br />
+Conlen [&lt;&lt;"0"&gt;&gt;]
+
+dispatching to {hty_accesslog_resource,"logger",
+                   [{hty_static_resource,
+                        {hty_fspath,
+                            "/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_00.02.10/hty.ct.logs/run.2022-07-21_00.02.11/log_private/accesslog/fixture/1028.http/2.logger.accesslog/static",
+                            hty_fs_fs},
+                        {hty_indexfile_welcome,
+                            ["index.html","index.xml","index.txt"]}}]}
+
+AccessLog.Handle
+Wrong status [500 "Internal Server Error"]
+
+
+</pre>
+<div class="ct_error_notify"><pre><b>*** CT Error Notification 2022-07-21 00:02:13.129 ***</b>
+hty_inte_SUITE:'-run_test/3-fun-1-' failed on line 158
+Reason: {badmatch,ok}
+
+<a href="#end">Full error description and stacktrace</a>
+</pre></div>
+<pre>
+<a name="end"></a>
+
+
+=== Ended at 2022-07-21 00:02:13
+=== Location: [{hty_inte_SUITE,'-run_test/3-fun-1-',<a href="hty_inte_suite.src.html#158">158</a>},
+              {lists,foreach,1338},
+              {test_server,ts_tc,1546},
+              {test_server,run_test_case_eval1,1062},
+              {test_server,run_test_case_eval,994}]
+=== Reason: no match of right hand side value ok
+  in function  hty_inte_SUITE:'-run_test/3-fun-1-'/3 (hty_inte_SUITE.erl, line 158)
+  in call from lists:foreach/2 (lists.erl, line 1338)
+  in call from test_server:ts_tc/3 (test_server.erl, line 1546)
+  in call from test_server:run_test_case_eval1/6 (test_server.erl, line 1062)
+  in call from test_server:run_test_case_eval/9 (test_server.erl, line 994)
+</pre>
+<center>
+<br /><hr /><p>
+<a href="../../../all_runs.html">Test run history
+</a>  |  <a href="../../../index.html">Top level test index
+</a>  |  <a href="../../../suite.log.latest.html">Latest test result</a>
+</p>
+<div class="copyright">Copyright &copy; 2022 <a href="http://www.erlang.org">Open Telecom Platform</a><br />
+Updated: <!--date-->Thu Jul 21 2022 00:02:12<!--/date--><br />
+</div>
+</center>
+</body>
+</html>

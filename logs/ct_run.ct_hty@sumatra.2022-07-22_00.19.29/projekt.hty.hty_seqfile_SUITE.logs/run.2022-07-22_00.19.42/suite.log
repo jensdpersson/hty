@@ -1,0 +1,48 @@
+=== Suite started at 2022-07-22 00:19:43
+=== Starting test, 3 test cases
+=cases         3
+=user          jens
+=host          sumatra
+=hosts         sumatra 
+=emulator_vsn  9.2
+=emulator      beam
+=otp_release   20
+=started       2022-07-22 00:19:43
+=case          hty_seqfile_SUITE:init_per_suite
+=logfile       hty_seqfile_suite.init_per_suite.html
+=started       2022-07-22 00:19:43
+=ended         2022-07-22 00:19:43
+=result        ok
+=elapsed       5.97e-4
+=case          hty_seqfile_SUITE:init_test
+=logfile       hty_seqfile_suite.init_test.html
+=started       2022-07-22 00:19:43
+=ended         2022-07-22 00:19:43
+=result        ok
+=elapsed       0.001649
+=case          hty_seqfile_SUITE:incr_test
+=logfile       hty_seqfile_suite.incr_test.html
+=started       2022-07-22 00:19:43
+=ended         2022-07-22 00:19:43
+=result        ok
+=elapsed       0.00105
+=case          hty_seqfile_SUITE:badfile_test
+=logfile       hty_seqfile_suite.badfile_test.html
+=started       2022-07-22 00:19:43
+=ended         2022-07-22 00:19:43
+=result        ok
+=elapsed       2.7e-4
+=case          hty_seqfile_SUITE:end_per_suite
+=logfile       hty_seqfile_suite.end_per_suite.html
+=started       2022-07-22 00:19:43
+=ended         2022-07-22 00:19:43
+=result        ok
+=elapsed       1.0e-6
+=group_time    0.203s
+=== TEST COMPLETE, 3 ok, 0 failed of 3 test cases
+
+=finished      2022-07-22 00:19:43
+=failed        0
+=successful    3
+=user_skipped  0
+=auto_skipped  0

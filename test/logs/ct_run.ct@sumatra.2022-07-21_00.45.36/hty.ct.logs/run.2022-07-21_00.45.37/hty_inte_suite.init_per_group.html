@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Test hty_inte_SUITE:init_per_group result</title>
+<meta http-equiv="cache-control" content="no-cache"></meta>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"></meta>
+<link rel="stylesheet" href="../../ct_default.css" type="text/css"></link>
+<script type="text/javascript" src="../../jquery-latest.js"></script>
+<script type="text/javascript" src="../../jquery.tablesorter.min.js"></script>
+</head>
+<body>
+
+<a name="top"></a><pre>
+=== Config function: <a href="hty_inte_suite.src.html#init_per_group-1">hty_inte_SUITE:init_per_group/2</a> (click for source code)
+
+=== Group properties: [{name,accesslog}]
+
+=== Config value:
+
+    [{watchdog,&lt;0.268.0&gt;},
+     {tc_logfile,"/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_00.45.36/hty.ct.logs/run.2022-07-21_00.45.37/hty_inte_suite.init_per_group.html"},
+     {tc_group_properties,[{name,accesslog}]},
+     {tc_group_path,[]},
+     {data_dir,"/home/jens/projekt/hty/ct/hty_inte_SUITE_data/"},
+     {priv_dir,"/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_00.45.36/hty.ct.logs/run.2022-07-21_00.45.37/log_private/"}]
+
+=== Current directory is "/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_00.45.36"
+
+=== Started at 2022-07-21 00:45:39
+
+<br />
+Copying from /home/jens/projekt/hty/ct/hty_inte_SUITE_data/accesslog/fixture/1028.http/2.logger.accesslog/static/helloworld.txt to /home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_00.45.36/hty.ct.logs/run.2022-07-21_00.45.37/log_private/accesslog/fixture/1028.http/2.logger.accesslog/static/helloworld.txt
+Copying from /home/jens/projekt/hty/ct/hty_inte_SUITE_data/accesslog/fixture/1028.http/3.logger.logviewer/gitsux to /home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_00.45.36/hty.ct.logs/run.2022-07-21_00.45.37/log_private/accesslog/fixture/1028.http/3.logger.logviewer/gitsux
+Copying from /home/jens/projekt/hty/ct/hty_inte_SUITE_data/accesslog/fixture/1028.http/1.logger,logger.bind/filelog/flat/gitsux to /home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_00.45.36/hty.ct.logs/run.2022-07-21_00.45.37/log_private/accesslog/fixture/1028.http/1.logger,logger.bind/filelog/flat/gitsux
+hty supervisor starting up
+
+Mounting "/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_00.45.36/hty.ct.logs/run.2022-07-21_00.45.37/log_private/accesslog/fixture"
+
+Parts=[[115,116,97,116,105,99]]
+
+Name="welcome", Params=[]
+
+Parts=[[115,116,97,116,105,99]]
+
+Reloading cfg [{hty_http_server,"http",
+                   {0,0,0,0},
+                   1028,
+                   {hty_union_resource,
+                       [{hty_bind_resource,"logger",
+                            [{hty_filelog_logger,&lt;0.289.0&gt;}]},
+                        {hty_accesslog_resource,"logger",
+                            [{hty_static_resource,
+                                 {hty_fspath,
+                                     "/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_00.45.36/hty.ct.logs/run.2022-07-21_00.45.37/log_private/accesslog/fixture/1028.http/2.logger.accesslog/static",
+                                     hty_fs_fs},
+                                 {hty_indexfile_welcome,
+                                     ["index.html","index.xml",
+                                      "index.txt"]}}]},
+                        {hty_logviewer_resource,"logger"}]}}]
+
+Trying to listen on {0,0,0,0}:1028
+, ok
+
+<a name="end"></a>
+
+
+=== Ended at 2022-07-21 00:45:39
+=== successfully completed test case
+=== Returned value: [{wwwroot,"/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_00.45.36/hty.ct.logs/run.2022-07-21_00.45.37/log_private/accesslog/fixture"},
+                     {files_dir,"/home/jens/projekt/hty/ct/hty_inte_SUITE_data/accesslog/files"},
+                     {watchdog,&lt;0.286.0&gt;},
+                     {tc_logfile,"/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_00.45.36/hty.ct.logs/run.2022-07-21_00.45.37/hty_inte_suite.init_per_group.html"},
+                     {tc_group_properties,[{name,accesslog}]},
+                     {tc_group_path,[]},
+                     {data_dir,"/home/jens/projekt/hty/ct/hty_inte_SUITE_data/"},
+                     {priv_dir,"/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_00.45.36/hty.ct.logs/run.2022-07-21_00.45.37/log_private/"}]
+</pre>
+<center>
+<br /><hr /><p>
+<a href="../../../all_runs.html">Test run history
+</a>  |  <a href="../../../index.html">Top level test index
+</a>  |  <a href="../../../suite.log.latest.html">Latest test result</a>
+</p>
+<div class="copyright">Copyright &copy; 2022 <a href="http://www.erlang.org">Open Telecom Platform</a><br />
+Updated: <!--date-->Thu Jul 21 2022 00:45:39<!--/date--><br />
+</div>
+</center>
+</body>
+</html>

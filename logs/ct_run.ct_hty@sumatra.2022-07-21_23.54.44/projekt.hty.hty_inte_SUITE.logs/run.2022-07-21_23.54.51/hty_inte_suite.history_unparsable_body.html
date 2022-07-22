@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Test hty_inte_SUITE:history_unparsable_body result</title>
+<meta http-equiv="cache-control" content="no-cache"></meta>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"></meta>
+<link rel="stylesheet" href="../../ct_default.css" type="text/css"></link>
+<script type="text/javascript" src="../../jquery-latest.js"></script>
+<script type="text/javascript" src="../../jquery.tablesorter.min.js"></script>
+</head>
+<body>
+
+<a name="top"></a><pre>
+=== Test case: <a href="hty_inte_suite.src.html#history_unparsable_body-1">hty_inte_SUITE:history_unparsable_body/1</a> (click for source code)
+
+=== Config value:
+
+    [{wwwroot,"/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/history/fixture"},
+     {files_dir,"/home/jens/projekt/hty/test/hty_inte_SUITE_data/history/files"},
+     {watchdog,&lt;0.365.0&gt;},
+     {tc_logfile,"/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/hty_inte_suite.history_unparsable_body.html"},
+     {tc_group_properties,[{name,history}]},
+     {tc_group_path,[]},
+     {data_dir,"/home/jens/projekt/hty/test/hty_inte_SUITE_data/"},
+     {priv_dir,"/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/"}]
+
+=== Current directory is "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44"
+
+=== Started at 2022-07-21 23:54:52
+
+<br />
+Conlen [&lt;&lt;"31"&gt;&gt;]
+
+dispatching to {hty_history_resource,
+                   {hty_fspath,
+                       "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/history/fixture/1033.http/history",
+                       hty_fs_fs},
+                   "xml"}
+
+history:handle()
+history:twig()
+Processing "unparsable.xml"
+Rev is [no]
+
+invoking chain(&lt;&lt;"[=root&amp;\"=lite_text&amp;]=annan_root"&gt;&gt;,q0)
+
+hty_formtree_spaf:parse(&lt;&lt;"[=root&amp;\"=lite_text&amp;]=annan_root"&gt;&gt;, {{expect_eq,
+                                                                  &lt;&lt;&gt;&gt;}, []})
+SPAF({push,&lt;&lt;"root"&gt;&gt;})
+
+SPAF({text,&lt;&lt;"lite_text"&gt;&gt;})
+
+Data1 is [60,&lt;&lt;"root"&gt;&gt;,62,&lt;&lt;"lite_text"&gt;&gt;]
+
+recv 0 more bytes
+
+invoking chain(eos,[{{expect_amp,&lt;&lt;"]"&gt;&gt;,&lt;&lt;"annan_root"&gt;&gt;},[&lt;&lt;"root"&gt;&gt;]},
+                    {not_in_start,[&lt;&lt;"root"&gt;&gt;]}])
+
+hty_formtree_spaf:parse(eos, {{expect_amp,&lt;&lt;"]"&gt;&gt;,&lt;&lt;"annan_root"&gt;&gt;}, [&lt;&lt;"root"&gt;&gt;]})
+Path1 = {[],["unparsable.xml"]}, Path2 = {[],["unparsable.xml"]}
+
+Tx1 = {hty_tx,
+          {ipv4,{127,0,0,1},36371},
+          &lt;&lt;"HTTP/1.1"&gt;&gt;,'POST',
+          {[],["unparsable.xml"]},
+          {200,"OK"},
+          [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+           {"host",&lt;&lt;"localhost:1033"&gt;&gt;},
+           {"te",&lt;&lt;&gt;&gt;},
+           {"content-length",&lt;&lt;"31"&gt;&gt;},
+           {"content-type",&lt;&lt;"application/x-www-form-urlencoded"&gt;&gt;}],
+          [&lt;&lt;"[=root&amp;\"=lite_text&amp;]=annan_root"&gt;&gt;],
+          #Fun&lt;hty_tx.0.61293378&gt;,q0,[],[],&lt;&lt;"guest"&gt;&gt;,hty_empty_realm,
+          [{"xslpi_choice","doc"}],
+          [],hty_socketreader,
+          [{hty_history_resource,
+               {hty_fspath,
+                   "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/history/fixture/1033.http/history",
+                   hty_fs_fs},
+               "xml"}],
+          [],0,false}, Tx2 = {hty_tx,
+                              {ipv4,{127,0,0,1},36371},
+                              &lt;&lt;"HTTP/1.1"&gt;&gt;,'POST',
+                              {[],["unparsable.xml"]},
+                              {400,
+                               [[123,
+                                 ["badpop",44,
+                                  [60,60,"\"annan_root\"",62,62],
+                                  44,
+                                  [60,60,"\"root\"",62,62]],
+                                 125]]},
+                              [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+                               {"host",&lt;&lt;"localhost:1033"&gt;&gt;},
+                               {"te",&lt;&lt;&gt;&gt;},
+                               {"content-length",&lt;&lt;"31"&gt;&gt;},
+                               {"content-type",
+                                &lt;&lt;"application/x-www-form-urlencoded"&gt;&gt;}],
+                              [eos],
+                              #Fun&lt;hty_tx.10.61293378&gt;,
+                              {{file_descriptor,prim_file,{#Port&lt;0.2812&gt;,23}},
+                               [{{expect_amp,&lt;&lt;"]"&gt;&gt;,&lt;&lt;"annan_root"&gt;&gt;},
+                                 [&lt;&lt;"root"&gt;&gt;]},
+                                {not_in_start,[&lt;&lt;"root"&gt;&gt;]}]},
+                              [],[],&lt;&lt;"guest"&gt;&gt;,hty_empty_realm,
+                              [{"xslpi_choice","doc"}],
+                              [],hty_socketreader,
+                              [{hty_history_resource,
+                                {hty_fspath,
+                                 "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/history/fixture/1033.http/history",
+                                 hty_fs_fs},
+                                "xml"}],
+                              [{"hty_history_resource",
+                                "2022-07-21T21:54:52.836","spaf",
+                                [[123,
+                                  ["badpop",44,
+                                   [60,60,"\"annan_root\"",62,62],
+                                   44,
+                                   [60,60,"\"root\"",62,62]],
+                                  125]]},
+                               {"hty_history_resource",
+                                "2022-07-21T21:54:52.836","status",
+                                [[123,
+                                  ["badpop",44,
+                                   [60,60,"\"annan_root\"",62,62],
+                                   44,
+                                   [60,60,"\"root\"",62,62]],
+                                  125]]}],
+                              0,false}
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},36371},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'POST',
+           {[],["unparsable.xml"]},
+           {400,
+            [[123,
+              ["badpop",44,
+               [60,60,"\"annan_root\"",62,62],
+               44,
+               [60,60,"\"root\"",62,62]],
+              125]]},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"host",&lt;&lt;"localhost:1033"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"31"&gt;&gt;},
+            {"content-type",&lt;&lt;"application/x-www-form-urlencoded"&gt;&gt;}],
+           [eos],
+           #Fun&lt;hty_tx.10.61293378&gt;,
+           {{file_descriptor,prim_file,{#Port&lt;0.2812&gt;,23}},
+            [{{expect_amp,&lt;&lt;"]"&gt;&gt;,&lt;&lt;"annan_root"&gt;&gt;},[&lt;&lt;"root"&gt;&gt;]},
+             {not_in_start,[&lt;&lt;"root"&gt;&gt;]}]},
+           [],[],&lt;&lt;"guest"&gt;&gt;,hty_empty_realm,
+           [{"xslpi_choice","doc"}],
+           [],hty_socketreader,
+           [{hty_history_resource,
+                {hty_fspath,
+                    "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/history/fixture/1033.http/history",
+                    hty_fs_fs},
+                "xml"}],
+           [{"hty_history_resource","2022-07-21T21:54:52.836","spaf",
+             [[123,
+               ["badpop",44,
+                [60,60,"\"annan_root\"",62,62],
+                44,
+                [60,60,"\"root\"",62,62]],
+               125]]},
+            {"hty_history_resource","2022-07-21T21:54:52.836","status",
+             [[123,
+               ["badpop",44,
+                [60,60,"\"annan_root\"",62,62],
+                44,
+                [60,60,"\"root\"",62,62]],
+               125]]}],
+           0,false}
+
+<a name="end"></a>
+
+
+=== Ended at 2022-07-21 23:54:52
+=== successfully completed test case
+=== Returned value: ok
+</pre>
+<center>
+<br /><hr /><p>
+<a href="../../../all_runs.html">Test run history
+</a>  |  <a href="../../../index.html">Top level test index
+</a>  |  <a href="../../../suite.log.latest.html">Latest test result</a>
+</p>
+<div class="copyright">Copyright &copy; 2022 <a href="http://www.erlang.org">Open Telecom Platform</a><br />
+Updated: <!--date-->Thu Jul 21 2022 23:54:52<!--/date--><br />
+</div>
+</center>
+</body>
+</html>

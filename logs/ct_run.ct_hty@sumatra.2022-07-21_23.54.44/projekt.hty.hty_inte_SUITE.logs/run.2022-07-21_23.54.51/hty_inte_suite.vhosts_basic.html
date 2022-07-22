@@ -1,0 +1,500 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Test hty_inte_SUITE:vhosts_basic result</title>
+<meta http-equiv="cache-control" content="no-cache"></meta>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"></meta>
+<link rel="stylesheet" href="../../ct_default.css" type="text/css"></link>
+<script type="text/javascript" src="../../jquery-latest.js"></script>
+<script type="text/javascript" src="../../jquery.tablesorter.min.js"></script>
+</head>
+<body>
+
+<a name="top"></a><pre>
+=== Test case: <a href="hty_inte_suite.src.html#vhosts_basic-1">hty_inte_SUITE:vhosts_basic/1</a> (click for source code)
+
+=== Config value:
+
+    [{wwwroot,"/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture"},
+     {files_dir,"/home/jens/projekt/hty/test/hty_inte_SUITE_data/vhosts/files"},
+     {watchdog,&lt;0.482.0&gt;},
+     {tc_logfile,"/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/hty_inte_suite.vhosts_basic.html"},
+     {tc_group_properties,[{name,vhosts}]},
+     {tc_group_path,[]},
+     {data_dir,"/home/jens/projekt/hty/test/hty_inte_SUITE_data/"},
+     {priv_dir,"/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/"}]
+
+=== Current directory is "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44"
+
+=== Started at 2022-07-21 23:54:53
+
+<br />
+Conlen [&lt;&lt;"0"&gt;&gt;]
+
+dispatching to {hty_dir_resource,"basic",
+                   [{hty_vhost_resource,
+                        [&lt;&lt;"orangutang"&gt;&gt;],
+                        [{hty_static_resource,
+                             {hty_fspath,
+                                 "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static",
+                                 hty_fs_fs},
+                             {hty_indexfile_welcome,
+                                 ["index.html","index.xml","index.txt"]}}]},
+                    {hty_vhost_resource,
+                        [&lt;&lt;"schimpans"&gt;&gt;],
+                        [{hty_static_resource,
+                             {hty_fspath,
+                                 "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static",
+                                 hty_fs_fs},
+                             {hty_indexfile_welcome,
+                                 ["index.html","index.xml","index.txt"]}}]}]}
+
+dispatching to {hty_vhost_resource,
+                   [&lt;&lt;"orangutang"&gt;&gt;],
+                   [{hty_static_resource,
+                        {hty_fspath,
+                            "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static",
+                            hty_fs_fs},
+                        {hty_indexfile_welcome,
+                            ["index.html","index.xml","index.txt"]}}]}
+
+dispatching to {hty_static_resource,
+                   {hty_fspath,
+                       "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static",
+                       hty_fs_fs},
+                   {hty_indexfile_welcome,
+                       ["index.html","index.xml","index.txt"]}}
+
+static path below [["index.txt"],&lt;&lt;"index.txt"&gt;&gt;,["index.txt"]]
+
+static subpath [{hty_fspath,"/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static/index.txt",
+                            hty_fs_fs}]
+
+last_modified ["/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static/index.txt"] is [{{2022,
+                                                                                                                                                                                                                                       7,
+                                                                                                                                                                                                                                       21},
+                                                                                                                                                                                                                                      {23,
+                                                                                                                                                                                                                                       54,
+                                                                                                                                                                                                                                       53}}]
+
+If-None-Match: []!="\"2022-07-21T23:54:53\""
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},42927},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'GET',
+           {["basic"],["index.txt"]},
+           {200,"OK"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"accept",&lt;&lt;"text/plain"&gt;&gt;},
+            {"host",&lt;&lt;"orangutang"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"0"&gt;&gt;}],
+           [&lt;&lt;&gt;&gt;],
+           #Fun&lt;hty_tx.0.61293378&gt;,q0,
+           [{'Content-Type',"text/plain"},
+            {"Cache-Control","public"},
+            {"ETag","\"2022-07-21T23:54:53\""}],
+           [{file,
+                "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static/index.txt"}],
+           &lt;&lt;"guest"&gt;&gt;,hty_empty_realm,[],[],hty_socketreader,
+           [{hty_static_resource,
+                {hty_fspath,
+                    "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static",
+                    hty_fs_fs},
+                {hty_indexfile_welcome,
+                    ["index.html","index.xml","index.txt"]}},
+            {hty_vhost_resource,
+                [&lt;&lt;"orangutang"&gt;&gt;],
+                [{hty_static_resource,
+                     {hty_fspath,
+                         "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static",
+                         hty_fs_fs},
+                     {hty_indexfile_welcome,
+                         ["index.html","index.xml","index.txt"]}}]},
+            {hty_dir_resource,"basic",
+                [{hty_vhost_resource,
+                     [&lt;&lt;"orangutang"&gt;&gt;],
+                     [{hty_static_resource,
+                          {hty_fspath,
+                              "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static",
+                              hty_fs_fs},
+                          {hty_indexfile_welcome,
+                              ["index.html","index.xml","index.txt"]}}]},
+                 {hty_vhost_resource,
+                     [&lt;&lt;"schimpans"&gt;&gt;],
+                     [{hty_static_resource,
+                          {hty_fspath,
+                              "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static",
+                              hty_fs_fs},
+                          {hty_indexfile_welcome,
+                              ["index.html","index.xml","index.txt"]}}]}]}],
+           [{"hty_static_resource","2022-07-21T21:54:53.868","status","OK"},
+            {"hty_static_resource","2022-07-21T21:54:53.868","sendfile",
+             "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static/index.txt"}],
+           0,true}
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},42927},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'GET',
+           {["basic"],["index.txt"]},
+           {200,"OK"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"accept",&lt;&lt;"text/plain"&gt;&gt;},
+            {"host",&lt;&lt;"orangutang"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"0"&gt;&gt;}],
+           [&lt;&lt;&gt;&gt;],
+           #Fun&lt;hty_tx.0.61293378&gt;,q0,
+           [{'Content-Type',"text/plain"},
+            {"Cache-Control","public"},
+            {"ETag","\"2022-07-21T23:54:53\""}],
+           [{file,
+                "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static/index.txt"}],
+           &lt;&lt;"guest"&gt;&gt;,hty_empty_realm,[],[],hty_socketreader,
+           [{hty_vhost_resource,
+                [&lt;&lt;"orangutang"&gt;&gt;],
+                [{hty_static_resource,
+                     {hty_fspath,
+                         "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static",
+                         hty_fs_fs},
+                     {hty_indexfile_welcome,
+                         ["index.html","index.xml","index.txt"]}}]},
+            {hty_dir_resource,"basic",
+                [{hty_vhost_resource,
+                     [&lt;&lt;"orangutang"&gt;&gt;],
+                     [{hty_static_resource,
+                          {hty_fspath,
+                              "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static",
+                              hty_fs_fs},
+                          {hty_indexfile_welcome,
+                              ["index.html","index.xml","index.txt"]}}]},
+                 {hty_vhost_resource,
+                     [&lt;&lt;"schimpans"&gt;&gt;],
+                     [{hty_static_resource,
+                          {hty_fspath,
+                              "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static",
+                              hty_fs_fs},
+                          {hty_indexfile_welcome,
+                              ["index.html","index.xml","index.txt"]}}]}]}],
+           [{"hty_static_resource","2022-07-21T21:54:53.868","status","OK"},
+            {"hty_static_resource","2022-07-21T21:54:53.868","sendfile",
+             "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static/index.txt"}],
+           0,true}
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},42927},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'GET',
+           {["basic"],["index.txt"]},
+           {200,"OK"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"accept",&lt;&lt;"text/plain"&gt;&gt;},
+            {"host",&lt;&lt;"orangutang"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"0"&gt;&gt;}],
+           [&lt;&lt;&gt;&gt;],
+           #Fun&lt;hty_tx.0.61293378&gt;,q0,
+           [{'Content-Type',"text/plain"},
+            {"Cache-Control","public"},
+            {"ETag","\"2022-07-21T23:54:53\""}],
+           [{file,
+                "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static/index.txt"}],
+           &lt;&lt;"guest"&gt;&gt;,hty_empty_realm,[],[],hty_socketreader,
+           [{hty_dir_resource,"basic",
+                [{hty_vhost_resource,
+                     [&lt;&lt;"orangutang"&gt;&gt;],
+                     [{hty_static_resource,
+                          {hty_fspath,
+                              "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static",
+                              hty_fs_fs},
+                          {hty_indexfile_welcome,
+                              ["index.html","index.xml","index.txt"]}}]},
+                 {hty_vhost_resource,
+                     [&lt;&lt;"schimpans"&gt;&gt;],
+                     [{hty_static_resource,
+                          {hty_fspath,
+                              "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static",
+                              hty_fs_fs},
+                          {hty_indexfile_welcome,
+                              ["index.html","index.xml","index.txt"]}}]}]}],
+           [{"hty_static_resource","2022-07-21T21:54:53.868","status","OK"},
+            {"hty_static_resource","2022-07-21T21:54:53.868","sendfile",
+             "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static/index.txt"}],
+           0,true}
+
+sendfile('"/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static/index.txt"')
+
+Sendfile ok
+
+Conlen [&lt;&lt;"0"&gt;&gt;]
+
+dispatching to {hty_dir_resource,"basic",
+                   [{hty_vhost_resource,
+                        [&lt;&lt;"orangutang"&gt;&gt;],
+                        [{hty_static_resource,
+                             {hty_fspath,
+                                 "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static",
+                                 hty_fs_fs},
+                             {hty_indexfile_welcome,
+                                 ["index.html","index.xml","index.txt"]}}]},
+                    {hty_vhost_resource,
+                        [&lt;&lt;"schimpans"&gt;&gt;],
+                        [{hty_static_resource,
+                             {hty_fspath,
+                                 "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static",
+                                 hty_fs_fs},
+                             {hty_indexfile_welcome,
+                                 ["index.html","index.xml","index.txt"]}}]}]}
+
+dispatching to {hty_vhost_resource,
+                   [&lt;&lt;"orangutang"&gt;&gt;],
+                   [{hty_static_resource,
+                        {hty_fspath,
+                            "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static",
+                            hty_fs_fs},
+                        {hty_indexfile_welcome,
+                            ["index.html","index.xml","index.txt"]}}]}
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},42115},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'GET',
+           {["basic"],["index.txt"]},
+           {404,"Not Found"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"accept",&lt;&lt;"text/plain"&gt;&gt;},
+            {"host",&lt;&lt;"schimpans"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"0"&gt;&gt;}],
+           [&lt;&lt;&gt;&gt;],
+           #Fun&lt;hty_tx.0.61293378&gt;,q0,[],[],&lt;&lt;"guest"&gt;&gt;,hty_empty_realm,[],[],
+           hty_socketreader,
+           [{hty_vhost_resource,
+                [&lt;&lt;"orangutang"&gt;&gt;],
+                [{hty_static_resource,
+                     {hty_fspath,
+                         "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static",
+                         hty_fs_fs},
+                     {hty_indexfile_welcome,
+                         ["index.html","index.xml","index.txt"]}}]},
+            {hty_dir_resource,"basic",
+                [{hty_vhost_resource,
+                     [&lt;&lt;"orangutang"&gt;&gt;],
+                     [{hty_static_resource,
+                          {hty_fspath,
+                              "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static",
+                              hty_fs_fs},
+                          {hty_indexfile_welcome,
+                              ["index.html","index.xml","index.txt"]}}]},
+                 {hty_vhost_resource,
+                     [&lt;&lt;"schimpans"&gt;&gt;],
+                     [{hty_static_resource,
+                          {hty_fspath,
+                              "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static",
+                              hty_fs_fs},
+                          {hty_indexfile_welcome,
+                              ["index.html","index.xml","index.txt"]}}]}]}],
+           [{"hty_vhost_resource","2022-07-21T21:54:53.878","status",
+             "Not Found"}],
+           0,false}
+
+dispatching to {hty_vhost_resource,
+                   [&lt;&lt;"schimpans"&gt;&gt;],
+                   [{hty_static_resource,
+                        {hty_fspath,
+                            "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static",
+                            hty_fs_fs},
+                        {hty_indexfile_welcome,
+                            ["index.html","index.xml","index.txt"]}}]}
+
+dispatching to {hty_static_resource,
+                   {hty_fspath,
+                       "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static",
+                       hty_fs_fs},
+                   {hty_indexfile_welcome,
+                       ["index.html","index.xml","index.txt"]}}
+
+static path below [["index.txt"],&lt;&lt;"index.txt"&gt;&gt;,["index.txt"]]
+
+static subpath [{hty_fspath,"/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static/index.txt",
+                            hty_fs_fs}]
+
+last_modified ["/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static/index.txt"] is [{{2022,
+                                                                                                                                                                                                                                      7,
+                                                                                                                                                                                                                                      21},
+                                                                                                                                                                                                                                     {23,
+                                                                                                                                                                                                                                      54,
+                                                                                                                                                                                                                                      53}}]
+
+If-None-Match: []!="\"2022-07-21T23:54:53\""
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},42115},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'GET',
+           {["basic"],["index.txt"]},
+           {200,"OK"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"accept",&lt;&lt;"text/plain"&gt;&gt;},
+            {"host",&lt;&lt;"schimpans"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"0"&gt;&gt;}],
+           [&lt;&lt;&gt;&gt;],
+           #Fun&lt;hty_tx.0.61293378&gt;,q0,
+           [{'Content-Type',"text/plain"},
+            {"Cache-Control","public"},
+            {"ETag","\"2022-07-21T23:54:53\""}],
+           [{file,
+                "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static/index.txt"}],
+           &lt;&lt;"guest"&gt;&gt;,hty_empty_realm,[],[],hty_socketreader,
+           [{hty_static_resource,
+                {hty_fspath,
+                    "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static",
+                    hty_fs_fs},
+                {hty_indexfile_welcome,
+                    ["index.html","index.xml","index.txt"]}},
+            {hty_vhost_resource,
+                [&lt;&lt;"schimpans"&gt;&gt;],
+                [{hty_static_resource,
+                     {hty_fspath,
+                         "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static",
+                         hty_fs_fs},
+                     {hty_indexfile_welcome,
+                         ["index.html","index.xml","index.txt"]}}]},
+            {hty_dir_resource,"basic",
+                [{hty_vhost_resource,
+                     [&lt;&lt;"orangutang"&gt;&gt;],
+                     [{hty_static_resource,
+                          {hty_fspath,
+                              "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static",
+                              hty_fs_fs},
+                          {hty_indexfile_welcome,
+                              ["index.html","index.xml","index.txt"]}}]},
+                 {hty_vhost_resource,
+                     [&lt;&lt;"schimpans"&gt;&gt;],
+                     [{hty_static_resource,
+                          {hty_fspath,
+                              "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static",
+                              hty_fs_fs},
+                          {hty_indexfile_welcome,
+                              ["index.html","index.xml","index.txt"]}}]}]}],
+           [{"hty_static_resource","2022-07-21T21:54:53.881","status","OK"},
+            {"hty_static_resource","2022-07-21T21:54:53.881","sendfile",
+             "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static/index.txt"},
+            {"hty_vhost_resource","2022-07-21T21:54:53.878","status",
+             "Not Found"}],
+           0,true}
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},42115},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'GET',
+           {["basic"],["index.txt"]},
+           {200,"OK"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"accept",&lt;&lt;"text/plain"&gt;&gt;},
+            {"host",&lt;&lt;"schimpans"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"0"&gt;&gt;}],
+           [&lt;&lt;&gt;&gt;],
+           #Fun&lt;hty_tx.0.61293378&gt;,q0,
+           [{'Content-Type',"text/plain"},
+            {"Cache-Control","public"},
+            {"ETag","\"2022-07-21T23:54:53\""}],
+           [{file,
+                "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static/index.txt"}],
+           &lt;&lt;"guest"&gt;&gt;,hty_empty_realm,[],[],hty_socketreader,
+           [{hty_vhost_resource,
+                [&lt;&lt;"schimpans"&gt;&gt;],
+                [{hty_static_resource,
+                     {hty_fspath,
+                         "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static",
+                         hty_fs_fs},
+                     {hty_indexfile_welcome,
+                         ["index.html","index.xml","index.txt"]}}]},
+            {hty_dir_resource,"basic",
+                [{hty_vhost_resource,
+                     [&lt;&lt;"orangutang"&gt;&gt;],
+                     [{hty_static_resource,
+                          {hty_fspath,
+                              "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static",
+                              hty_fs_fs},
+                          {hty_indexfile_welcome,
+                              ["index.html","index.xml","index.txt"]}}]},
+                 {hty_vhost_resource,
+                     [&lt;&lt;"schimpans"&gt;&gt;],
+                     [{hty_static_resource,
+                          {hty_fspath,
+                              "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static",
+                              hty_fs_fs},
+                          {hty_indexfile_welcome,
+                              ["index.html","index.xml","index.txt"]}}]}]}],
+           [{"hty_static_resource","2022-07-21T21:54:53.881","status","OK"},
+            {"hty_static_resource","2022-07-21T21:54:53.881","sendfile",
+             "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static/index.txt"},
+            {"hty_vhost_resource","2022-07-21T21:54:53.878","status",
+             "Not Found"}],
+           0,true}
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},42115},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'GET',
+           {["basic"],["index.txt"]},
+           {200,"OK"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"accept",&lt;&lt;"text/plain"&gt;&gt;},
+            {"host",&lt;&lt;"schimpans"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"0"&gt;&gt;}],
+           [&lt;&lt;&gt;&gt;],
+           #Fun&lt;hty_tx.0.61293378&gt;,q0,
+           [{'Content-Type',"text/plain"},
+            {"Cache-Control","public"},
+            {"ETag","\"2022-07-21T23:54:53\""}],
+           [{file,
+                "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static/index.txt"}],
+           &lt;&lt;"guest"&gt;&gt;,hty_empty_realm,[],[],hty_socketreader,
+           [{hty_dir_resource,"basic",
+                [{hty_vhost_resource,
+                     [&lt;&lt;"orangutang"&gt;&gt;],
+                     [{hty_static_resource,
+                          {hty_fspath,
+                              "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/orangutang.vhost/static",
+                              hty_fs_fs},
+                          {hty_indexfile_welcome,
+                              ["index.html","index.xml","index.txt"]}}]},
+                 {hty_vhost_resource,
+                     [&lt;&lt;"schimpans"&gt;&gt;],
+                     [{hty_static_resource,
+                          {hty_fspath,
+                              "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static",
+                              hty_fs_fs},
+                          {hty_indexfile_welcome,
+                              ["index.html","index.xml","index.txt"]}}]}]}],
+           [{"hty_static_resource","2022-07-21T21:54:53.881","status","OK"},
+            {"hty_static_resource","2022-07-21T21:54:53.881","sendfile",
+             "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static/index.txt"},
+            {"hty_vhost_resource","2022-07-21T21:54:53.878","status",
+             "Not Found"}],
+           0,true}
+
+sendfile('"/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-21_23.54.44/projekt.hty.hty_inte_SUITE.logs/run.2022-07-21_23.54.51/log_private/vhosts/fixture/1035.http/basic.dir/schimpans.vhost/static/index.txt"')
+
+Sendfile ok
+
+<a name="end"></a>
+
+
+=== Ended at 2022-07-21 23:54:53
+=== successfully completed test case
+=== Returned value: ok
+</pre>
+<center>
+<br /><hr /><p>
+<a href="../../../all_runs.html">Test run history
+</a>  |  <a href="../../../index.html">Top level test index
+</a>  |  <a href="../../../suite.log.latest.html">Latest test result</a>
+</p>
+<div class="copyright">Copyright &copy; 2022 <a href="http://www.erlang.org">Open Telecom Platform</a><br />
+Updated: <!--date-->Thu Jul 21 2022 23:54:53<!--/date--><br />
+</div>
+</center>
+</body>
+</html>

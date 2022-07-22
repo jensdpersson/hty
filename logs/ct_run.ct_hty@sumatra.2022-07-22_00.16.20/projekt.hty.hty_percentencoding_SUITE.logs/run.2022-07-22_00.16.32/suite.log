@@ -1,0 +1,44 @@
+=== Suite started at 2022-07-22 00:16:32
+=== Starting test, 2 test cases
+=cases         2
+=user          jens
+=host          sumatra
+=hosts         sumatra 
+=emulator_vsn  9.2
+=emulator      beam
+=otp_release   20
+=started       2022-07-22 00:16:32
+=case          ct_framework:init_per_suite
+=logfile       ct_framework.init_per_suite.html
+=group_props   [{suite,hty_percentencoding_SUITE}]
+=started       2022-07-22 00:16:32
+=ended         2022-07-22 00:16:32
+=result        ok
+=elapsed       1.0e-6
+=case          hty_percentencoding_SUITE:decode_square_brackets
+=logfile       hty_percentencoding_suite.decode_square_brackets.html
+=started       2022-07-22 00:16:32
+=ended         2022-07-22 00:16:32
+=result        ok
+=elapsed       1.4e-5
+=case          hty_percentencoding_SUITE:decode_latin1
+=logfile       hty_percentencoding_suite.decode_latin1.html
+=started       2022-07-22 00:16:32
+=ended         2022-07-22 00:16:32
+=result        ok
+=elapsed       1.9e-5
+=case          ct_framework:end_per_suite
+=logfile       ct_framework.end_per_suite.html
+=group_props   [{suite,hty_percentencoding_SUITE}]
+=started       2022-07-22 00:16:32
+=ended         2022-07-22 00:16:32
+=result        ok
+=elapsed       1.0e-6
+=group_time    0.168s
+=== TEST COMPLETE, 2 ok, 0 failed of 2 test cases
+
+=finished      2022-07-22 00:16:32
+=failed        0
+=successful    2
+=user_skipped  0
+=auto_skipped  0

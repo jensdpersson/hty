@@ -1,0 +1,416 @@
+=== Suite started at 2022-07-22 00:00:36
+=== Starting test, 21 test cases
+=cases         21
+=user          jens
+=host          sumatra
+=hosts         sumatra 
+=emulator_vsn  9.2
+=emulator      beam
+=otp_release   20
+=started       2022-07-22 00:00:36
+=case          hty_inte_SUITE:init_per_suite
+=logfile       hty_inte_suite.init_per_suite.html
+=started       2022-07-22 00:00:36
+=ended         2022-07-22 00:00:36
+=result        ok
+=elapsed       0.05508
+=case          hty_inte_SUITE:init_per_group
+=logfile       hty_inte_suite.init_per_group.html
+=group_props   [{name,accesslog}]
+=started       2022-07-22 00:00:36
+=ended         2022-07-22 00:00:36
+=result        ok
+=elapsed       0.03321
+=case          hty_inte_SUITE:accesslog_check_request_logged
+=logfile       hty_inte_suite.accesslog_check_request_logged.html
+=started       2022-07-22 00:00:36
+=ended         2022-07-22 00:00:36
+=result        ok
+=elapsed       0.078925
+=case          hty_inte_SUITE:end_per_group
+=logfile       hty_inte_suite.end_per_group.html
+=group_props   [{name,accesslog}]
+=started       2022-07-22 00:00:36
+=ended         2022-07-22 00:00:36
+=result        ok
+=elapsed       1.42e-4
+=group_time    0.201s
+=case          hty_inte_SUITE:init_per_group
+=logfile       hty_inte_suite.init_per_group.2.html
+=group_props   [{name,'catch'}]
+=started       2022-07-22 00:00:36
+=ended         2022-07-22 00:00:36
+=result        ok
+=elapsed       0.029755
+=case          hty_inte_SUITE:catch_forward
+=logfile       hty_inte_suite.catch_forward.html
+=started       2022-07-22 00:00:36
+=ended         2022-07-22 00:00:36
+=result        ok
+=elapsed       0.008742
+=case          hty_inte_SUITE:end_per_group
+=logfile       hty_inte_suite.end_per_group.18.html
+=group_props   [{name,'catch'}]
+=started       2022-07-22 00:00:36
+=ended         2022-07-22 00:00:36
+=result        ok
+=elapsed       1.7e-4
+=group_time    0.108s
+=case          hty_inte_SUITE:init_per_group
+=logfile       hty_inte_suite.init_per_group.34.html
+=group_props   [{name,move}]
+=started       2022-07-22 00:00:36
+=ended         2022-07-22 00:00:36
+=result        ok
+=elapsed       0.045948
+=case          hty_inte_SUITE:move_file
+=logfile       hty_inte_suite.move_file.html
+=started       2022-07-22 00:00:37
+=ended         2022-07-22 00:00:37
+=result        ok
+=elapsed       0.073959
+=case          hty_inte_SUITE:move_folder
+=logfile       hty_inte_suite.move_folder.html
+=started       2022-07-22 00:00:37
+=ended         2022-07-22 00:00:37
+=result        ok
+=elapsed       0.055518
+=case          hty_inte_SUITE:end_per_group
+=logfile       hty_inte_suite.end_per_group.50.html
+=group_props   [{name,move}]
+=started       2022-07-22 00:00:37
+=ended         2022-07-22 00:00:37
+=result        ok
+=elapsed       1.43e-4
+=group_time    0.288s
+=case          hty_inte_SUITE:init_per_group
+=logfile       hty_inte_suite.init_per_group.66.html
+=group_props   [{name,history}]
+=started       2022-07-22 00:00:37
+=ended         2022-07-22 00:00:37
+=result        ok
+=elapsed       0.020062
+=case          hty_inte_SUITE:history_empty
+=logfile       hty_inte_suite.history_empty.html
+=started       2022-07-22 00:00:37
+=ended         2022-07-22 00:00:37
+=result        ok
+=elapsed       0.003507
+=case          hty_inte_SUITE:history_unparsable_body
+=logfile       hty_inte_suite.history_unparsable_body.html
+=started       2022-07-22 00:00:37
+=ended         2022-07-22 00:00:37
+=result        ok
+=elapsed       0.013243
+=case          hty_inte_SUITE:history_post_and_reread
+=logfile       hty_inte_suite.history_post_and_reread.html
+=started       2022-07-22 00:00:37
+=ended         2022-07-22 00:00:37
+=result        failed: {{badmatch,{error,no_scheme}},
+                        [{hty_inte_SUITE,'-run_test/3-fun-1-',3,
+                             [{file,"test/hty_inte_SUITE.erl"},{line,177}]},
+                         {lists,foreach,2,[{file,"lists.erl"},{line,1338}]},
+                         {test_server,ts_tc,3,
+                             [{file,"test_server.erl"},{line,1546}]},
+                         {test_server,run_test_case_eval1,6,
+                             [{file,"test_server.erl"},{line,1062}]},
+                         {test_server,run_test_case_eval,9,
+                             [{file,"test_server.erl"},{line,994}]}]}, [{hty_inte_SUITE,
+                                                                         '-run_test/3-fun-1-',
+                                                                         177},
+                                                                        {lists,
+                                                                         foreach,
+                                                                         1338},
+                                                                        {test_server,
+                                                                         ts_tc,
+                                                                         1546},
+                                                                        {test_server,
+                                                                         run_test_case_eval1,
+                                                                         1062},
+                                                                        {test_server,
+                                                                         run_test_case_eval,
+                                                                         994}]
+=== *** FAILED test case 7 of 21 ***
+=case          hty_inte_SUITE:history_get_latest
+=logfile       hty_inte_suite.history_get_latest.html
+=started       2022-07-22 00:00:37
+=ended         2022-07-22 00:00:37
+=result        failed: {{badmatch,{error,no_scheme}},
+                        [{hty_inte_SUITE,'-run_test/3-fun-1-',3,
+                             [{file,"test/hty_inte_SUITE.erl"},{line,177}]},
+                         {lists,foreach,2,[{file,"lists.erl"},{line,1338}]},
+                         {test_server,ts_tc,3,
+                             [{file,"test_server.erl"},{line,1546}]},
+                         {test_server,run_test_case_eval1,6,
+                             [{file,"test_server.erl"},{line,1062}]},
+                         {test_server,run_test_case_eval,9,
+                             [{file,"test_server.erl"},{line,994}]}]}, [{hty_inte_SUITE,
+                                                                         '-run_test/3-fun-1-',
+                                                                         177},
+                                                                        {lists,
+                                                                         foreach,
+                                                                         1338},
+                                                                        {test_server,
+                                                                         ts_tc,
+                                                                         1546},
+                                                                        {test_server,
+                                                                         run_test_case_eval1,
+                                                                         1062},
+                                                                        {test_server,
+                                                                         run_test_case_eval,
+                                                                         994}]
+=== *** FAILED test case 8 of 21 ***
+=case          hty_inte_SUITE:history_get_earlier
+=logfile       hty_inte_suite.history_get_earlier.html
+=started       2022-07-22 00:00:37
+=ended         2022-07-22 00:00:37
+=result        failed: {{badmatch,{error,no_scheme}},
+                        [{hty_inte_SUITE,'-run_test/3-fun-1-',3,
+                             [{file,"test/hty_inte_SUITE.erl"},{line,177}]},
+                         {lists,foreach,2,[{file,"lists.erl"},{line,1338}]},
+                         {test_server,ts_tc,3,
+                             [{file,"test_server.erl"},{line,1546}]},
+                         {test_server,run_test_case_eval1,6,
+                             [{file,"test_server.erl"},{line,1062}]},
+                         {test_server,run_test_case_eval,9,
+                             [{file,"test_server.erl"},{line,994}]}]}, [{hty_inte_SUITE,
+                                                                         '-run_test/3-fun-1-',
+                                                                         177},
+                                                                        {lists,
+                                                                         foreach,
+                                                                         1338},
+                                                                        {test_server,
+                                                                         ts_tc,
+                                                                         1546},
+                                                                        {test_server,
+                                                                         run_test_case_eval1,
+                                                                         1062},
+                                                                        {test_server,
+                                                                         run_test_case_eval,
+                                                                         994}]
+=== *** FAILED test case 9 of 21 ***
+=case          hty_inte_SUITE:history_expect_conflict
+=logfile       hty_inte_suite.history_expect_conflict.html
+=started       2022-07-22 00:00:37
+=ended         2022-07-22 00:00:37
+=result        failed: {{badmatch,{error,no_scheme}},
+                        [{hty_inte_SUITE,'-run_test/3-fun-1-',3,
+                             [{file,"test/hty_inte_SUITE.erl"},{line,177}]},
+                         {lists,foreach,2,[{file,"lists.erl"},{line,1338}]},
+                         {test_server,ts_tc,3,
+                             [{file,"test_server.erl"},{line,1546}]},
+                         {test_server,run_test_case_eval1,6,
+                             [{file,"test_server.erl"},{line,1062}]},
+                         {test_server,run_test_case_eval,9,
+                             [{file,"test_server.erl"},{line,994}]}]}, [{hty_inte_SUITE,
+                                                                         '-run_test/3-fun-1-',
+                                                                         177},
+                                                                        {lists,
+                                                                         foreach,
+                                                                         1338},
+                                                                        {test_server,
+                                                                         ts_tc,
+                                                                         1546},
+                                                                        {test_server,
+                                                                         run_test_case_eval1,
+                                                                         1062},
+                                                                        {test_server,
+                                                                         run_test_case_eval,
+                                                                         994}]
+=== *** FAILED test case 10 of 21 ***
+=case          hty_inte_SUITE:end_per_group
+=logfile       hty_inte_suite.end_per_group.82.html
+=group_props   [{name,history}]
+=started       2022-07-22 00:00:37
+=ended         2022-07-22 00:00:37
+=result        ok
+=elapsed       1.56e-4
+=group_time    0.379s
+=case          hty_inte_SUITE:init_per_group
+=logfile       hty_inte_suite.init_per_group.98.html
+=group_props   [{name,static}]
+=started       2022-07-22 00:00:37
+=ended         2022-07-22 00:00:37
+=result        ok
+=elapsed       0.015304
+=case          hty_inte_SUITE:static_get_rootfile
+=logfile       hty_inte_suite.static_get_rootfile.html
+=started       2022-07-22 00:00:37
+=ended         2022-07-22 00:00:37
+=result        ok
+=elapsed       0.006659
+=case          hty_inte_SUITE:static_get_subfile
+=logfile       hty_inte_suite.static_get_subfile.html
+=started       2022-07-22 00:00:37
+=ended         2022-07-22 00:00:37
+=result        ok
+=elapsed       0.006444
+=case          hty_inte_SUITE:static_index_txt_welcome
+=logfile       hty_inte_suite.static_index_txt_welcome.html
+=started       2022-07-22 00:00:37
+=ended         2022-07-22 00:00:37
+=result        ok
+=elapsed       0.012839
+=case          hty_inte_SUITE:static_get_rootindex
+=logfile       hty_inte_suite.static_get_rootindex.html
+=started       2022-07-22 00:00:37
+=ended         2022-07-22 00:00:37
+=result        ok
+=elapsed       0.007082
+=case          hty_inte_SUITE:static_get_subindex
+=logfile       hty_inte_suite.static_get_subindex.html
+=started       2022-07-22 00:00:37
+=ended         2022-07-22 00:00:37
+=result        ok
+=elapsed       0.006932
+=case          hty_inte_SUITE:end_per_group
+=logfile       hty_inte_suite.end_per_group.114.html
+=group_props   [{name,static}]
+=started       2022-07-22 00:00:37
+=ended         2022-07-22 00:00:37
+=result        ok
+=elapsed       1.91e-4
+=group_time    0.284s
+=case          hty_inte_SUITE:init_per_group
+=logfile       hty_inte_suite.init_per_group.130.html
+=group_props   [{name,staticlisting}]
+=started       2022-07-22 00:00:37
+=ended         2022-07-22 00:00:38
+=result        ok
+=elapsed       0.023061
+=case          hty_inte_SUITE:staticlisting_list_root
+=logfile       hty_inte_suite.staticlisting_list_root.html
+=started       2022-07-22 00:00:38
+=ended         2022-07-22 00:00:38
+=result        failed: {{badmatch,
+                            "<dir><file>rootfile1.html</file><file>index.html</file><file>rootfile.html</file><file>subfolder</file></dir>"},
+                        [{hty_inte_SUITE,trim_compare,2,
+                             [{file,"test/hty_inte_SUITE.erl"},{line,240}]},
+                         {lists,foreach,2,[{file,"lists.erl"},{line,1338}]},
+                         {test_server,ts_tc,3,
+                             [{file,"test_server.erl"},{line,1546}]},
+                         {test_server,run_test_case_eval1,6,
+                             [{file,"test_server.erl"},{line,1062}]},
+                         {test_server,run_test_case_eval,9,
+                             [{file,"test_server.erl"},{line,994}]}]}, [{hty_inte_SUITE,
+                                                                         trim_compare,
+                                                                         240},
+                                                                        {lists,
+                                                                         foreach,
+                                                                         1338},
+                                                                        {test_server,
+                                                                         ts_tc,
+                                                                         1546},
+                                                                        {test_server,
+                                                                         run_test_case_eval1,
+                                                                         1062},
+                                                                        {test_server,
+                                                                         run_test_case_eval,
+                                                                         994}]
+=== *** FAILED test case 16 of 21 ***
+=case          hty_inte_SUITE:staticlisting_list_sub
+=logfile       hty_inte_suite.staticlisting_list_sub.html
+=started       2022-07-22 00:00:38
+=ended         2022-07-22 00:00:38
+=result        failed: {{badmatch,
+                            "<dir><file>subfile1.html</file><file>index.html</file><file>subfile.html</file></dir>"},
+                        [{hty_inte_SUITE,trim_compare,2,
+                             [{file,"test/hty_inte_SUITE.erl"},{line,240}]},
+                         {lists,foreach,2,[{file,"lists.erl"},{line,1338}]},
+                         {test_server,ts_tc,3,
+                             [{file,"test_server.erl"},{line,1546}]},
+                         {test_server,run_test_case_eval1,6,
+                             [{file,"test_server.erl"},{line,1062}]},
+                         {test_server,run_test_case_eval,9,
+                             [{file,"test_server.erl"},{line,994}]}]}, [{hty_inte_SUITE,
+                                                                         trim_compare,
+                                                                         240},
+                                                                        {lists,
+                                                                         foreach,
+                                                                         1338},
+                                                                        {test_server,
+                                                                         ts_tc,
+                                                                         1546},
+                                                                        {test_server,
+                                                                         run_test_case_eval1,
+                                                                         1062},
+                                                                        {test_server,
+                                                                         run_test_case_eval,
+                                                                         994}]
+=== *** FAILED test case 17 of 21 ***
+=case          hty_inte_SUITE:staticlisting_prefer_welcomefile
+=logfile       hty_inte_suite.staticlisting_prefer_welcomefile.html
+=started       2022-07-22 00:00:38
+=ended         2022-07-22 00:00:38
+=result        ok
+=elapsed       0.007018
+=case          hty_inte_SUITE:end_per_group
+=logfile       hty_inte_suite.end_per_group.146.html
+=group_props   [{name,staticlisting}]
+=started       2022-07-22 00:00:38
+=ended         2022-07-22 00:00:38
+=result        ok
+=elapsed       1.51e-4
+=group_time    0.240s
+=case          hty_inte_SUITE:init_per_group
+=logfile       hty_inte_suite.init_per_group.162.html
+=group_props   [{name,vhosts}]
+=started       2022-07-22 00:00:38
+=ended         2022-07-22 00:00:38
+=result        ok
+=elapsed       0.043911
+=case          hty_inte_SUITE:vhosts_basic
+=logfile       hty_inte_suite.vhosts_basic.html
+=started       2022-07-22 00:00:38
+=ended         2022-07-22 00:00:38
+=result        ok
+=elapsed       0.02145
+=case          hty_inte_SUITE:vhosts_subdomains
+=logfile       hty_inte_suite.vhosts_subdomains.html
+=started       2022-07-22 00:00:38
+=ended         2022-07-22 00:00:38
+=result        ok
+=elapsed       0.025644
+=case          hty_inte_SUITE:end_per_group
+=logfile       hty_inte_suite.end_per_group.178.html
+=group_props   [{name,vhosts}]
+=started       2022-07-22 00:00:38
+=ended         2022-07-22 00:00:38
+=result        ok
+=elapsed       1.41e-4
+=group_time    0.197s
+=case          hty_inte_SUITE:init_per_group
+=logfile       hty_inte_suite.init_per_group.194.html
+=group_props   [{name,xslpi}]
+=started       2022-07-22 00:00:38
+=ended         2022-07-22 00:00:38
+=result        ok
+=elapsed       0.014138
+=case          hty_inte_SUITE:xslpi_basic
+=logfile       hty_inte_suite.xslpi_basic.html
+=started       2022-07-22 00:00:38
+=ended         2022-07-22 00:00:38
+=result        ok
+=elapsed       0.00842
+=case          hty_inte_SUITE:end_per_group
+=logfile       hty_inte_suite.end_per_group.210.html
+=group_props   [{name,xslpi}]
+=started       2022-07-22 00:00:38
+=ended         2022-07-22 00:00:38
+=result        ok
+=elapsed       1.5e-4
+=group_time    0.106s
+=case          hty_inte_SUITE:end_per_suite
+=logfile       hty_inte_suite.end_per_suite.html
+=started       2022-07-22 00:00:38
+=ended         2022-07-22 00:00:38
+=result        ok
+=elapsed       0.005646
+=group_time    2.250s
+=== TEST COMPLETE, 15 ok, 6 failed of 21 test cases
+
+=finished      2022-07-22 00:00:38
+=failed        6
+=successful    15
+=user_skipped  0
+=auto_skipped  0

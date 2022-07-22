@@ -51,13 +51,14 @@ append({Above, Below}, Leaf) ->
 
 pack({Above, Below}) ->
     Segs = hty_util:rewind(Above, Below),
-    lists:flatmap(fun({Name, Matrix}) ->
+    Packed = lists:flatmap(fun({Name, Matrix}) ->
 		      [$/, Name|lists:map(fun({Key, Value}) ->
 					       [$;, Key, $=, Value]
 				      end, Matrix)];
 		 (Name) ->
 		      [$/, Name]
-	      end, Segs).
+	      end, Segs),
+	list_to_binary(Packed).
 
 %%
 %% Local Functions

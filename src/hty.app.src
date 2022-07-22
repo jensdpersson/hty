@@ -3,5 +3,7 @@
   {vsn, "0.5"},
   {mod, {hty_app, []}},
   {applications, [kernel,
-                  stdlib]}
+                  stdlib]},
+  {env, []},
+  {modules, []}
 ]}.

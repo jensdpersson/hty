@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Test hty_inte_SUITE:history_get_latest result</title>
+<meta http-equiv="cache-control" content="no-cache"></meta>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"></meta>
+<link rel="stylesheet" href="../../ct_default.css" type="text/css"></link>
+<script type="text/javascript" src="../../jquery-latest.js"></script>
+<script type="text/javascript" src="../../jquery.tablesorter.min.js"></script>
+</head>
+<body>
+
+<a name="top"></a><pre>
+=== Test case: <a href="hty_inte_suite.src.html#history_get_latest-1">hty_inte_SUITE:history_get_latest/1</a> (click for source code)
+
+=== Config value:
+
+    [{wwwroot,"/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-22_00.16.20/projekt.hty.hty_inte_SUITE.logs/run.2022-07-22_00.16.27/log_private/history/fixture"},
+     {files_dir,"/home/jens/projekt/hty/test/hty_inte_SUITE_data/history/files"},
+     {watchdog,&lt;0.370.0&gt;},
+     {tc_logfile,"/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-22_00.16.20/projekt.hty.hty_inte_SUITE.logs/run.2022-07-22_00.16.27/hty_inte_suite.history_get_latest.html"},
+     {tc_group_properties,[{name,history}]},
+     {tc_group_path,[]},
+     {data_dir,"/home/jens/projekt/hty/test/hty_inte_SUITE_data/"},
+     {priv_dir,"/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-22_00.16.20/projekt.hty.hty_inte_SUITE.logs/run.2022-07-22_00.16.27/log_private/"}]
+
+=== Current directory is "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-22_00.16.20"
+
+=== Started at 2022-07-22 00:16:28
+
+<br />
+Conlen [&lt;&lt;"38"&gt;&gt;]
+
+dispatching to {hty_history_resource,
+                   {hty_fspath,
+                       "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-22_00.16.20/projekt.hty.hty_inte_SUITE.logs/run.2022-07-22_00.16.27/log_private/history/fixture/1033.http/history",
+                       hty_fs_fs},
+                   "xml"}
+
+history:handle()
+history:twig()
+Processing "get_latest.xml"
+Rev is [no]
+
+invoking chain(&lt;&lt;"[=apor&amp;[=apa&amp;\"=orangutang&amp;]=apa&amp;]=apor"&gt;&gt;,q0)
+
+hty_formtree_spaf:parse(&lt;&lt;"[=apor&amp;[=apa&amp;\"=orangutang&amp;]=apa&amp;]=apor"&gt;&gt;, {{expect_eq,
+                                                                         &lt;&lt;&gt;&gt;}, []})
+SPAF({push,&lt;&lt;"apor"&gt;&gt;})
+
+SPAF({push,&lt;&lt;"apa"&gt;&gt;})
+
+SPAF({text,&lt;&lt;"orangutang"&gt;&gt;})
+
+SPAF({pop,&lt;&lt;"apa"&gt;&gt;})
+
+Data1 is [60,&lt;&lt;"apor"&gt;&gt;,62,60,&lt;&lt;"apa"&gt;&gt;,62,&lt;&lt;"orangutang"&gt;&gt;,60,47,&lt;&lt;"apa"&gt;&gt;,
+          62]
+
+recv 0 more bytes
+
+invoking chain(eos,[{{expect_amp,&lt;&lt;"]"&gt;&gt;,&lt;&lt;"apor"&gt;&gt;},[&lt;&lt;"apor"&gt;&gt;]},
+                    {not_in_start,[&lt;&lt;"apor"&gt;&gt;]}])
+
+hty_formtree_spaf:parse(eos, {{expect_amp,&lt;&lt;"]"&gt;&gt;,&lt;&lt;"apor"&gt;&gt;}, [&lt;&lt;"apor"&gt;&gt;]})
+SPAF({pop,&lt;&lt;"apor"&gt;&gt;})
+
+Data1 is [60,47,&lt;&lt;"apor"&gt;&gt;,62]
+
+Path1 = {[],["get_latest.xml"]}, Path2 = {[],["get_latest.xml"]}
+
+Tx1 = {hty_tx,
+          {ipv4,{127,0,0,1},34753},
+          &lt;&lt;"HTTP/1.1"&gt;&gt;,'POST',
+          {[],["get_latest.xml"]},
+          {200,"OK"},
+          [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+           {"host",&lt;&lt;"localhost:1033"&gt;&gt;},
+           {"te",&lt;&lt;&gt;&gt;},
+           {"content-length",&lt;&lt;"38"&gt;&gt;},
+           {"content-type",&lt;&lt;"application/x-www-form-urlencoded"&gt;&gt;}],
+          [&lt;&lt;"[=apor&amp;[=apa&amp;\"=orangutang&amp;]=apa&amp;]=apor"&gt;&gt;],
+          #Fun&lt;hty_tx.0.61293378&gt;,q0,[],[],&lt;&lt;"guest"&gt;&gt;,hty_empty_realm,
+          [{"xslpi_choice","doc"}],
+          [],hty_socketreader,
+          [{hty_history_resource,
+               {hty_fspath,
+                   "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-22_00.16.20/projekt.hty.hty_inte_SUITE.logs/run.2022-07-22_00.16.27/log_private/history/fixture/1033.http/history",
+                   hty_fs_fs},
+               "xml"}],
+          [],0,false}, Tx2 = {hty_tx,
+                              {ipv4,{127,0,0,1},34753},
+                              &lt;&lt;"HTTP/1.1"&gt;&gt;,'POST',
+                              {[],["get_latest.xml"]},
+                              {200,"OK"},
+                              [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+                               {"host",&lt;&lt;"localhost:1033"&gt;&gt;},
+                               {"te",&lt;&lt;&gt;&gt;},
+                               {"content-length",&lt;&lt;"38"&gt;&gt;},
+                               {"content-type",
+                                &lt;&lt;"application/x-www-form-urlencoded"&gt;&gt;}],
+                              [],#Fun&lt;hty_tx.10.61293378&gt;,
+                              {{file_descriptor,prim_file,{#Port&lt;0.2845&gt;,23}},
+                               [done,{not_in_start,[]}]},
+                              [],[],&lt;&lt;"guest"&gt;&gt;,hty_empty_realm,
+                              [{"xslpi_choice","doc"}],
+                              [],hty_socketreader,
+                              [{hty_history_resource,
+                                {hty_fspath,
+                                 "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-22_00.16.20/projekt.hty.hty_inte_SUITE.logs/run.2022-07-22_00.16.27/log_private/history/fixture/1033.http/history",
+                                 hty_fs_fs},
+                                "xml"}],
+                              [],0,false}
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},34753},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'POST',
+           {[],["get_latest.xml"]},
+           {303,"See Other"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"host",&lt;&lt;"localhost:1033"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"38"&gt;&gt;},
+            {"content-type",&lt;&lt;"application/x-www-form-urlencoded"&gt;&gt;}],
+           [],#Fun&lt;hty_tx.10.61293378&gt;,
+           {{file_descriptor,prim_file,{#Port&lt;0.2845&gt;,23}},
+            [done,{not_in_start,[]}]},
+           [{"Location",&lt;&lt;"/get_latest.xml;rev=0"&gt;&gt;}],
+           [],&lt;&lt;"guest"&gt;&gt;,hty_empty_realm,
+           [{"xslpi_choice","doc"}],
+           [],hty_socketreader,
+           [{hty_history_resource,
+                {hty_fspath,
+                    "/home/jens/projekt/hty/logs/ct_run.ct_hty@sumatra.2022-07-22_00.16.20/projekt.hty.hty_inte_SUITE.logs/run.2022-07-22_00.16.27/log_private/history/fixture/1033.http/history",
+                    hty_fs_fs},
+                "xml"}],
+           [{"hty_history_resource","2022-07-21T22:16:28.318","status",
+             "See Other"}],
+           0,true}
+
+
+</pre>
+<div class="ct_error_notify"><pre><b>*** CT Error Notification 2022-07-22 00:16:28.320 ***</b>
+hty_inte_SUITE:'-run_test/3-fun-1-' failed on line 128
+Reason: {badmatch,{error,no_scheme}}
+
+<a href="#end">Full error description and stacktrace</a>
+</pre></div>
+<pre>
+<a name="end"></a>
+
+
+=== Ended at 2022-07-22 00:16:28
+=== Location: [{hty_inte_SUITE,'-run_test/3-fun-1-',<a href="hty_inte_suite.src.html#128">128</a>},
+              {lists,foreach,1338},
+              {test_server,ts_tc,1546},
+              {test_server,run_test_case_eval1,1062},
+              {test_server,run_test_case_eval,994}]
+=== Reason: no match of right hand side value {error,no_scheme}
+  in function  hty_inte_SUITE:'-run_test/3-fun-1-'/3 (test/hty_inte_SUITE.erl, line 128)
+  in call from lists:foreach/2 (lists.erl, line 1338)
+  in call from test_server:ts_tc/3 (test_server.erl, line 1546)
+  in call from test_server:run_test_case_eval1/6 (test_server.erl, line 1062)
+  in call from test_server:run_test_case_eval/9 (test_server.erl, line 994)
+</pre>
+<center>
+<br /><hr /><p>
+<a href="../../../all_runs.html">Test run history
+</a>  |  <a href="../../../index.html">Top level test index
+</a>  |  <a href="../../../suite.log.latest.html">Latest test result</a>
+</p>
+<div class="copyright">Copyright &copy; 2022 <a href="http://www.erlang.org">Open Telecom Platform</a><br />
+Updated: <!--date-->Fri Jul 22 2022 00:16:28<!--/date--><br />
+</div>
+</center>
+</body>
+</html>

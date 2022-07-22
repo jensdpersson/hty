@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Test hty_inte_SUITE:catch_forward result</title>
+<meta http-equiv="cache-control" content="no-cache"></meta>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"></meta>
+<link rel="stylesheet" href="../../ct_default.css" type="text/css"></link>
+<script type="text/javascript" src="../../jquery-latest.js"></script>
+<script type="text/javascript" src="../../jquery.tablesorter.min.js"></script>
+</head>
+<body>
+
+<a name="top"></a><pre>
+=== Test case: <a href="hty_inte_suite.src.html#catch_forward-1">hty_inte_SUITE:catch_forward/1</a> (click for source code)
+
+=== Config value:
+
+    [{wwwroot,"/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_01.02.18/hty.ct.logs/run.2022-07-21_01.02.19/log_private/catch/fixture"},
+     {files_dir,"/home/jens/projekt/hty/ct/hty_inte_SUITE_data/catch/files"},
+     {watchdog,&lt;0.309.0&gt;},
+     {tc_logfile,"/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_01.02.18/hty.ct.logs/run.2022-07-21_01.02.19/hty_inte_suite.catch_forward.html"},
+     {tc_group_properties,[{name,'catch'}]},
+     {tc_group_path,[]},
+     {data_dir,"/home/jens/projekt/hty/ct/hty_inte_SUITE_data/"},
+     {priv_dir,"/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_01.02.18/hty.ct.logs/run.2022-07-21_01.02.19/log_private/"}]
+
+=== Current directory is "/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_01.02.18"
+
+=== Started at 2022-07-21 01:02:21
+
+<br />
+Conlen [&lt;&lt;"0"&gt;&gt;]
+
+dispatching to {hty_static_resource,
+                   {hty_fspath,
+                       "/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_01.02.18/hty.ct.logs/run.2022-07-21_01.02.19/log_private/catch/fixture/1029.http/1.static",
+                       hty_fs_fs},
+                   {hty_indexfile_welcome,
+                       ["index.html","index.xml","index.txt"]}}
+
+static path below [["helloworld.html"],&lt;&lt;"helloworld.html"&gt;&gt;,["helloworld.html"]]
+
+static subpath [{hty_fspath,"/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_01.02.18/hty.ct.logs/run.2022-07-21_01.02.19/log_private/catch/fixture/1029.http/1.static/helloworld.html",
+                            hty_fs_fs}]
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},44983},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'GET',
+           {[],["helloworld.html"]},
+           {404,"Not Found"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"host",&lt;&lt;"localhost:1029"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"0"&gt;&gt;}],
+           [&lt;&lt;&gt;&gt;],
+           #Fun&lt;hty_tx.0.61293378&gt;,q0,[],[],&lt;&lt;"guest"&gt;&gt;,hty_empty_realm,[],[],
+           hty_socketreader,
+           [{hty_static_resource,
+                {hty_fspath,
+                    "/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_01.02.18/hty.ct.logs/run.2022-07-21_01.02.19/log_private/catch/fixture/1029.http/1.static",
+                    hty_fs_fs},
+                {hty_indexfile_welcome,
+                    ["index.html","index.xml","index.txt"]}}],
+           [{"hty_static_resource","2022-07-20T23:02:21.517","status",
+             "Not Found"}],
+           0,false}
+
+dispatching to {hty_catch_resource,404,
+                   [{hty_static_resource,
+                        {hty_fspath,
+                            "/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_01.02.18/hty.ct.logs/run.2022-07-21_01.02.19/log_private/catch/fixture/1029.http/2.404.catch/static",
+                            hty_fs_fs},
+                        {hty_indexfile_welcome,
+                            ["index.html","index.xml","index.txt"]}}]}
+
+Checking for code 404 in {404,"Not Found"}
+
+dispatching to {hty_static_resource,
+                   {hty_fspath,
+                       "/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_01.02.18/hty.ct.logs/run.2022-07-21_01.02.19/log_private/catch/fixture/1029.http/2.404.catch/static",
+                       hty_fs_fs},
+                   {hty_indexfile_welcome,
+                       ["index.html","index.xml","index.txt"]}}
+
+static path below [["helloworld.html"],&lt;&lt;"helloworld.html"&gt;&gt;,["helloworld.html"]]
+
+static subpath [{hty_fspath,"/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_01.02.18/hty.ct.logs/run.2022-07-21_01.02.19/log_private/catch/fixture/1029.http/2.404.catch/static/helloworld.html",
+                            hty_fs_fs}]
+
+last_modified ["/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_01.02.18/hty.ct.logs/run.2022-07-21_01.02.19/log_private/catch/fixture/1029.http/2.404.catch/static/helloworld.html"] is [{{2022,
+                                                                                                                                                                                                        7,
+                                                                                                                                                                                                        21},
+                                                                                                                                                                                                       {1,
+                                                                                                                                                                                                        2,
+                                                                                                                                                                                                        21}}]
+
+If-None-Match: []!="\"2022-07-21T01:02:21\""
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},44983},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'GET',
+           {[],["helloworld.html"]},
+           {200,"OK"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"host",&lt;&lt;"localhost:1029"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"0"&gt;&gt;}],
+           [&lt;&lt;&gt;&gt;],
+           #Fun&lt;hty_tx.0.61293378&gt;,q0,
+           [{'Content-Type',"text/html"},
+            {"Cache-Control","public"},
+            {"ETag","\"2022-07-21T01:02:21\""}],
+           [{file,
+                "/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_01.02.18/hty.ct.logs/run.2022-07-21_01.02.19/log_private/catch/fixture/1029.http/2.404.catch/static/helloworld.html"}],
+           &lt;&lt;"guest"&gt;&gt;,hty_empty_realm,[],[],hty_socketreader,
+           [{hty_static_resource,
+                {hty_fspath,
+                    "/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_01.02.18/hty.ct.logs/run.2022-07-21_01.02.19/log_private/catch/fixture/1029.http/2.404.catch/static",
+                    hty_fs_fs},
+                {hty_indexfile_welcome,
+                    ["index.html","index.xml","index.txt"]}},
+            {hty_catch_resource,404,
+                [{hty_static_resource,
+                     {hty_fspath,
+                         "/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_01.02.18/hty.ct.logs/run.2022-07-21_01.02.19/log_private/catch/fixture/1029.http/2.404.catch/static",
+                         hty_fs_fs},
+                     {hty_indexfile_welcome,
+                         ["index.html","index.xml","index.txt"]}}]}],
+           [{"hty_static_resource","2022-07-20T23:02:21.519","status","OK"},
+            {"hty_static_resource","2022-07-20T23:02:21.519","sendfile",
+             "/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_01.02.18/hty.ct.logs/run.2022-07-21_01.02.19/log_private/catch/fixture/1029.http/2.404.catch/static/helloworld.html"},
+            {"hty_static_resource","2022-07-20T23:02:21.517","status",
+             "Not Found"}],
+           0,true}
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},44983},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'GET',
+           {[],["helloworld.html"]},
+           {200,"OK"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"host",&lt;&lt;"localhost:1029"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"0"&gt;&gt;}],
+           [&lt;&lt;&gt;&gt;],
+           #Fun&lt;hty_tx.0.61293378&gt;,q0,
+           [{'Content-Type',"text/html"},
+            {"Cache-Control","public"},
+            {"ETag","\"2022-07-21T01:02:21\""}],
+           [{file,
+                "/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_01.02.18/hty.ct.logs/run.2022-07-21_01.02.19/log_private/catch/fixture/1029.http/2.404.catch/static/helloworld.html"}],
+           &lt;&lt;"guest"&gt;&gt;,hty_empty_realm,[],[],hty_socketreader,
+           [{hty_catch_resource,404,
+                [{hty_static_resource,
+                     {hty_fspath,
+                         "/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_01.02.18/hty.ct.logs/run.2022-07-21_01.02.19/log_private/catch/fixture/1029.http/2.404.catch/static",
+                         hty_fs_fs},
+                     {hty_indexfile_welcome,
+                         ["index.html","index.xml","index.txt"]}}]}],
+           [{"hty_static_resource","2022-07-20T23:02:21.519","status","OK"},
+            {"hty_static_resource","2022-07-20T23:02:21.519","sendfile",
+             "/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_01.02.18/hty.ct.logs/run.2022-07-21_01.02.19/log_private/catch/fixture/1029.http/2.404.catch/static/helloworld.html"},
+            {"hty_static_resource","2022-07-20T23:02:21.517","status",
+             "Not Found"}],
+           0,true}
+
+sendfile('"/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_01.02.18/hty.ct.logs/run.2022-07-21_01.02.19/log_private/catch/fixture/1029.http/2.404.catch/static/helloworld.html"')
+
+Sendfile ok
+
+Looking for header content-type=text/html in [{"cache-control","public"},
+                                              {"etag",
+                                               "\"2022-07-21T01:02:21\""},
+                                              {"server","haughty 0.4"},
+                                              {"content-type","text/html"}]
+
+Reading facit file /home/jens/projekt/hty/ct/hty_inte_SUITE_data/catch/files/catch_forward/facit.html
+
+About to compare facit [&lt;html&gt;Hello world&lt;/html&gt;
+]
+ with response body [&lt;html&gt;Hello world&lt;/html&gt;
+]
+
+<a name="end"></a>
+
+
+=== Ended at 2022-07-21 01:02:21
+=== successfully completed test case
+=== Returned value: ok
+</pre>
+<center>
+<br /><hr /><p>
+<a href="../../../all_runs.html">Test run history
+</a>  |  <a href="../../../index.html">Top level test index
+</a>  |  <a href="../../../suite.log.latest.html">Latest test result</a>
+</p>
+<div class="copyright">Copyright &copy; 2022 <a href="http://www.erlang.org">Open Telecom Platform</a><br />
+Updated: <!--date-->Thu Jul 21 2022 01:02:21<!--/date--><br />
+</div>
+</center>
+</body>
+</html>

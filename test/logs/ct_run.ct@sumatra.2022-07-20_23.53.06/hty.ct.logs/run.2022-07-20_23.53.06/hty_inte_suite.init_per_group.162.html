@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Test hty_inte_SUITE:init_per_group result</title>
+<meta http-equiv="cache-control" content="no-cache"></meta>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"></meta>
+<link rel="stylesheet" href="../../ct_default.css" type="text/css"></link>
+<script type="text/javascript" src="../../jquery-latest.js"></script>
+<script type="text/javascript" src="../../jquery.tablesorter.min.js"></script>
+</head>
+<body>
+
+<a name="top"></a><pre>
+=== Config function: <a href="hty_inte_suite.src.html#init_per_group-1">hty_inte_SUITE:init_per_group/2</a> (click for source code)
+
+=== Group properties: [{name,history}]
+
+=== Config value:
+
+    [{watchdog,&lt;0.266.0&gt;},
+     {tc_logfile,"/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-20_23.53.06/hty.ct.logs/run.2022-07-20_23.53.06/hty_inte_suite.init_per_group.162.html"},
+     {tc_group_properties,[{name,history}]},
+     {tc_group_path,[]},
+     {data_dir,"/home/jens/projekt/hty/ct/hty_inte_SUITE_data/"},
+     {priv_dir,"/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-20_23.53.06/hty.ct.logs/run.2022-07-20_23.53.06/log_private/"}]
+
+=== Current directory is "/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-20_23.53.06"
+
+=== Started at 2022-07-20 23:53:09
+
+<br />
+Copying from /home/jens/projekt/hty/ct/hty_inte_SUITE_data/history/fixture to /home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-20_23.53.06/hty.ct.logs/run.2022-07-20_23.53.06/log_private/history/fixture
+
+</pre>
+<div class="ct_error_notify"><pre><b>*** CT Error Notification 2022-07-20 23:53:09.523 ***</b>
+hty_inte_SUITE:init_per_group failed
+Reason: {badmatch,{error,enoent}}
+
+<a href="#end">Full error description and stacktrace</a>
+</pre></div>
+<pre>
+<a name="end"></a>
+
+
+=== Ended at 2022-07-20 23:53:09
+=== Location: [{hty_inte_SUITE,copy_fixture,<a href="hty_inte_suite.src.html#100">100</a>},
+              {hty_inte_SUITE,init_per_group,<a href="hty_inte_suite.src.html#69">69</a>},
+              {test_server,ts_tc,1546},
+              {test_server,run_test_case_eval1,1147},
+              {test_server,run_test_case_eval,994}]
+=== Reason: no match of right hand side value {error,enoent}
+  in function  hty_inte_SUITE:copy_fixture/2 (hty_inte_SUITE.erl, line 100)
+  in call from hty_inte_SUITE:init_per_group/2 (hty_inte_SUITE.erl, line 69)
+  in call from test_server:ts_tc/3 (test_server.erl, line 1546)
+  in call from test_server:run_test_case_eval1/6 (test_server.erl, line 1147)
+  in call from test_server:run_test_case_eval/9 (test_server.erl, line 994)
+=== 
+*** init_per_group failed.
+    Skipping all cases.
+</pre>
+<center>
+<br /><hr /><p>
+<a href="../../../all_runs.html">Test run history
+</a>  |  <a href="../../../index.html">Top level test index
+</a>  |  <a href="../../../suite.log.latest.html">Latest test result</a>
+</p>
+<div class="copyright">Copyright &copy; 2022 <a href="http://www.erlang.org">Open Telecom Platform</a><br />
+Updated: <!--date-->Wed Jul 20 2022 23:53:09<!--/date--><br />
+</div>
+</center>
+</body>
+</html>

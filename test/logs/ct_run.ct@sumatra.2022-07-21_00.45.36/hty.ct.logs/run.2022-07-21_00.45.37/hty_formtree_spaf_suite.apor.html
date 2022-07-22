@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Test hty_formtree_spaf_SUITE:apor result</title>
+<meta http-equiv="cache-control" content="no-cache"></meta>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"></meta>
+<link rel="stylesheet" href="../../ct_default.css" type="text/css"></link>
+<script type="text/javascript" src="../../jquery-latest.js"></script>
+<script type="text/javascript" src="../../jquery.tablesorter.min.js"></script>
+</head>
+<body>
+
+<a name="top"></a><pre>
+=== Test case: <a href="hty_formtree_spaf_suite.src.html#apor-1">hty_formtree_spaf_SUITE:apor/1</a> (click for source code)
+
+=== Config value:
+
+    [{watchdog,&lt;0.181.0&gt;},
+     {tc_logfile,"/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_00.45.36/hty.ct.logs/run.2022-07-21_00.45.37/hty_formtree_spaf_suite.apor.html"},
+     {tc_group_properties,[{suite,hty_formtree_spaf_SUITE}]},
+     {tc_group_path,[]},
+     {data_dir,"/home/jens/projekt/hty/ct/hty_formtree_spaf_SUITE_data/"},
+     {priv_dir,"/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_00.45.36/hty.ct.logs/run.2022-07-21_00.45.37/log_private/"}]
+
+=== Current directory is "/home/jens/projekt/hty/ct/logs/ct_run.ct@sumatra.2022-07-21_00.45.36"
+
+=== Started at 2022-07-21 00:45:38
+
+<br />
+hty_formtree_spaf:parse(&lt;&lt;"[=apor&amp;[=apa&amp;\"=orangutang&amp;]=apa&amp;]=apor"&gt;&gt;, {{expect_eq,
+                                                                         &lt;&lt;&gt;&gt;}, []})
+hty_formtree_spaf:parse(eos, {{expect_amp,&lt;&lt;"]"&gt;&gt;,&lt;&lt;"apor"&gt;&gt;}, [&lt;&lt;"apor"&gt;&gt;]})
+<a name="end"></a>
+
+
+=== Ended at 2022-07-21 00:45:38
+=== successfully completed test case
+=== Returned value: [{push,&lt;&lt;"apor"&gt;&gt;},
+                     {push,&lt;&lt;"apa"&gt;&gt;},
+                     {text,&lt;&lt;"orangutang"&gt;&gt;},
+                     {pop,&lt;&lt;"apa"&gt;&gt;},
+                     {pop,&lt;&lt;"apor"&gt;&gt;}]
+</pre>
+<center>
+<br /><hr /><p>
+<a href="../../../all_runs.html">Test run history
+</a>  |  <a href="../../../index.html">Top level test index
+</a>  |  <a href="../../../suite.log.latest.html">Latest test result</a>
+</p>
+<div class="copyright">Copyright &copy; 2022 <a href="http://www.erlang.org">Open Telecom Platform</a><br />
+Updated: <!--date-->Thu Jul 21 2022 00:45:38<!--/date--><br />
+</div>
+</center>
+</body>
+</html>
