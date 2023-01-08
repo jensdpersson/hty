@@ -1,4 +1,4 @@
-if [ ! -d "ct/logs" ]; then
-  mkdir ct/logs
+if [ ! -d "test/logs" ]; then
+  mkdir test/logs
 fi
-mkdir -p ebin && erlc -o ebin src/*.erl && ct_run -logdir ct/logs -dir ct -pz ebin
+mkdir -p ebin && erlc -o ebin -I include src/*.erl  && ct_run -include include src/*.erl -logdir test/logs -dir test -pz ebin

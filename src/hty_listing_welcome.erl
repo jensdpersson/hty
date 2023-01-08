@@ -33,7 +33,7 @@ listUrilist(Htx, Fspath) ->
 listXml(Htx, Fspath, Attrs) ->
   Htx1 = hty_tx:rsp_header("Content-Type", "application/xml", Htx),
   SpafEvts = [{pop, <<"dir">>}],
-  SpafEvts1 = add_files(hty_fspath:list(Fspath), SpafEvts, Attrs),
+  SpafEvts1 = add_files(sort_files(hty_fspath:list(Fspath)), SpafEvts, Attrs),
   SpafEvts2 = [{push, <<"dir">>}|SpafEvts1],
   {Htx2, _} = lists:foldl(
 								fun(Evt, {Htxn, Qn}) ->
@@ -49,6 +49,10 @@ listXml(Htx, Fspath, Attrs) ->
 %%
 %% Local Functions
 %%
+
+-spec sort_files(Files :: [any()]) -> [any()].
+sort_files(Files) -> lists:sort(Files).
+
 add_files([In|Ins], Outs, Attrs) ->
   Outs1 = [{text, list_to_binary(hty_fspath:basename(In))},
     {pop, <<"file">>}|Outs],

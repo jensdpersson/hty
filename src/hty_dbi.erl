@@ -1,7 +1,9 @@
 -module(hty_dbi).
+-export([connect/1, query/3]).
 
--export([connect/5, query/2]).
+connect(Connspec) -> 
+    Driver = element(1, Connspec),
+    Driver:connect(Connspec).
 
-connect(_Url, _Db, _User, _Pass, _Callback) -> notyet.
-
-query(_Sql, _Callback) -> notyet.
+query(Sql, Parameters, Dbi) -> 
+    Dbi:query(Sql, Parameters).

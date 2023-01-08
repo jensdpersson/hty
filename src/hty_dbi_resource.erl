@@ -1,5 +1,5 @@
 -module(hty_dbi_resource).
--record(hty_dbi_resource, {key, driver, opts}).
+-record(hty_dbi_resource, {key, dbi}).
 -export([mount/2, handle/2]).
 
 mount(Fspath, _Mountext) ->
@@ -10,15 +10,16 @@ mount(Fspath, _Mountext) ->
                     case Terms of
                         [] -> 
                             {error, ["empty file ", Fspath]};
-                        [Opts] ->  
-                            #{driver := Drivermod} = Opts,
-                            % Senare ...
-                            % Driver = hty_pool:create(Key, Opts)
-                            Driver = Drivermod:new(Key, Opts),
-                            {ok, #hty_dbi_resource{key = Key, driver = Driver, opts = Opts}}
+                        [ConnSpec] ->  
+                            case hty_dbi:connect(ConnSpec) of
+                                {ok, Dbi} ->
+                                    {ok, #hty_dbi_resource{key = Key, dbi = Dbi}};
+                                {error, Error} ->
+                                    {error, Error}
+                            end
                     end;
-		_ ->
-		    {error, ["failed reading ", Fspath]}
+		        _ ->
+		            {error, ["failed reading ", Fspath]}
             end;
         _ -> 
             {error, ["missing key parameter"]}
@@ -26,4 +27,6 @@ mount(Fspath, _Mountext) ->
             
             
 handle(Htx, This) ->
-    hty_tx:bind(This#hty_dbi_resource.key, This, Htx).
+    Key = This#hty_dbi_resource.key,
+    Dbi = This#hty_dbi_resource.dbi,
+    hty_tx:bind(Key, Dbi, Htx).

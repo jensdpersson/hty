@@ -546,8 +546,7 @@ dispatch(Resources, This) ->
         Htx5 = ndc_push(Resource, Htx),
         %when is this popped?
         {break, server_error(Error, Htx5)};
-      error:Error ->
-        Trace = erlang:get_stacktrace(),
+      error:Error:Trace ->        
         io:format(user, "Dispatch caught ~p :: ~p~n", [Error, Trace]),
         {break, hty_tx:server_error(io_lib:format("~p", [Error]), Htx)}
         %Should this not be Htx3:server_error, rather than Htx:server_error?
