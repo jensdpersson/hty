@@ -1,0 +1,19 @@
+
+Om man ska bygga erlang med ninja behöver man reda ut beroendena. 
+
+Vi har två sorters artefakter:
+en beam-fil, den beror på sin erl-fil. Men kompilatorn checkar inte ifall funktioner finns
+så den är inte beroende på refererade moduler. Eller?
+Hur är det med externt importerade typer, de checkas av dialyzer.
+
+Dialyzer-rapporten kan vara en egen artefakt.
+
+Sen är Test-rapporten en egen artefakt. Den beror på erl-filen, alla refererade
+moduler, eventuellt testdata, och testkoden.
+
+Man kan ju strängt taget ha flera testrapporter. 
+
+En komponent behöver räkna över filer och räkna ut dependencies. Hur generell 
+kan den vara?
+
+Ett erlang-chart för chartifact?

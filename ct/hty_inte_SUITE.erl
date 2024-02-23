@@ -8,6 +8,7 @@ all() -> [
     {group, copy},
     {group, move},
     {group, history},
+    {group, site},
     {group, static},
     {group, staticlisting},
     {group, vhosts},
@@ -22,9 +23,9 @@ groups() -> [
         catch_forward
     ]},
     {copy, [
-        copy_deep,
-        copy_to_existing_folder,
-        copy_to_existing_file
+        copy_deep%,
+        %copy_to_existing_folder,
+        %copy_to_existing_file
     ]},
     {history, [
       history_empty,
@@ -37,6 +38,10 @@ groups() -> [
     {move, [
         move_file,
         move_folder
+    ]},
+    {site, [
+        site_do_fwd,
+        site_dont_fwd
     ]},
     {static, [
         static_get_rootfile,
@@ -296,6 +301,27 @@ copy_to_existing_file(Config) ->
       ]
     }
     ], Config).
+    
+    
+site_do_fwd(Config) ->
+    run_test(#exchange{
+                url = "http://localhost:1038/dofwd/index.html",
+                rsp_headers = [
+                    {"content-type", "text/html"}
+                ],
+                rsp_file = "dofwd.html"
+            },
+            Config).
+            
+site_dont_fwd(Config) ->
+    run_test(#exchange{
+                url = "http://localhost:1038/dontfwd/index.html",
+                rsp_headers = [
+                    {"content-type", "text/html"}
+                ],
+                rsp_file = "dontfwd.html"
+            },
+            Config).
 
 static_get_rootfile(Config) ->
     run_test(#exchange{

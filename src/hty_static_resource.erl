@@ -15,14 +15,21 @@
 %%
 -export([handle/2, new/2, mount/2]).
 
+make_welcome(Modname) ->
+    WelcomeModule = list_to_atom("hty_" ++ Modname ++ "_welcome"),
+    WelcomeModule:new().
 
 mount(Fspath, _Mc) ->
   Welcome = case hty_fspath:param("welcome", Fspath) of
     no ->
-      hty_indexfile_welcome:new();
+        case hty_fspath:parts(Fspath) of 
+            ["static", WelcomeMod|_] ->
+                make_welcome(WelcomeMod);
+            _ ->
+                hty_indexfile_welcome:new()
+        end;
     WelcomeType ->
-      WelcomeModule = list_to_atom("hty_" ++ WelcomeType ++ "_welcome"),
-      WelcomeModule:new()
+      make_welcome(WelcomeType)
   end,
   {ok, new(Fspath, Welcome)}.
 

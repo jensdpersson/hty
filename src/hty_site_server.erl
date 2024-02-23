@@ -34,7 +34,7 @@ start(This) ->
 
 stop(This) ->
   RegName = This#hty_site_server.regname,
-  RegName ! stop,
+  RegName ! {stop, self()},
   receive
     ok ->
       ok;

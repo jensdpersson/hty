@@ -29,7 +29,7 @@ validate(String) ->
       {ok, Int}
   end.
 
-  handle(Htx, This) ->
+handle(Htx, This) ->
     Status = This#hty_catch_resource.status,
     Subs = This#hty_catch_resource.subs,
     io:format("Checking for code ~p in ~p~n",[Status, hty_tx:status(Htx)]),

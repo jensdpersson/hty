@@ -5,7 +5,7 @@
 mount(Fspath, Mc) ->
   Method = case hty_fspath:parts(Fspath) of
     [Meth, "chgmethod"] ->
-      list_to_atom(Meth);
+      list_to_atom(string:uppercase(Meth));
     ["chgmethod"] ->
       'GET'
   end,

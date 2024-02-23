@@ -109,7 +109,7 @@ handle(Htx0, This) ->
   end.
 
 conflict(Htx, _Tip, _Rev) ->
-  Htx1 = hty_tx:conflict(Htx),
+  Htx1 = hty_tx:with([conflict], Htx),
   Htx1.
 
 redirect(Htx, Tip) ->
