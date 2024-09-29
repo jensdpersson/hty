@@ -90,9 +90,7 @@ binder(Schema) ->
 				   io:format("Bind ~p in ~p~n", [E, Bindings]),
 			  	 case bind(Key, Value, [], Bindings) of
 						 {ok, Bindings1} ->
-							 {ok, Bindings1, []};
-						 {no, Error} ->
-							 {no, Error}
+							 {ok, Bindings1, []}
 					 end;
 				 eos ->
 					 {ok, qf, Bindings};

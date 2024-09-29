@@ -18,15 +18,15 @@ handle(Htx, This) ->
     Pid = This#hty_neatface_resource.pid,
     ReplyTo = self(),
     case hty_tx:method(Htx) of
-	'POST' ->
-	    SomeKindOfDataStructure = extract_payload(Htx),
-	    Pid ! {append, Neatpath, SomeKindOfDataStructure, ReplyTo},
-	    recv();
-	'GET' ->
-	    Pid ! {query, Neatpath, ReplyTo},
-	    recv();
-	_ -> 
-	    hty_tx:method_not_allowed(['GET', 'POST'], Htx)
+    	'POST' ->
+    	    SomeKindOfDataStructure = extract_payload(Htx),
+    	    Pid ! {append, Neatpath, SomeKindOfDataStructure, ReplyTo},
+    	    recv();
+    	'GET' ->
+    	    Pid ! {query, Neatpath, ReplyTo},
+    	    recv();
+    	_ -> 
+    	    hty_tx:method_not_allowed(["GET", "POST"], Htx)
     end.
 
 recv() ->

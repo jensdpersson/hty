@@ -46,7 +46,7 @@ mount(Path0) ->
         {error, _} = E -> E;
         {ok, Libs} ->
           Prefixes = lists:map(fun(Lib) -> hty_lib:prefix(Lib) end, Libs),
-          Ignores = lists:map(fun(Lib) -> hty_lib:file_name(Lib) end, Libs),          
+          Ignores = [], %lists:map(fun(Lib) -> hty_lib:file_name(Lib) end, Libs),          
           walk_servers(Fspath, hty_mounter:new([{prefixes, ["hty"|Prefixes]}, {ignores, Ignores}]))
       end;
     false ->

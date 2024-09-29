@@ -40,15 +40,16 @@ loop(Namespaces) ->
             loop(hty_util:keyappend({JobId, Resource}, Namespace, Namespaces));
         {stop, ReplyTo} ->
             ReplyTo ! {ok, stopped};
-        {find, Namespace, Finder, ReplyTo} ->
-            case lists:keyfind(Namespace, 1, Namespaces) of
-                false -> ReplyTo ! no;
-                {_, Resources} ->
-                    case lists:find(Finder, Resources) of % TODO find is not a function the that module!
-                        false -> ReplyTo ! no;
-                        {value, Value} -> ReplyTo ! {ok, Value}
-                    end
-            end,
+        {find, _Namespace, _Finder, ReplyTo} ->
+            %case lists:keyfind(Namespace, 1, Namespaces) of
+            ReplyTo ! notyet,
+                %false -> ReplyTo ! no;
+                %{_, Resources} ->
+                %    case lists:find(Finder, Resources) of % TODO find is not a function the that module!
+                %        false -> ReplyTo ! no;
+                %        {value, Value} -> ReplyTo ! {ok, Value}
+                %    end
+            %end,
             loop(Namespaces);
         {list, Namespace, ReplyTo} ->
             case lists:keyfind(Namespace, 1, Namespaces) of
