@@ -468,11 +468,11 @@ recvbody(This) ->
       Chain = hty_spaf:chain([fun Spaf:parse/1]),
       Fun = fun(Data, State, Htx) ->
          case Chain(Data, State) of
-    	    {ok, State1, Out} ->
+    	    {ok, State1, _Out} ->
     		  case Data of
     		    eos ->
-              % TODO this function does not exist.
-    		      hty_tx:body(Out, This);
+                  % TODO this function does not exist.
+    		      "hty_tx:body(Out, This)";
     			_ ->
     			  {ok, State1, Htx}
     		  end;

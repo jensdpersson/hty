@@ -1,0 +1,493 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Test hty_inte_SUITE:history_expect_conflict result</title>
+<meta http-equiv="cache-control" content="no-cache"></meta>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"></meta>
+<link rel="stylesheet" href="../../ct_default.css" type="text/css"></link>
+<script type="text/javascript" src="../../jquery-latest.js"></script>
+<script type="text/javascript" src="../../jquery.tablesorter.min.js"></script>
+</head>
+<body>
+
+<a name="top"></a><pre>
+=== Test case: <a href="hty_inte_suite.src.html#history_expect_conflict-1">hty_inte_SUITE:history_expect_conflict/1</a> (click for source code)
+
+=== Config value:
+
+    [{wwwroot,"/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private//inte/history/fixture"},
+     {files_dir,"/Users/jens/projekt/hty/test/hty_inte_SUITE_data/history/files"},
+     {watchdog,&lt;0.467.0&gt;},
+     {tc_logfile,"/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/hty_inte_suite.history_expect_conflict.html"},
+     {tc_group_properties,[{name,history}]},
+     {tc_group_path,[]},
+     {data_dir,"/Users/jens/projekt/hty/test/hty_inte_SUITE_data/"},
+     {priv_dir,"/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/"}]
+
+=== Current directory is "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15"
+
+=== Started at 2024-09-29 22:28:19
+
+<br />
+Conlen [&lt;&lt;"38"&gt;&gt;]
+
+dispatching to {hty_history_resource,
+                   {hty_fspath,
+                       "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history",
+                       hty_fs_fs},
+                   "xml"}
+
+history:handle()
+history:twig()
+Processing "expect_conflict.xml"
+Rev is [no]
+
+invoking chain(&lt;&lt;"[=apor&amp;[=apa&amp;\"=orangutang&amp;]=apa&amp;]=apor"&gt;&gt;,q0)
+
+hty_formtree_spaf:parse(&lt;&lt;"[=apor&amp;[=apa&amp;\"=orangutang&amp;]=apa&amp;]=apor"&gt;&gt;, {{expect_eq,
+                                                                         &lt;&lt;&gt;&gt;}, []})
+SPAF({push,&lt;&lt;"apor"&gt;&gt;})
+
+SPAF({push,&lt;&lt;"apa"&gt;&gt;})
+
+SPAF({text,&lt;&lt;"orangutang"&gt;&gt;})
+
+SPAF({pop,&lt;&lt;"apa"&gt;&gt;})
+
+Data1 is [60,&lt;&lt;"apor"&gt;&gt;,62,60,&lt;&lt;"apa"&gt;&gt;,62,&lt;&lt;"orangutang"&gt;&gt;,60,47,&lt;&lt;"apa"&gt;&gt;,
+          62]
+
+recv 0 more bytes
+
+invoking chain(eos,[{{expect_amp,&lt;&lt;"]"&gt;&gt;,&lt;&lt;"apor"&gt;&gt;},[&lt;&lt;"apor"&gt;&gt;]},
+                    {not_in_start,[&lt;&lt;"apor"&gt;&gt;]}])
+
+hty_formtree_spaf:parse(eos, {{expect_amp,&lt;&lt;"]"&gt;&gt;,&lt;&lt;"apor"&gt;&gt;}, [&lt;&lt;"apor"&gt;&gt;]})
+SPAF({pop,&lt;&lt;"apor"&gt;&gt;})
+
+Data1 is [60,47,&lt;&lt;"apor"&gt;&gt;,62]
+
+Path1 = {[],["expect_conflict.xml"]}, Path2 = {[],["expect_conflict.xml"]}
+
+Tx1 = {hty_tx,
+          {ipv4,{127,0,0,1},53471},
+          &lt;&lt;"HTTP/1.1"&gt;&gt;,'POST',
+          {[],["expect_conflict.xml"]},
+          {200,"OK"},
+          [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+           {"host",&lt;&lt;"localhost:1033"&gt;&gt;},
+           {"te",&lt;&lt;&gt;&gt;},
+           {"content-length",&lt;&lt;"38"&gt;&gt;},
+           {"content-type",&lt;&lt;"application/x-www-form-urlencoded"&gt;&gt;}],
+          [&lt;&lt;"[=apor&amp;[=apa&amp;\"=orangutang&amp;]=apa&amp;]=apor"&gt;&gt;],
+          #Fun&lt;hty_tx.0.28375859&gt;,q0,[],[],&lt;&lt;"guest"&gt;&gt;,hty_empty_realm,
+          [{"xslpi_choice","doc"}],
+          [],hty_socketreader,
+          [{hty_history_resource,
+               {hty_fspath,
+                   "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history",
+                   hty_fs_fs},
+               "xml"}],
+          [],0,false}, Tx2 = {hty_tx,
+                              {ipv4,{127,0,0,1},53471},
+                              &lt;&lt;"HTTP/1.1"&gt;&gt;,'POST',
+                              {[],["expect_conflict.xml"]},
+                              {200,"OK"},
+                              [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+                               {"host",&lt;&lt;"localhost:1033"&gt;&gt;},
+                               {"te",&lt;&lt;&gt;&gt;},
+                               {"content-length",&lt;&lt;"38"&gt;&gt;},
+                               {"content-type",
+                                &lt;&lt;"application/x-www-form-urlencoded"&gt;&gt;}],
+                              [],#Fun&lt;hty_tx.10.28375859&gt;,
+                              {{file_descriptor,raw_file_io_delayed,
+                                #{buffer =&gt;
+                                   #Ref&lt;0.1273940150.3786276866.90192&gt;,
+                                  delay_size =&gt; 65536,owner =&gt; &lt;0.541.0&gt;,
+                                  pid =&gt; &lt;0.542.0&gt;}},
+                               [done,{not_in_start,[]}]},
+                              [],[],&lt;&lt;"guest"&gt;&gt;,hty_empty_realm,
+                              [{"xslpi_choice","doc"}],
+                              [],hty_socketreader,
+                              [{hty_history_resource,
+                                {hty_fspath,
+                                 "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history",
+                                 hty_fs_fs},
+                                "xml"}],
+                              [],0,false}
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},53471},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'POST',
+           {[],["expect_conflict.xml"]},
+           {303,"See Other"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"host",&lt;&lt;"localhost:1033"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"38"&gt;&gt;},
+            {"content-type",&lt;&lt;"application/x-www-form-urlencoded"&gt;&gt;}],
+           [],#Fun&lt;hty_tx.10.28375859&gt;,
+           {{file_descriptor,raw_file_io_delayed,
+                #{buffer =&gt; #Ref&lt;0.1273940150.3786276866.90192&gt;,
+                  delay_size =&gt; 65536,owner =&gt; &lt;0.541.0&gt;,pid =&gt; &lt;0.542.0&gt;}},
+            [done,{not_in_start,[]}]},
+           [{"Location",[47,"expect_conflict.xml",[59,&lt;&lt;"rev"&gt;&gt;,61,"0"]]}],
+           [],&lt;&lt;"guest"&gt;&gt;,hty_empty_realm,
+           [{"xslpi_choice","doc"}],
+           [],hty_socketreader,
+           [{hty_history_resource,
+                {hty_fspath,
+                    "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history",
+                    hty_fs_fs},
+                "xml"}],
+           [{"hty_history_resource","2024-09-29T20:28:19.307","status",
+             "See Other"}],
+           0,true}
+
+Conlen [&lt;&lt;"0"&gt;&gt;]
+
+dispatching to {hty_history_resource,
+                   {hty_fspath,
+                       "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history",
+                       hty_fs_fs},
+                   "xml"}
+
+history:handle()
+history:twig()
+Processing "expect_conflict.xml"
+;rev=&lt;&lt;"0"&gt;&gt;
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},53472},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'GET',
+           {[],[{"expect_conflict.xml",[{&lt;&lt;"rev"&gt;&gt;,&lt;&lt;"0"&gt;&gt;}]}]},
+           {200,"OK"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"host",&lt;&lt;"localhost:1033"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"0"&gt;&gt;},
+            {"content-type",&lt;&lt;"application/x-www-form-urlencoded"&gt;&gt;}],
+           [&lt;&lt;&gt;&gt;],
+           #Fun&lt;hty_tx.0.28375859&gt;,q0,
+           [{"Content-Type","application/xml"}],
+           [{file,
+                "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history/expect_conflict.xml/0.data"}],
+           &lt;&lt;"guest"&gt;&gt;,hty_empty_realm,
+           [{"xslpi_choice","doc"}],
+           [],hty_socketreader,
+           [{hty_history_resource,
+                {hty_fspath,
+                    "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history",
+                    hty_fs_fs},
+                "xml"}],
+           [{"hty_history_resource","2024-09-29T20:28:19.310","sendfile",
+             "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history/expect_conflict.xml/0.data"},
+            {"hty_history_resource","2024-09-29T20:28:19.310","status","OK"}],
+           0,true}
+
+sendfile('"/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history/expect_conflict.xml/0.data"')
+
+Sendfile ok
+
+Conlen [&lt;&lt;"34"&gt;&gt;]
+
+dispatching to {hty_history_resource,
+                   {hty_fspath,
+                       "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history",
+                       hty_fs_fs},
+                   "xml"}
+
+history:handle()
+history:twig()
+Processing "expect_conflict.xml"
+;rev=&lt;&lt;"0"&gt;&gt;
+
+invoking chain(&lt;&lt;"[=apor&amp;[=apa&amp;\"=bonobo&amp;]=apa&amp;]=apor"&gt;&gt;,q0)
+
+hty_formtree_spaf:parse(&lt;&lt;"[=apor&amp;[=apa&amp;\"=bonobo&amp;]=apa&amp;]=apor"&gt;&gt;, {{expect_eq,
+                                                                     &lt;&lt;&gt;&gt;}, []})
+SPAF({push,&lt;&lt;"apor"&gt;&gt;})
+
+SPAF({push,&lt;&lt;"apa"&gt;&gt;})
+
+SPAF({text,&lt;&lt;"bonobo"&gt;&gt;})
+
+SPAF({pop,&lt;&lt;"apa"&gt;&gt;})
+
+Data1 is [60,&lt;&lt;"apor"&gt;&gt;,62,60,&lt;&lt;"apa"&gt;&gt;,62,&lt;&lt;"bonobo"&gt;&gt;,60,47,&lt;&lt;"apa"&gt;&gt;,62]
+
+recv 0 more bytes
+
+invoking chain(eos,[{{expect_amp,&lt;&lt;"]"&gt;&gt;,&lt;&lt;"apor"&gt;&gt;},[&lt;&lt;"apor"&gt;&gt;]},
+                    {not_in_start,[&lt;&lt;"apor"&gt;&gt;]}])
+
+hty_formtree_spaf:parse(eos, {{expect_amp,&lt;&lt;"]"&gt;&gt;,&lt;&lt;"apor"&gt;&gt;}, [&lt;&lt;"apor"&gt;&gt;]})
+SPAF({pop,&lt;&lt;"apor"&gt;&gt;})
+
+Data1 is [60,47,&lt;&lt;"apor"&gt;&gt;,62]
+
+Path1 = {[],[{"expect_conflict.xml",[{&lt;&lt;"rev"&gt;&gt;,&lt;&lt;"0"&gt;&gt;}]}]}, Path2 = {[],
+                                                                       [{"expect_conflict.xml",
+                                                                         [{&lt;&lt;"rev"&gt;&gt;,
+                                                                           &lt;&lt;"0"&gt;&gt;}]}]}
+
+Tx1 = {hty_tx,
+          {ipv4,{127,0,0,1},53473},
+          &lt;&lt;"HTTP/1.1"&gt;&gt;,'POST',
+          {[],[{"expect_conflict.xml",[{&lt;&lt;"rev"&gt;&gt;,&lt;&lt;"0"&gt;&gt;}]}]},
+          {200,"OK"},
+          [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+           {"host",&lt;&lt;"localhost:1033"&gt;&gt;},
+           {"te",&lt;&lt;&gt;&gt;},
+           {"content-length",&lt;&lt;"34"&gt;&gt;},
+           {"content-type",&lt;&lt;"application/x-www-form-urlencoded"&gt;&gt;}],
+          [&lt;&lt;"[=apor&amp;[=apa&amp;\"=bonobo&amp;]=apa&amp;]=apor"&gt;&gt;],
+          #Fun&lt;hty_tx.0.28375859&gt;,q0,[],[],&lt;&lt;"guest"&gt;&gt;,hty_empty_realm,
+          [{"xslpi_choice","doc"}],
+          [],hty_socketreader,
+          [{hty_history_resource,
+               {hty_fspath,
+                   "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history",
+                   hty_fs_fs},
+               "xml"}],
+          [],0,false}, Tx2 = {hty_tx,
+                              {ipv4,{127,0,0,1},53473},
+                              &lt;&lt;"HTTP/1.1"&gt;&gt;,'POST',
+                              {[],
+                               [{"expect_conflict.xml",
+                                 [{&lt;&lt;"rev"&gt;&gt;,&lt;&lt;"0"&gt;&gt;}]}]},
+                              {200,"OK"},
+                              [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+                               {"host",&lt;&lt;"localhost:1033"&gt;&gt;},
+                               {"te",&lt;&lt;&gt;&gt;},
+                               {"content-length",&lt;&lt;"34"&gt;&gt;},
+                               {"content-type",
+                                &lt;&lt;"application/x-www-form-urlencoded"&gt;&gt;}],
+                              [],#Fun&lt;hty_tx.10.28375859&gt;,
+                              {{file_descriptor,raw_file_io_delayed,
+                                #{buffer =&gt;
+                                   #Ref&lt;0.1273940150.3786276866.90286&gt;,
+                                  delay_size =&gt; 65536,owner =&gt; &lt;0.546.0&gt;,
+                                  pid =&gt; &lt;0.547.0&gt;}},
+                               [done,{not_in_start,[]}]},
+                              [],[],&lt;&lt;"guest"&gt;&gt;,hty_empty_realm,
+                              [{"xslpi_choice","doc"}],
+                              [],hty_socketreader,
+                              [{hty_history_resource,
+                                {hty_fspath,
+                                 "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history",
+                                 hty_fs_fs},
+                                "xml"}],
+                              [],0,false}
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},53473},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'POST',
+           {[],[{"expect_conflict.xml",[{&lt;&lt;"rev"&gt;&gt;,&lt;&lt;"0"&gt;&gt;}]}]},
+           {303,"See Other"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"host",&lt;&lt;"localhost:1033"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"34"&gt;&gt;},
+            {"content-type",&lt;&lt;"application/x-www-form-urlencoded"&gt;&gt;}],
+           [],#Fun&lt;hty_tx.10.28375859&gt;,
+           {{file_descriptor,raw_file_io_delayed,
+                #{buffer =&gt; #Ref&lt;0.1273940150.3786276866.90286&gt;,
+                  delay_size =&gt; 65536,owner =&gt; &lt;0.546.0&gt;,pid =&gt; &lt;0.547.0&gt;}},
+            [done,{not_in_start,[]}]},
+           [{"Location",[47,"expect_conflict.xml",[59,&lt;&lt;"rev"&gt;&gt;,61,"1"]]}],
+           [],&lt;&lt;"guest"&gt;&gt;,hty_empty_realm,
+           [{"xslpi_choice","doc"}],
+           [],hty_socketreader,
+           [{hty_history_resource,
+                {hty_fspath,
+                    "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history",
+                    hty_fs_fs},
+                "xml"}],
+           [{"hty_history_resource","2024-09-29T20:28:19.321","status",
+             "See Other"}],
+           0,true}
+
+Conlen [&lt;&lt;"0"&gt;&gt;]
+
+dispatching to {hty_history_resource,
+                   {hty_fspath,
+                       "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history",
+                       hty_fs_fs},
+                   "xml"}
+
+history:handle()
+history:twig()
+Processing "expect_conflict.xml"
+;rev=&lt;&lt;"1"&gt;&gt;
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},53474},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'GET',
+           {[],[{"expect_conflict.xml",[{&lt;&lt;"rev"&gt;&gt;,&lt;&lt;"1"&gt;&gt;}]}]},
+           {200,"OK"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"host",&lt;&lt;"localhost:1033"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"0"&gt;&gt;},
+            {"content-type",&lt;&lt;"application/x-www-form-urlencoded"&gt;&gt;}],
+           [&lt;&lt;&gt;&gt;],
+           #Fun&lt;hty_tx.0.28375859&gt;,q0,
+           [{"Content-Type","application/xml"}],
+           [{file,
+                "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history/expect_conflict.xml/1.data"}],
+           &lt;&lt;"guest"&gt;&gt;,hty_empty_realm,
+           [{"xslpi_choice","doc"}],
+           [],hty_socketreader,
+           [{hty_history_resource,
+                {hty_fspath,
+                    "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history",
+                    hty_fs_fs},
+                "xml"}],
+           [{"hty_history_resource","2024-09-29T20:28:19.342","sendfile",
+             "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history/expect_conflict.xml/1.data"},
+            {"hty_history_resource","2024-09-29T20:28:19.342","status","OK"}],
+           0,true}
+
+sendfile('"/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history/expect_conflict.xml/1.data"')
+
+Sendfile ok
+
+Conlen [&lt;&lt;"35"&gt;&gt;]
+
+dispatching to {hty_history_resource,
+                   {hty_fspath,
+                       "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history",
+                       hty_fs_fs},
+                   "xml"}
+
+history:handle()
+history:twig()
+Processing "expect_conflict.xml"
+;rev=&lt;&lt;"0"&gt;&gt;
+
+Rev does not match tip: [&lt;&lt;"0"&gt;&gt; != &lt;&lt;"1"&gt;&gt;]
+record {hty_tx,
+           {ipv4,{127,0,0,1},53475},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'POST',
+           {[],[{"expect_conflict.xml",[{&lt;&lt;"rev"&gt;&gt;,&lt;&lt;"0"&gt;&gt;}]}]},
+           {409,"Conflict"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"host",&lt;&lt;"localhost:1033"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"35"&gt;&gt;},
+            {"content-type",&lt;&lt;"application/x-www-form-urlencoded"&gt;&gt;}],
+           [&lt;&lt;"[=apor&amp;[=apa&amp;\"=gorilla&amp;]=apa&amp;]=apor"&gt;&gt;],
+           #Fun&lt;hty_tx.0.28375859&gt;,q0,[],[],&lt;&lt;"guest"&gt;&gt;,hty_empty_realm,
+           [{"xslpi_choice","doc"}],
+           [],hty_socketreader,
+           [{hty_history_resource,
+                {hty_fspath,
+                    "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history",
+                    hty_fs_fs},
+                "xml"}],
+           [{"hty_history_resource","2024-09-29T20:28:19.350","status",
+             "Conflict"}],
+           0,false}
+
+Conlen [&lt;&lt;"0"&gt;&gt;]
+
+dispatching to {hty_history_resource,
+                   {hty_fspath,
+                       "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history",
+                       hty_fs_fs},
+                   "xml"}
+
+history:handle()
+history:twig()
+Processing "expect_conflict.xml"
+Rev is [no]
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},53476},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'GET',
+           {[],["expect_conflict.xml"]},
+           {307,"Temporary Redirect"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"host",&lt;&lt;"localhost:1033"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"0"&gt;&gt;}],
+           [&lt;&lt;&gt;&gt;],
+           #Fun&lt;hty_tx.0.28375859&gt;,q0,
+           [{"Location",[47,"expect_conflict.xml",[59,&lt;&lt;"rev"&gt;&gt;,61,&lt;&lt;"1"&gt;&gt;]]}],
+           [],&lt;&lt;"guest"&gt;&gt;,hty_empty_realm,
+           [{"xslpi_choice","doc"}],
+           [],hty_socketreader,
+           [{hty_history_resource,
+                {hty_fspath,
+                    "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history",
+                    hty_fs_fs},
+                "xml"}],
+           [{"hty_history_resource","2024-09-29T20:28:19.354","status",
+             "Temporary Redirect"}],
+           0,true}
+
+Conlen [&lt;&lt;"0"&gt;&gt;]
+
+dispatching to {hty_history_resource,
+                   {hty_fspath,
+                       "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history",
+                       hty_fs_fs},
+                   "xml"}
+
+history:handle()
+history:twig()
+Processing "expect_conflict.xml"
+;rev=&lt;&lt;"1"&gt;&gt;
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},53477},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'GET',
+           {[],[{"expect_conflict.xml",[{&lt;&lt;"rev"&gt;&gt;,&lt;&lt;"1"&gt;&gt;}]}]},
+           {200,"OK"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"host",&lt;&lt;"localhost:1033"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"0"&gt;&gt;}],
+           [&lt;&lt;&gt;&gt;],
+           #Fun&lt;hty_tx.0.28375859&gt;,q0,
+           [{"Content-Type","application/xml"}],
+           [{file,
+                "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history/expect_conflict.xml/1.data"}],
+           &lt;&lt;"guest"&gt;&gt;,hty_empty_realm,
+           [{"xslpi_choice","doc"}],
+           [],hty_socketreader,
+           [{hty_history_resource,
+                {hty_fspath,
+                    "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history",
+                    hty_fs_fs},
+                "xml"}],
+           [{"hty_history_resource","2024-09-29T20:28:19.362","sendfile",
+             "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history/expect_conflict.xml/1.data"},
+            {"hty_history_resource","2024-09-29T20:28:19.362","status","OK"}],
+           0,true}
+
+sendfile('"/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.28.15/projekt.hty.logs/run.2024-09-29_22.28.15/log_private/inte/history/fixture/1033.http/xml.history/expect_conflict.xml/1.data"')
+
+Sendfile ok
+
+<a name="end"></a>
+
+
+=== Ended at 2024-09-29 22:28:19
+=== successfully completed test case
+=== === Returned value: ok
+</pre>
+<center>
+<br /><hr /><p>
+<a href="../../../all_runs.html">Test run history
+</a>  |  <a href="../../../index.html">Top level test index
+</a>  |  <a href="../../../suite.log.latest.html">Latest test result</a>
+</p>
+<div class="copyright">Copyright &copy; 2024 <a href="http://www.erlang.org">Open Telecom Platform</a><br />
+Updated: <!--date-->Sun Sep 29 2024 22:28:19<!--/date--><br />
+</div>
+</center>
+</body>
+</html>

@@ -2,6 +2,7 @@
 -record(hty_accesslog_resource, {key, subs}).
 -export([mount/2, new/2, handle/2]).
 
+% Just a comment
 
 mount(Fspath, Mc) ->
   case lists:reverse(hty_fspath:parts(Fspath)) of

@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Test hty_figlet_SUITE:single_level result</title>
+<meta http-equiv="cache-control" content="no-cache"></meta>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"></meta>
+<link rel="stylesheet" href="../../ct_default.css" type="text/css"></link>
+<script type="text/javascript" src="../../jquery-latest.js"></script>
+<script type="text/javascript" src="../../jquery.tablesorter.min.js"></script>
+</head>
+<body>
+
+<a name="top"></a><pre>
+=== Test case: <a href="hty_figlet_suite.src.html#single_level-1">hty_figlet_SUITE:single_level/1</a> (click for source code)
+
+=== Config value:
+
+    [{group_dir,"/Users/jens/projekt/hty/test/hty_figlet_SUITE_data/foldered"},
+     {watchdog,&lt;0.254.0&gt;},
+     {tc_logfile,"/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-10-05_07.24.19/projekt.hty.logs/run.2024-10-05_07.24.20/hty_figlet_suite.single_level.html"},
+     {tc_group_properties,[{name,foldered}]},
+     {tc_group_path,[[{suite,hty_figlet_SUITE}]]},
+     {data_dir,"/Users/jens/projekt/hty/test/hty_figlet_SUITE_data/"},
+     {priv_dir,"/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-10-05_07.24.19/projekt.hty.logs/run.2024-10-05_07.24.20/log_private/"}]
+
+=== Current directory is "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-10-05_07.24.19"
+
+=== Started at 2024-10-05 07:24:20
+
+<br />
+
+</pre>
+<div class="ct_error_notify"><pre><b>*** CT Error Notification 2024-10-05 07:24:20.564 ***</b>
+hty_figlet_SUITE:single_level failed on line 32
+Reason: {badmatch,[47,85,115,101,114,115,47,106,101|...]}
+
+<a href="#end">Full error description and stacktrace</a>
+</pre></div>
+<pre>
+<a name="end"></a>
+
+
+=== Ended at 2024-10-05 07:24:20
+=== Location: [{hty_figlet_SUITE,single_level,<a href="hty_figlet_suite.src.html#32">32</a>},
+              {test_server,ts_tc,1748},
+              {test_server,run_test_case_eval1,1263},
+              {test_server,run_test_case_eval,1195}]
+=== === Reason: no match of right hand side value 
+                 [47,85,115,101,114,115,47,106,101,110,115,47,112,114,111,106,
+                  101,107,116,47,104,116,121,47,116,101,115,116,47,104,116,
+                  121,95,102,105,103,108,101,116,95,83,85,73,84,69,95,100,97,
+                  116,97,47,102,111,108,100,101,114,101,100|single_level]
+  in function  hty_figlet_SUITE:single_level/1 (hty_figlet_SUITE.erl, line 32)
+  in call from test_server:ts_tc/3 (test_server.erl, line 1748)
+  in call from test_server:run_test_case_eval1/6 (test_server.erl, line 1263)
+  in call from test_server:run_test_case_eval/9 (test_server.erl, line 1195)
+</pre>
+<center>
+<br /><hr /><p>
+<a href="../../../all_runs.html">Test run history
+</a>  |  <a href="../../../index.html">Top level test index
+</a>  |  <a href="../../../suite.log.latest.html">Latest test result</a>
+</p>
+<div class="copyright">Copyright &copy; 2024 <a href="http://www.erlang.org">Open Telecom Platform</a><br />
+Updated: <!--date-->Sat Oct 05 2024 07:24:20<!--/date--><br />
+</div>
+</center>
+</body>
+</html>

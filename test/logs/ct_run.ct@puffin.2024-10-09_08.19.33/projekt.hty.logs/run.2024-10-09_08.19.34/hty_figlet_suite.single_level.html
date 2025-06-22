@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Test hty_figlet_SUITE:single_level result</title>
+<meta http-equiv="cache-control" content="no-cache"></meta>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"></meta>
+<link rel="stylesheet" href="../../ct_default.css" type="text/css"></link>
+<script type="text/javascript" src="../../jquery-latest.js"></script>
+<script type="text/javascript" src="../../jquery.tablesorter.min.js"></script>
+</head>
+<body>
+
+<a name="top"></a><pre>
+=== Test case: <a href="hty_figlet_suite.src.html#single_level-1">hty_figlet_SUITE:single_level/1</a> (click for source code)
+
+=== Config value:
+
+    [{group_dir,"/Users/jens/projekt/hty/test/hty_figlet_SUITE_data/foldered"},
+     {watchdog,&lt;0.252.0&gt;},
+     {tc_logfile,"/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-10-09_08.19.33/projekt.hty.logs/run.2024-10-09_08.19.34/hty_figlet_suite.single_level.html"},
+     {tc_group_properties,[{name,foldered}]},
+     {tc_group_path,[[{suite,hty_figlet_SUITE}]]},
+     {data_dir,"/Users/jens/projekt/hty/test/hty_figlet_SUITE_data/"},
+     {priv_dir,"/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-10-09_08.19.33/projekt.hty.logs/run.2024-10-09_08.19.34/log_private/"}]
+
+=== Current directory is "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-10-09_08.19.33"
+
+=== Started at 2024-10-09 08:19:34
+
+<br />
+
+</pre>
+<div class="ct_error_notify"><pre><b>*** CT Error Notification 2024-10-09 08:19:34.709 ***</b>
+hty_figlet:watch failed on line 27
+Reason: badfun
+
+<a href="#end">Full error description and stacktrace</a>
+</pre></div>
+<pre>
+<a name="end"></a>
+
+
+=== Ended at 2024-10-09 08:19:34
+=== Location: [{hty_figlet,watch,27},
+              {hty_figlet_SUITE,run_test,<a href="hty_figlet_suite.src.html#46">46</a>},
+              {test_server,ts_tc,1748},
+              {test_server,run_test_case_eval1,1263},
+              {test_server,run_test_case_eval,1195}]
+=== === Reason: bad function {no,{enoent,
+                                      "/Users/jens/projekt/hty/test/hty_figlet_SUITE_data/foldered/single_level"}}
+  in function  hty_figlet:watch/3 (src/hty_figlet.erl, line 27)
+  in call from hty_figlet_SUITE:run_test/2 (hty_figlet_SUITE.erl, line 46)
+  in call from test_server:ts_tc/3 (test_server.erl, line 1748)
+  in call from test_server:run_test_case_eval1/6 (test_server.erl, line 1263)
+  in call from test_server:run_test_case_eval/9 (test_server.erl, line 1195)
+</pre>
+<center>
+<br /><hr /><p>
+<a href="../../../all_runs.html">Test run history
+</a>  |  <a href="../../../index.html">Top level test index
+</a>  |  <a href="../../../suite.log.latest.html">Latest test result</a>
+</p>
+<div class="copyright">Copyright &copy; 2024 <a href="http://www.erlang.org">Open Telecom Platform</a><br />
+Updated: <!--date-->Wed Oct 09 2024 08:19:34<!--/date--><br />
+</div>
+</center>
+</body>
+</html>

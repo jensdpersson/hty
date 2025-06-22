@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Test hty_inte_SUITE:xslpi_basic result</title>
+<meta http-equiv="cache-control" content="no-cache"></meta>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"></meta>
+<link rel="stylesheet" href="../../ct_default.css" type="text/css"></link>
+<script type="text/javascript" src="../../jquery-latest.js"></script>
+<script type="text/javascript" src="../../jquery.tablesorter.min.js"></script>
+</head>
+<body>
+
+<a name="top"></a><pre>
+=== Test case: <a href="hty_inte_suite.src.html#xslpi_basic-1">hty_inte_SUITE:xslpi_basic/1</a> (click for source code)
+
+=== Config value:
+
+    [{wwwroot,"/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.49.11/projekt.hty.logs/run.2024-09-29_22.49.11/log_private//inte/xslpi/fixture"},
+     {files_dir,"/Users/jens/projekt/hty/test/hty_inte_SUITE_data/xslpi/files"},
+     {watchdog,&lt;0.683.0&gt;},
+     {tc_logfile,"/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.49.11/projekt.hty.logs/run.2024-09-29_22.49.11/hty_inte_suite.xslpi_basic.html"},
+     {tc_group_properties,[{name,xslpi}]},
+     {tc_group_path,[]},
+     {data_dir,"/Users/jens/projekt/hty/test/hty_inte_SUITE_data/"},
+     {priv_dir,"/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.49.11/projekt.hty.logs/run.2024-09-29_22.49.11/log_private/"}]
+
+=== Current directory is "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.49.11"
+
+=== Started at 2024-09-29 22:49:16
+
+<br />
+Conlen [&lt;&lt;"0"&gt;&gt;]
+
+dispatching to {hty_xslpi_resource,
+                   [{hty_static_resource,
+                        {hty_fspath,
+                            "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.49.11/projekt.hty.logs/run.2024-09-29_22.49.11/log_private/inte/xslpi/fixture/1030.http/%2Fassets%2Fxslt%2Fhello.xslpi/static",
+                            hty_fs_fs},
+                        {hty_indexfile_welcome,
+                            ["index.html","index.xml","index.txt"]}}],
+                   [&lt;&lt;"&lt;?xml-stylesheet type=\"text/xsl\" href=\""&gt;&gt;,
+                    &lt;&lt;"/assets/xslt/hello"&gt;&gt;,&lt;&lt;".xsl\"?&gt;"&gt;&gt;]}
+
+dispatching to {hty_static_resource,
+                   {hty_fspath,
+                       "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.49.11/projekt.hty.logs/run.2024-09-29_22.49.11/log_private/inte/xslpi/fixture/1030.http/%2Fassets%2Fxslt%2Fhello.xslpi/static",
+                       hty_fs_fs},
+                   {hty_indexfile_welcome,
+                       ["index.html","index.xml","index.txt"]}}
+
+static path below [["docs","resource.xml"],&lt;&lt;"docsresource.xml"&gt;&gt;,["docs",
+                                                                   "resource.xml"]]
+
+static subpath [{hty_fspath,"/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.49.11/projekt.hty.logs/run.2024-09-29_22.49.11/log_private/inte/xslpi/fixture/1030.http/%2Fassets%2Fxslt%2Fhello.xslpi/static/docs/resource.xml",
+                            hty_fs_fs}]
+
+last_modified ["/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.49.11/projekt.hty.logs/run.2024-09-29_22.49.11/log_private/inte/xslpi/fixture/1030.http/%2Fassets%2Fxslt%2Fhello.xslpi/static/docs/resource.xml"] is [{{2024,
+                                                                                                                                                                                                                                         9,
+                                                                                                                                                                                                                                         29},
+                                                                                                                                                                                                                                        {22,
+                                                                                                                                                                                                                                         49,
+                                                                                                                                                                                                                                         16}}]
+
+If-None-Match: []!="\"2024-09-29T22:49:16\""
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},53839},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'GET',
+           {[],["docs","resource.xml"]},
+           {200,"OK"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"host",&lt;&lt;"localhost:1030"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"0"&gt;&gt;}],
+           [&lt;&lt;&gt;&gt;],
+           #Fun&lt;hty_tx.0.83996365&gt;,q0,
+           [{'Content-Type',"text/xml"},
+            {"Cache-Control","public"},
+            {"ETag","\"2024-09-29T22:49:16\""}],
+           [{file,
+                "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.49.11/projekt.hty.logs/run.2024-09-29_22.49.11/log_private/inte/xslpi/fixture/1030.http/%2Fassets%2Fxslt%2Fhello.xslpi/static/docs/resource.xml"}],
+           &lt;&lt;"guest"&gt;&gt;,hty_empty_realm,[],[],hty_socketreader,
+           [{hty_static_resource,
+                {hty_fspath,
+                    "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.49.11/projekt.hty.logs/run.2024-09-29_22.49.11/log_private/inte/xslpi/fixture/1030.http/%2Fassets%2Fxslt%2Fhello.xslpi/static",
+                    hty_fs_fs},
+                {hty_indexfile_welcome,
+                    ["index.html","index.xml","index.txt"]}},
+            {hty_xslpi_resource,
+                [{hty_static_resource,
+                     {hty_fspath,
+                         "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.49.11/projekt.hty.logs/run.2024-09-29_22.49.11/log_private/inte/xslpi/fixture/1030.http/%2Fassets%2Fxslt%2Fhello.xslpi/static",
+                         hty_fs_fs},
+                     {hty_indexfile_welcome,
+                         ["index.html","index.xml","index.txt"]}}],
+                [&lt;&lt;"&lt;?xml-stylesheet type=\"text/xsl\" href=\""&gt;&gt;,
+                 &lt;&lt;"/assets/xslt/hello"&gt;&gt;,&lt;&lt;".xsl\"?&gt;"&gt;&gt;]}],
+           [{"hty_static_resource","2024-09-29T20:49:16.510","status","OK"},
+            {"hty_static_resource","2024-09-29T20:49:16.510","sendfile",
+             "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.49.11/projekt.hty.logs/run.2024-09-29_22.49.11/log_private/inte/xslpi/fixture/1030.http/%2Fassets%2Fxslt%2Fhello.xslpi/static/docs/resource.xml"}],
+           0,true}
+
+record {hty_tx,
+           {ipv4,{127,0,0,1},53839},
+           &lt;&lt;"HTTP/1.1"&gt;&gt;,'GET',
+           {[],["docs","resource.xml"]},
+           {200,"OK"},
+           [{"connection",&lt;&lt;"keep-alive"&gt;&gt;},
+            {"host",&lt;&lt;"localhost:1030"&gt;&gt;},
+            {"te",&lt;&lt;&gt;&gt;},
+            {"content-length",&lt;&lt;"0"&gt;&gt;}],
+           [&lt;&lt;&gt;&gt;],
+           #Fun&lt;hty_tx.0.83996365&gt;,q0,
+           [{'Content-Type',"text/xml"},
+            {"Cache-Control","public"},
+            {"ETag","\"2024-09-29T22:49:16\""}],
+           [{file,
+                "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.49.11/projekt.hty.logs/run.2024-09-29_22.49.11/log_private/inte/xslpi/fixture/1030.http/%2Fassets%2Fxslt%2Fhello.xslpi/static/docs/resource.xml"},
+            {data,
+                [&lt;&lt;"&lt;?xml-stylesheet type=\"text/xsl\" href=\""&gt;&gt;,
+                 &lt;&lt;"/assets/xslt/hello"&gt;&gt;,&lt;&lt;".xsl\"?&gt;"&gt;&gt;]}],
+           &lt;&lt;"guest"&gt;&gt;,hty_empty_realm,[],[],hty_socketreader,
+           [{hty_xslpi_resource,
+                [{hty_static_resource,
+                     {hty_fspath,
+                         "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.49.11/projekt.hty.logs/run.2024-09-29_22.49.11/log_private/inte/xslpi/fixture/1030.http/%2Fassets%2Fxslt%2Fhello.xslpi/static",
+                         hty_fs_fs},
+                     {hty_indexfile_welcome,
+                         ["index.html","index.xml","index.txt"]}}],
+                [&lt;&lt;"&lt;?xml-stylesheet type=\"text/xsl\" href=\""&gt;&gt;,
+                 &lt;&lt;"/assets/xslt/hello"&gt;&gt;,&lt;&lt;".xsl\"?&gt;"&gt;&gt;]}],
+           [{"hty_static_resource","2024-09-29T20:49:16.510","status","OK"},
+            {"hty_static_resource","2024-09-29T20:49:16.510","sendfile",
+             "/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.49.11/projekt.hty.logs/run.2024-09-29_22.49.11/log_private/inte/xslpi/fixture/1030.http/%2Fassets%2Fxslt%2Fhello.xslpi/static/docs/resource.xml"}],
+           0,true}
+
+data('[&lt;&lt;"&lt;?xml-stylesheet type=\"text/xsl\" href=\""&gt;&gt;,
+       &lt;&lt;"/assets/xslt/hello"&gt;&gt;,&lt;&lt;".xsl\"?&gt;"&gt;&gt;]')
+
+sendfile('"/Users/jens/projekt/hty/test/logs/ct_run.ct@puffin.2024-09-29_22.49.11/projekt.hty.logs/run.2024-09-29_22.49.11/log_private/inte/xslpi/fixture/1030.http/%2Fassets%2Fxslt%2Fhello.xslpi/static/docs/resource.xml"')
+
+Sendfile ok
+
+Looking for header content-type=text/xml in [{"cache-control","public"},
+                                             {"etag",
+                                              "\"2024-09-29T22:49:16\""},
+                                             {"server","haughty 0.4"},
+                                             {"content-type","text/xml"}]
+
+Reading facit file /Users/jens/projekt/hty/test/hty_inte_SUITE_data/xslpi/files/xslpi_basic/facit.xml
+
+About to compare facit [&lt;?xml-stylesheet type="text/xsl" href="/assets/xslt/hello.xsl"?&gt;&lt;hello&gt;world&lt;/hello&gt;
+]
+ with response body [&lt;?xml-stylesheet type="text/xsl" href="/assets/xslt/hello.xsl"?&gt;&lt;hello&gt;world&lt;/hello&gt;
+]
+
+<a name="end"></a>
+
+
+=== Ended at 2024-09-29 22:49:16
+=== successfully completed test case
+=== === Returned value: ok
+</pre>
+<center>
+<br /><hr /><p>
+<a href="../../../all_runs.html">Test run history
+</a>  |  <a href="../../../index.html">Top level test index
+</a>  |  <a href="../../../suite.log.latest.html">Latest test result</a>
+</p>
+<div class="copyright">Copyright &copy; 2024 <a href="http://www.erlang.org">Open Telecom Platform</a><br />
+Updated: <!--date-->Sun Sep 29 2024 22:49:16<!--/date--><br />
+</div>
+</center>
+</body>
+</html>

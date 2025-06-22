@@ -3,7 +3,8 @@
     watch/3,
     new_lister_linear/1,
     new_lister_seq/1,
-    new_lister_file/1
+    new_lister_file/1,
+    new_resolver_modfromext/0
 ]).
 
 -export([start/2, stop/1]).
@@ -19,7 +20,7 @@
 % Perhaps the figtree structure needs an etag or last-modified that can be used to
 % only watch/3 the stale subtrees. 
 
--spec watch(fig(), figlet_resolver(), figlet_collector()) -> any().
+-spec watch(figtree(), figlet_resolver(), figlet_collector()) -> any().
 watch({Root, Lister}, FigletResolver, FigletCollector) ->
     % This is the async part, and the part which can happen many times
     % if underlying structure is modified when running.
@@ -89,37 +90,27 @@ invoke_lister([Lister|Listers], SubtreeCollector) ->
     
 new_lister_file(Filesystempath) ->
     case file:list_dir(Filesystempath) of
-        [] -> fun lister_empty/1;
-        Filenames ->
-            Figs = lists:map(
-                fun(Filename) ->
-                    create_fig(Filename, 
-                        new_lister_file(filename:absname_join(Filesystempath, Filename))
-                    )  
-                end,
-                Filenames
-            ),
-            fun(SubtreeCollector) ->
-                SubtreeCollector(Figs)
-            end
-    end.
+        {ok, Subs} -> 
+            case Subs of 
+                    [] -> fun lister_empty/1;
+                Filenames ->
+                    Figs = lists:map(
+                        fun(Filename) ->
+                            create_fig(Filename, 
+                                new_lister_file(filename:absname_join(Filesystempath, Filename))
+                            )  
+                        end,
+                        Filenames
+                    ),
+                    fun(SubtreeCollector) ->
+                        SubtreeCollector(Figs)
+                    end
+            end;
+        {error, Error} ->
+            {no, {Error, Filesystempath}}
+    end.    
     
-    
-create_fig(Name, Lister) -> {Name, Lister}.
-
-% De här funktionerna är mer hty-specifika. Kanske de får hamna i en egen hty_figlet
-% och det generiska blir bara figlet.
--spec start(string(), string()) -> ok|{no, string()}.
-start(Prepath, Rootfolder) ->
-    
-    Pid = spawn(fun loop_supervise/1),
-    
-    Root = hty_root:new(),
-    Lister = new_lister_seq(
-        [new_lister_linear(Prepath), new_lister_file(Rootfolder)]
-    ),
-    
-    Resolver = fun(Name) ->
+new_resolver_modfromext() -> fun(Name) ->
         % Få se, en figlet behöver ju vara en tuple till att börja med.
         % Och första elementet ska vara en modul.
         % Om vi bara mappar rakt av 
@@ -134,13 +125,31 @@ start(Prepath, Rootfolder) ->
         % Första elementet funkar dåligt med sortering. Sista-fast-inte-om-det-står-xml känns
         % stökigt. Jag tror man måste köra sista.
         % Alltså
-        case string:split(Name, $.) of
+        case string:tokens(Name, "$") of
             [] -> {no, {empty_filename}};
             Segments -> 
-                [Module|Rest] = lists:reverse(Segments),
+                [ModuleName|Rest] = lists:reverse(Segments),
+                Module = list_to_atom(ModuleName),
                 Module:new(Rest)     
         end
-    end,
+    end.
+
+    
+create_fig(Name, Lister) -> {Name, Lister}.
+
+% De här funktionerna är mer hty-specifika. Kanske de får hamna i en egen hty_figlet
+% och det generiska blir bara figlet.
+-spec start(string(), string()) -> {ok, pid()}|{no, string()}.
+start(Prepath, Rootfolder) ->
+    
+    Pid = spawn(fun loop_supervise/1),
+    
+    Root = hty_root:new(),
+    Lister = new_lister_seq(
+        [new_lister_linear(Prepath), new_lister_file(Rootfolder)]
+    ),
+    
+    Resolver = new_resolver_modfromext(),
     
     watch({Root, Lister}, Resolver, fun(Figlet) -> 
         Pid ! {refresh, Figlet}
